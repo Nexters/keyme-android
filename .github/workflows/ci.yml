@@ -22,12 +22,14 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Debug Build with Gradle
+      - name: App Module ktlintCheck
         run: ./gradlew app:ktlintCheck
-      - name: Debug Build with Gradle
+      - name: Presentation Module ktlintCheck
         run: ./gradlew presentation:ktlintCheck
-      - name: Debug Build with Gradle
+      - name: Domain Module ktlintCheck
         run: ./gradlew domain:ktlintCheck
+      - name: Data Module ktlintCheck
+        run: ./gradlew data:ktlintCheck
 
   build:
 

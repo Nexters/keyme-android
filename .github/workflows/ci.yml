@@ -23,7 +23,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Debug Build with Gradle
-        run: ./gradlew ktlintCheck
+        run: ./gradlew app:ktlintCheck
+      - name: Debug Build with Gradle
+        run: ./gradlew presentation:ktlintCheck
+      - name: Debug Build with Gradle
+        run: ./gradlew domain:ktlintCheck
 
   build:
 

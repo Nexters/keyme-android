@@ -13,6 +13,7 @@ plugins {
     kotlin("kapt")
     id("com.android.library")
     id("com.google.dagger.hilt.android")
+    id("org.jlleitschuh.gradle.ktlint") version Versions.KTLINT
 }
 
 android {

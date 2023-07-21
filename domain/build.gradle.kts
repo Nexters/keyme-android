@@ -6,6 +6,7 @@ import Dependencies.setTestDependencies
 plugins {
     id("java-library")
     id("org.jetbrains.kotlin.jvm")
+    id("org.jlleitschuh.gradle.ktlint") version Versions.KTLINT
 }
 
 java {

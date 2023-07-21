@@ -87,7 +87,7 @@ out/
 *.swp
 *~
 
-.idea
+.idea/*
 *.ipr
 *.iws
 .shelf

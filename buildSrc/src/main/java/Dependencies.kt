@@ -16,6 +16,10 @@ object Dependencies {
     // Splash
     private val splash = "androidx.core:core-splashscreen:${Versions.SPLASH}"
 
+    // Activity
+    private val activity = "androidx.activity:activity-ktx:${Versions.ACTIVITY}"
+    private val activity_compose = "androidx.activity:activity-compose:${Versions.ACTIVITY}"
+
     // Compose
     // See https://developer.android.com/jetpack/compose/bom/bom-mapping
     private val composeBom = "androidx.compose:compose-bom:${Versions.COMPOSE_BOM}"
@@ -57,6 +61,10 @@ object Dependencies {
     private val androidJunit = "androidx.test.ext:junit:${Versions.ANDROID_JUNIT}"
     private val espressoCore = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO_CORE}"
 
+    fun DependencyHandler.setActivityDepdendencies() {
+        implementation(activity)
+        implementation(activity_compose)
+    }
 
     fun DependencyHandler.setKotlinStdLibDependencies() {
         implementation(kotlinStdLib)
@@ -100,7 +108,7 @@ object Dependencies {
         implementation(gsonConverter)
         implementation(okhttpInterceptor)
     }
-    
+
     fun DependencyHandler.setDatabaseDependencies() {
         kapt(roomCompiler)
         annotationProcessor(roomCompiler)

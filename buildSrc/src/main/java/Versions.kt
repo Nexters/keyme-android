@@ -9,11 +9,14 @@ object Versions {
     // Coroutines
     const val COROUTINES = "1.3.9"
 
+    // Activity
+    const val ACTIVITY = "1.7.2"
+
     // Splash
     const val SPLASH = "1.0.0"
 
     // Compose
-    const val COMPOSE_BOM = "2023.05.01"
+    const val COMPOSE_BOM = "2023.06.01"
     const val COMPOSE_VIEW_MODEL = "2.5.1"
     const val COMPOSE_NAVIGATION = "2.6.0"
 

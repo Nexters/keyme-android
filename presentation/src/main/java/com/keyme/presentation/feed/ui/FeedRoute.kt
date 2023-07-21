@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.keyme.presentation.navigation.KeymeNavigationDestination
 import com.keyme.presentation.R
+import com.keyme.presentation.navigation.KeymeNavigationDestination
 
 object FeedDestination : KeymeNavigationDestination {
     override val route = "feed_route"

@@ -1,4 +1,4 @@
-package com.keyme.presentation.main
+package com.keyme.presentation.feed
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

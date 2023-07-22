@@ -51,6 +51,7 @@ object Dependencies {
 
     // Dependency injection
     private val hilt = "com.google.dagger:hilt-android:${Versions.HILT}"
+    private val hiltCompose = "androidx.hilt:hilt-navigation-compose:1.0.0"
     private val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.HILT}"
     private val javaXInject = "javax.inject:javax.inject:${Versions.JAVA_X_INJECT}"
 
@@ -120,6 +121,7 @@ object Dependencies {
     fun DependencyHandler.setHiltDependencies() {
         kapt(hiltCompiler)
         implementation(hilt)
+        implementation(hiltCompose)
     }
 
     fun DependencyHandler.setJavaXInjectDependencies() {

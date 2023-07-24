@@ -1,4 +1,6 @@
+import Dependencies.setActivityDepdendencies
 import Dependencies.setAndroidTestDependencies
+import Dependencies.setComposeDependencies
 import Dependencies.setCoreKtxDependencies
 import Dependencies.setHiltDependencies
 import Dependencies.setKotlinStdLibDependencies
@@ -23,6 +25,22 @@ android {
     defaultConfig {
         minSdk = AppConfig.minSdkVersion
     }
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        // See https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+        kotlinCompilerExtensionVersion = "1.4.0"
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -34,6 +52,8 @@ dependencies {
     setCoreKtxDependencies()
 
     setSplashDependencies()
+    setActivityDepdendencies()
+    setComposeDependencies()
 
     setHiltDependencies()
 

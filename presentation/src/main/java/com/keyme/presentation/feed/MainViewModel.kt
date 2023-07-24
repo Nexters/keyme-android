@@ -1,4 +1,4 @@
-package com.keyme.presentation.main
+package com.keyme.presentation.feed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

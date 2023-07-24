@@ -16,6 +16,10 @@ object Dependencies {
     // Splash
     private val splash = "androidx.core:core-splashscreen:${Versions.SPLASH}"
 
+    // Activity
+    private val activity = "androidx.activity:activity-ktx:${Versions.ACTIVITY}"
+    private val activity_compose = "androidx.activity:activity-compose:${Versions.ACTIVITY}"
+
     // Compose
     // See https://developer.android.com/jetpack/compose/bom/bom-mapping
     private val composeBom = "androidx.compose:compose-bom:${Versions.COMPOSE_BOM}"
@@ -47,6 +51,7 @@ object Dependencies {
 
     // Dependency injection
     private val hilt = "com.google.dagger:hilt-android:${Versions.HILT}"
+    private val hiltCompose = "androidx.hilt:hilt-navigation-compose:1.0.0"
     private val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.HILT}"
     private val javaXInject = "javax.inject:javax.inject:${Versions.JAVA_X_INJECT}"
 
@@ -57,6 +62,10 @@ object Dependencies {
     private val androidJunit = "androidx.test.ext:junit:${Versions.ANDROID_JUNIT}"
     private val espressoCore = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO_CORE}"
 
+    fun DependencyHandler.setActivityDepdendencies() {
+        implementation(activity)
+        implementation(activity_compose)
+    }
 
     fun DependencyHandler.setKotlinStdLibDependencies() {
         implementation(kotlinStdLib)
@@ -100,7 +109,7 @@ object Dependencies {
         implementation(gsonConverter)
         implementation(okhttpInterceptor)
     }
-    
+
     fun DependencyHandler.setDatabaseDependencies() {
         kapt(roomCompiler)
         annotationProcessor(roomCompiler)
@@ -112,6 +121,7 @@ object Dependencies {
     fun DependencyHandler.setHiltDependencies() {
         kapt(hiltCompiler)
         implementation(hilt)
+        implementation(hiltCompose)
     }
 
     fun DependencyHandler.setJavaXInjectDependencies() {

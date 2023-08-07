@@ -1,6 +1,8 @@
 package com.keyme.data.remote.di
 
+import com.keyme.data.remote.repositoryimpl.ResultCircleRepositoryImpl
 import com.keyme.data.remote.repositoryimpl.SampleRepositoryImpl
+import com.keyme.domain.repository.ResultCircleRepository
 import com.keyme.domain.repository.SampleRepository
 import dagger.Binds
 import dagger.Module
@@ -13,4 +15,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindSampleRepository(impl: SampleRepositoryImpl): SampleRepository
+
+    @Binds
+    abstract fun bindResultCircleRepository(impl: ResultCircleRepositoryImpl): ResultCircleRepository
 }

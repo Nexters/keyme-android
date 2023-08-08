@@ -3,9 +3,11 @@ import Dependencies.setAndroidTestDependencies
 import Dependencies.setComposeDependencies
 import Dependencies.setCoreKtxDependencies
 import Dependencies.setHiltDependencies
+import Dependencies.setKakaoSignInDependencies
 import Dependencies.setKotlinStdLibDependencies
 import Dependencies.setSplashDependencies
 import Dependencies.setTestDependencies
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 
 @Suppress("UnstableApiUsage")
@@ -23,7 +25,13 @@ android {
 
     @Suppress("UnstableApiUsage")
     defaultConfig {
+        applicationId = "com.keyme.app"
         minSdk = AppConfig.minSdkVersion
+        versionCode = AppConfig.versionCode
+        versionName = AppConfig.versionName
+
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = getKakaoNativeAppKey()
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", getKakaoNativeAppKey())
     }
 
     buildFeatures {
@@ -54,6 +62,7 @@ dependencies {
     setSplashDependencies()
     setActivityDepdendencies()
     setComposeDependencies()
+    setKakaoSignInDependencies()
 
     setHiltDependencies()
 
@@ -63,4 +72,9 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+}
+
+
+fun getKakaoNativeAppKey(): String {
+    return gradleLocalProperties(rootDir).getProperty("kakao_native_app_key")
 }

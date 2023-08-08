@@ -4,6 +4,7 @@ import Dependencies.setCoreKtxDependencies
 import Dependencies.setCoroutinesDependencies
 import Dependencies.setHiltDependencies
 import Dependencies.setImageDependencies
+import Dependencies.setKakaoSignInDependencies
 import Dependencies.setKotlinStdLibDependencies
 import Dependencies.setLottieDependencies
 import Dependencies.setTestDependencies
@@ -53,6 +54,8 @@ dependencies {
 
     setComposeDependencies()
     setViewModelDependencies()
+
+    setKakaoSignInDependencies()
     setLottieDependencies()
     setImageDependencies()
 

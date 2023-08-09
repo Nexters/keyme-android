@@ -66,7 +66,7 @@ object Dependencies {
     private val espressoCore = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO_CORE}"
 
     // Logger
-    private val timber = "com.jakewharton.timber:timber:5.0.1"
+    private val timber = "com.jakewharton.timber:timber:4.7.1"
 
     fun DependencyHandler.setActivityDepdendencies() {
         implementation(activity)

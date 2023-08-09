@@ -17,14 +17,18 @@ import com.keyme.presentation.utils.scale
 
 @Composable
 fun BubbleChartCanvas(
-    circles: List<Circle>,
     bubbleChartState: BubbleChartState,
 ) {
     Canvas(
         modifier = Modifier.bubbleChart(bubbleChartState),
         onDraw = {
-            circles.forEachIndexed { index, circle ->
-                drawResultBubble(circle, colors[index], bubbleChartState.scale.toInt(), "")
+            bubbleChartState.bubbleRectList.forEachIndexed { index, rect ->
+                drawResultBubble(
+                    bubbleChartState,
+                    rect,
+                    colors[index],
+                    "",
+                )
             }
         },
     )
@@ -43,18 +47,14 @@ private val colors = listOf(
     Color.LightGray,
 )
 
-private fun DrawScope.drawResultBubble(circle: Circle, color: Color, scale: Int, info: String) {
-    val center = Offset(
-        x = circle.x.scale(scale) + center.x,
-        y = circle.y.scale(scale) + center.y,
-    )
-
+private fun DrawScope.drawResultBubble(
+    bubbleChartState: BubbleChartState,
+    bubbleRect: Rect,
+    color: Color,
+    info: String,
+) {
     val circlePath = Path().apply {
-        val rect = Rect(
-            center = center,
-            radius = circle.r.scale(scale),
-        )
-        addOval(rect)
+        addOval(bubbleRect)
     }
 
     drawPath(circlePath, color)

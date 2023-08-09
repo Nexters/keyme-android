@@ -15,13 +15,14 @@ import com.keyme.presentation.myprofile.chart.rememberBubbleChartState
 fun BubbleChart(circles: List<Circle>) {
     BubbleChartContainer {
         val bubbleChartState = rememberBubbleChartState(
+            circles = circles,
             containerSize = Size(
                 constraints.maxWidth.toFloat(),
                 constraints.maxHeight.toFloat(),
             ),
         )
 
-        BubbleChartCanvas(circles = circles, bubbleChartState = bubbleChartState)
+        BubbleChartCanvas(bubbleChartState = bubbleChartState)
     }
 }
 

@@ -65,6 +65,9 @@ object Dependencies {
     private val androidJunit = "androidx.test.ext:junit:${Versions.ANDROID_JUNIT}"
     private val espressoCore = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO_CORE}"
 
+    // Logger
+    private val timber = "com.jakewharton.timber:timber:5.0.1"
+
     fun DependencyHandler.setActivityDepdendencies() {
         implementation(activity)
         implementation(activity_compose)
@@ -140,6 +143,10 @@ object Dependencies {
     fun DependencyHandler.setAndroidTestDependencies() {
         androidTestImplementation(androidJunit)
         androidTestImplementation(espressoCore)
+    }
+
+    fun DependencyHandler.setLoggerDependencies() {
+        implementation(timber)
     }
 
 

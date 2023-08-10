@@ -18,6 +18,5 @@ fun NavGraphBuilder.keymeTestDetailGraph(onBackClick: () -> Unit) {
 
 @Composable
 fun KeymeTestDetailRoute(onBackClick: () -> Unit) {
-
     KeymeTestDetailScreen(onBackClick = onBackClick)
 }

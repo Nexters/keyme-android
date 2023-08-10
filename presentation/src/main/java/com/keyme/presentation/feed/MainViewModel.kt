@@ -1,7 +1,5 @@
 package com.keyme.presentation.feed
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.keyme.domain.entity.onFailure
 import com.keyme.domain.entity.onSuccess
 import com.keyme.domain.entity.response.Sample

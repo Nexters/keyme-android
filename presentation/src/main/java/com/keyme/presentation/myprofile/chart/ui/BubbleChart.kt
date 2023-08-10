@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.UiComposable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.zIndex
 import com.keyme.domain.entity.response.Circle
@@ -44,7 +43,7 @@ fun BubbleChart(circles: List<Circle>, onBubbleClick: () -> Unit) {
 
 @Composable
 private fun BubbleChartContainer(
-    content: @Composable @UiComposable BoxWithConstraintsScope.() -> Unit,
+    content: @Composable BoxWithConstraintsScope.() -> Unit,
 ) {
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize(),

@@ -27,7 +27,6 @@ class MyProfileViewModel @Inject constructor(
             resultCircleUseCase().onSuccess {
                 _resultCircleState.value = it
             }.onFailure {
-
             }
         }
     }

@@ -49,7 +49,7 @@ enum class BubbleChartInitialState {
 
     fun isInit() = this == Init
 
-    fun isFinish() = this == Finish;
+    fun isFinish() = this == Finish
 }
 
 class BubbleChartState(
@@ -72,7 +72,6 @@ class BubbleChartState(
     var bubbleChartInitialState by mutableStateOf(BubbleChartInitialState.Init)
 
     val bubbleChartItemBitmaps = mutableListOf<Bitmap>()
-
 
     @Composable
     fun init() {
@@ -100,7 +99,6 @@ class BubbleChartState(
 private fun CaptureBitmap(
     content: @Composable () -> Unit,
 ): () -> Bitmap {
-
     val context = LocalContext.current
     val composeView = remember { ComposeView(context) }
 

@@ -3,7 +3,7 @@ package com.keyme.domain.entity
 sealed interface ApiResult<T> {
     data class Success<T>(val data: T) : ApiResult<T>
 
-    data class ApiError(val code: String, val message: String): ApiResult<Nothing>
+    data class ApiError(val code: String, val message: String) : ApiResult<Nothing>
     data class NetworkError(val throwable: Throwable) : ApiResult<Nothing>
 }
 
@@ -20,7 +20,6 @@ fun <T> ApiResult<T>.onApiError(action: (code: String, message: String) -> Unit)
     }
     return this
 }
-
 
 fun <T> ApiResult<T>.onFailure(action: (Throwable) -> Unit): ApiResult<T> {
     if (this is ApiResult.NetworkError) {

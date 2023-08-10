@@ -13,12 +13,13 @@ import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
     primary = keyme_black,
-    background = keyme_black,
+    background = keyme_bottom,
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = keyme_black,
     background = keyme_black,
+    surface = keyme_bottom,
 )
 
 @Composable
@@ -35,7 +36,7 @@ fun KeymeTheme(
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
         }
     }
 

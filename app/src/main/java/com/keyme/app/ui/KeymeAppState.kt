@@ -9,8 +9,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.keyme.app.navigation.TopLevelDestination
-import com.keyme.presentation.feed.ui.FeedDestination
 import com.keyme.presentation.navigation.KeymeNavigationDestination
+import com.keyme.presentation.signin.SignInDestination
 
 @Composable
 fun rememberKeymeAppState(
@@ -22,7 +22,7 @@ class KeymeAppState(val navController: NavHostController) {
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
-    val startDestination = FeedDestination
+    val startDestination = SignInDestination
 
     fun navigate(destination: KeymeNavigationDestination) {
         if (destination is TopLevelDestination) {

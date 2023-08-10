@@ -19,6 +19,9 @@ import com.keyme.presentation.alarm.ui.alarmGraph
 import com.keyme.presentation.designsystem.theme.KeymeTheme
 import com.keyme.presentation.feed.ui.feedGraph
 import com.keyme.presentation.myprofile.ui.myProfileGraph
+import com.keyme.presentation.nickname.NicknameDestination
+import com.keyme.presentation.nickname.nicknameGraph
+import com.keyme.presentation.signin.signInGraph
 
 @Composable
 fun KeymeApp() {
@@ -26,12 +29,12 @@ fun KeymeApp() {
 
     KeymeTheme {
         Scaffold(
-            bottomBar = {
-                KeymeBottomBar(
-                    currentDestination = appState.currentDestination,
-                    onNavigateToDestination = appState::navigate,
-                )
-            },
+//            bottomBar = {
+//                KeymeBottomBar(
+//                    currentDestination = appState.currentDestination,
+//                    onNavigateToDestination = appState::navigate,
+//                )
+//            },
         ) { innerPadding ->
             NavHost(
                 navController = appState.navController,
@@ -40,6 +43,13 @@ fun KeymeApp() {
                     .fillMaxSize()
                     .padding(innerPadding),
             ) {
+                signInGraph(
+                    navigateToNickname = { appState.navigate(NicknameDestination) },
+//                    navigateToHome = { appState.navigate(HomeDestination) },
+                )
+                nicknameGraph(
+                    onBackClick = appState::onBackClick,
+                )
                 feedGraph(
                     navigateToAlarm = { appState.navigate(AlarmDestination) },
                     nestedGraphs = {

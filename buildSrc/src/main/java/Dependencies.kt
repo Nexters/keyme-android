@@ -24,7 +24,7 @@ object Dependencies {
     // See https://developer.android.com/jetpack/compose/bom/bom-mapping
     private val composeBom = "androidx.compose:compose-bom:${Versions.COMPOSE_BOM}"
     private val composeMaterial = "androidx.compose.material3:material3"
-    private val composePreview = "androidx.compose.ui:ui-tooling-preview"
+    private val composePreview = "androidx.compose.ui:ui-tooling"
     private val composeLiveData = "androidx.compose.runtime:runtime-livedata"
     private val composeViewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.COMPOSE_VIEW_MODEL}"
     private val composeNavigation = "androidx.navigation:navigation-compose:${Versions.COMPOSE_NAVIGATION}"

@@ -36,10 +36,11 @@ import timber.log.Timber
 fun rememberBubbleChartState(
     circles: List<Circle>,
     containerSize: Size,
+    onBubbleClick: () -> Unit,
 ): BubbleChartState {
     val coroutineScope = rememberCoroutineScope()
     return remember(Unit) {
-        BubbleChartState(coroutineScope, circles, containerSize)
+        BubbleChartState(coroutineScope, circles, containerSize, onBubbleClick)
     }
 }
 
@@ -55,6 +56,7 @@ class BubbleChartState(
     private val coroutineScope: CoroutineScope,
     private val circles: List<Circle>,
     private val containerSize: Size,
+    private val onBubbleClick: () -> Unit,
 ) {
     val scale = containerSize.width.toInt()
     val bubbleRectList = circles.map { circle ->
@@ -90,7 +92,7 @@ class BubbleChartState(
 
     fun onBubbleItemClick(item: Rect) {
         Timber.d("onBubbleItemClick: $item")
-
+        onBubbleClick()
     }
 }
 

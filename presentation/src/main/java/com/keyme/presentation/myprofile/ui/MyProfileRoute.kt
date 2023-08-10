@@ -2,10 +2,7 @@ package com.keyme.presentation.myprofile.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,17 +17,27 @@ object MyProfileDestination : KeymeNavigationDestination {
     override val destination: String = "myProfile_destination"
 }
 
-fun NavGraphBuilder.myProfileGraph() {
+fun NavGraphBuilder.myProfileGraph(
+    navigateToDetail: () -> Unit,
+    nestedGraphs: NavGraphBuilder.() -> Unit,
+) {
     composable(route = MyProfileDestination.route) {
-        MyProfileRoute()
+        MyProfileRoute(navigateToDetail = navigateToDetail)
     }
+    nestedGraphs()
 }
 
 @Composable
-fun MyProfileRoute(myProfileViewModel: MyProfileViewModel = hiltViewModel()) {
+fun MyProfileRoute(
+    myProfileViewModel: MyProfileViewModel = hiltViewModel(),
+    navigateToDetail: () -> Unit,
+) {
     val resultCircle by myProfileViewModel.resultCircleState.collectAsStateWithLifecycle()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        ResultScreen(resultCircle)
+        KeymeTestResultScreen(
+            circles = resultCircle,
+            onTestItemClick = { navigateToDetail() },
+        )
     }
 }

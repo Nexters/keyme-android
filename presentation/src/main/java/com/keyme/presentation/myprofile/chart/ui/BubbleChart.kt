@@ -10,14 +10,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.UiComposable
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.zIndex
 import com.keyme.domain.entity.response.Circle
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.myprofile.chart.rememberBubbleChartState
 
 @Composable
-fun BubbleChart(circles: List<Circle>) {
+fun BubbleChart(circles: List<Circle>, onBubbleClick: () -> Unit) {
     BubbleChartContainer {
         val bubbleChartState = rememberBubbleChartState(
             circles = circles,
@@ -25,6 +24,7 @@ fun BubbleChart(circles: List<Circle>) {
                 constraints.maxWidth.toFloat(),
                 constraints.maxHeight.toFloat(),
             ),
+            onBubbleClick = onBubbleClick,
         )
 
         if (bubbleChartState.bubbleChartInitialState.isInit()) bubbleChartState.init()

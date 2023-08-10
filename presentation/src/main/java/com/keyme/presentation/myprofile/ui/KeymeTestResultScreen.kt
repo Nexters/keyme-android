@@ -5,8 +5,9 @@ import com.keyme.domain.entity.response.Circle
 import com.keyme.presentation.myprofile.chart.ui.BubbleChart
 
 @Composable
-fun ResultScreen(
+fun KeymeTestResultScreen(
     circles: List<Circle>,
+    onTestItemClick: () -> Unit,
 ) {
-    BubbleChart(circles = circles)
+    BubbleChart(circles = circles, onBubbleClick = onTestItemClick)
 }

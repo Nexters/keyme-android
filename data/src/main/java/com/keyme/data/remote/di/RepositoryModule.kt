@@ -1,7 +1,7 @@
 package com.keyme.data.remote.di
 
-import com.keyme.data.remote.repositoryimpl.SampleRepositoryImpl
-import com.keyme.domain.repository.SampleRepository
+import com.keyme.data.remote.repositoryimpl.SignInRepositoryImpl
+import com.keyme.domain.repository.SignInRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,5 +12,5 @@ import dagger.hilt.android.components.ViewModelComponent
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun bindSampleRepository(impl: SampleRepositoryImpl): SampleRepository
+    abstract fun bindSignInRepository(impl: SignInRepositoryImpl): SignInRepository
 }

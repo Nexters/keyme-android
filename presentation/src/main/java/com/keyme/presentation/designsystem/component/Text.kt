@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.TextUnit
 import com.keyme.presentation.designsystem.theme.pretendard
 
 @Composable
-fun Text(
+fun KeymeText(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,

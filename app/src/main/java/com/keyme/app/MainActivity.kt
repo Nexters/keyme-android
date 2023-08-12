@@ -21,7 +21,6 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var uiEventManager: UiEventManager
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -35,7 +34,7 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 uiEventManager.uiEvent.collectLatest {
-                    when(it) {
+                    when (it) {
                         is UiEvent.Toast -> {
                             Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_SHORT).show()
                         }

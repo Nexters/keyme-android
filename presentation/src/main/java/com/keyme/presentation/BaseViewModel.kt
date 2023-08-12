@@ -7,8 +7,6 @@ import com.keyme.domain.entity.onApiError
 import com.keyme.domain.entity.onFailure
 import com.keyme.domain.entity.onSuccess
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import timber.log.Timber
@@ -31,7 +29,6 @@ abstract class BaseViewModel : ViewModel() {
                 baseViewModelScope.launch {
                     uiEventManager.onEvent(UiEvent.Toast("($code) $message"))
                 }
-
             }.onFailure {
                 baseViewModelScope.launch {
                     uiEventManager.onEvent(UiEvent.Toast(it.message ?: ""))

@@ -24,10 +24,13 @@ object Dependencies {
     // See https://developer.android.com/jetpack/compose/bom/bom-mapping
     private val composeBom = "androidx.compose:compose-bom:${Versions.COMPOSE_BOM}"
     private val composeMaterial = "androidx.compose.material3:material3"
+    private val composeTooling = "androidx.compose.ui:ui-tooling"
     private val composePreview = "androidx.compose.ui:ui-tooling-preview"
     private val composeLiveData = "androidx.compose.runtime:runtime-livedata"
     private val composeViewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.COMPOSE_VIEW_MODEL}"
     private val composeNavigation = "androidx.navigation:navigation-compose:${Versions.COMPOSE_NAVIGATION}"
+    private val runtime_compose = "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
+
 
     // ViewModel
     private val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE}"
@@ -62,6 +65,9 @@ object Dependencies {
     private val androidJunit = "androidx.test.ext:junit:${Versions.ANDROID_JUNIT}"
     private val espressoCore = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO_CORE}"
 
+    // Logger
+    private val timber = "com.jakewharton.timber:timber:4.7.1"
+
     fun DependencyHandler.setActivityDepdendencies() {
         implementation(activity)
         implementation(activity_compose)
@@ -86,10 +92,12 @@ object Dependencies {
     fun DependencyHandler.setComposeDependencies() {
         implementation(platform(composeBom))
         implementation(composeMaterial)
+        debugImplementation(composeTooling)
         implementation(composePreview)
         implementation(composeLiveData)
         implementation(composeViewModel)
         implementation(composeNavigation)
+        implementation(runtime_compose)
     }
 
     fun DependencyHandler.setViewModelDependencies() {
@@ -137,6 +145,10 @@ object Dependencies {
         androidTestImplementation(espressoCore)
     }
 
+    fun DependencyHandler.setLoggerDependencies() {
+        implementation(timber)
+    }
+
 
     private fun DependencyHandler.ksp(dependency: String) {
         add("ksp", dependency)
@@ -156,6 +168,14 @@ object Dependencies {
 
     private fun DependencyHandler.implementation(dependency: Dependency) {
         add("implementation", dependency)
+    }
+
+    private fun DependencyHandler.debugImplementation(dependency: String) {
+        add("debugImplementation", dependency)
+    }
+
+    private fun DependencyHandler.debugImplementation(dependency: Dependency) {
+        add("debugImplementation", dependency)
     }
 
     private fun DependencyHandler.annotationProcessor(dependency: String) {

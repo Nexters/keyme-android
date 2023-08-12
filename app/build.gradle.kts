@@ -4,6 +4,7 @@ import Dependencies.setComposeDependencies
 import Dependencies.setCoreKtxDependencies
 import Dependencies.setHiltDependencies
 import Dependencies.setKotlinStdLibDependencies
+import Dependencies.setLoggerDependencies
 import Dependencies.setSplashDependencies
 import Dependencies.setTestDependencies
 
@@ -59,6 +60,8 @@ dependencies {
 
     setTestDependencies()
     setAndroidTestDependencies()
+
+    setLoggerDependencies()
 }
 
 kapt {

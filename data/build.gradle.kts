@@ -4,6 +4,7 @@ import Dependencies.setCoroutinesDependencies
 import Dependencies.setDatabaseDependencies
 import Dependencies.setHiltDependencies
 import Dependencies.setKotlinStdLibDependencies
+import Dependencies.setLoggerDependencies
 import Dependencies.setNetworkDependencies
 import Dependencies.setTestDependencies
 
@@ -47,6 +48,8 @@ dependencies {
 
     setTestDependencies()
     setAndroidTestDependencies()
+
+    setLoggerDependencies()
 }
 
 kapt {

@@ -24,8 +24,8 @@ jobs:
         run: chmod +x gradlew
       - name: Update KAKAO_NATIVE_APP_KEY from Secrets
         env:
-            kakao_native_app_key: ${{ secrets.KAKAO_NATIVE_APP_KEY }}
-        run: echo KAKAO_NATIVE_APP_KEY=\"KAKAO_NATIVE_APP_KEY" > ./local.properties
+            KAKAO_NATIVE_APP_KEY: $
+        run: echo KAKAO_NATIVE_APP_KEY=\"KAKAO_NATIVE_APP_KEY\" > ./local.properties
       - name: App Module ktlintCheck
         run: ./gradlew app:ktlintCheck
       - name: Presentation Module ktlintCheck

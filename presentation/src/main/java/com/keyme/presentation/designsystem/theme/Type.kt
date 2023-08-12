@@ -41,4 +41,3 @@ val pretendard = FontFamily(
     Font(R.font.pretendard_extrabold, FontWeight.ExtraBold, FontStyle.Normal),
     Font(R.font.pretendard_black, FontWeight.Black, FontStyle.Normal),
 )
-

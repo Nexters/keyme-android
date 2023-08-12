@@ -11,5 +11,5 @@ fun KeymeTestStatisticsScreen(
 ) {
     BubbleChart(circles = circles, onBubbleClick = {
         onTestItemClick()
-    })
+    },)
 }

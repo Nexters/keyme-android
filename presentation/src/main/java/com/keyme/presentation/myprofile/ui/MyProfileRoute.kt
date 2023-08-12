@@ -35,7 +35,7 @@ fun MyProfileRoute(
     val resultCircle by myProfileViewModel.resultCircleState.collectAsStateWithLifecycle()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        KeymeTestResultScreen(
+        KeymeTestStatisticsScreen(
             circles = resultCircle,
             onTestItemClick = { navigateToDetail() },
         )

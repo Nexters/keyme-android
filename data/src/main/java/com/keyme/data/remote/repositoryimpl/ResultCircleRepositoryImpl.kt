@@ -10,6 +10,8 @@ class ResultCircleRepositoryImpl @Inject constructor(
 ) : ResultCircleRepository {
 
     override suspend fun getDummy(): ResultCircleResponse {
-        return resultCircleDataSource.getSample()
+        return resultCircleDataSource.getSample().apply {
+            statusCode = "200"
+        }
     }
 }

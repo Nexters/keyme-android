@@ -18,8 +18,8 @@ import com.keyme.presentation.alarm.ui.AlarmDestination
 import com.keyme.presentation.alarm.ui.alarmGraph
 import com.keyme.presentation.designsystem.theme.KeymeTheme
 import com.keyme.presentation.feed.ui.feedGraph
-import com.keyme.presentation.myprofile.ui.KeymeTestDetailDestination
-import com.keyme.presentation.myprofile.ui.keymeTestDetailGraph
+import com.keyme.presentation.myprofile.ui.KeymeTestResultDetailDestination
+import com.keyme.presentation.myprofile.ui.keymeTestResultDetailGraph
 import com.keyme.presentation.myprofile.ui.myProfileGraph
 
 @Composable
@@ -49,9 +49,9 @@ fun KeymeApp() {
                     },
                 )
                 myProfileGraph(
-                    navigateToDetail = { appState.navigate(KeymeTestDetailDestination) },
+                    navigateToDetail = { appState.navigate(KeymeTestResultDetailDestination) },
                     nestedGraphs = {
-                        keymeTestDetailGraph(onBackClick = appState::onBackClick)
+                        keymeTestResultDetailGraph(onBackClick = appState::onBackClick)
                     },
                 )
             }

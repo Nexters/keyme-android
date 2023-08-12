@@ -6,6 +6,7 @@ import Dependencies.setHiltDependencies
 import Dependencies.setImageDependencies
 import Dependencies.setKakaoSignInDependencies
 import Dependencies.setKotlinStdLibDependencies
+import Dependencies.setLoggerDependencies
 import Dependencies.setLottieDependencies
 import Dependencies.setTestDependencies
 import Dependencies.setViewModelDependencies
@@ -63,6 +64,8 @@ dependencies {
 
     setTestDependencies()
     setAndroidTestDependencies()
+
+    setLoggerDependencies()
 }
 
 kapt {

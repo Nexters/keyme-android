@@ -5,6 +5,7 @@ import Dependencies.setCoreKtxDependencies
 import Dependencies.setHiltDependencies
 import Dependencies.setKakaoSignInDependencies
 import Dependencies.setKotlinStdLibDependencies
+import Dependencies.setLoggerDependencies
 import Dependencies.setSplashDependencies
 import Dependencies.setTestDependencies
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
@@ -68,6 +69,8 @@ dependencies {
 
     setTestDependencies()
     setAndroidTestDependencies()
+
+    setLoggerDependencies()
 }
 
 kapt {

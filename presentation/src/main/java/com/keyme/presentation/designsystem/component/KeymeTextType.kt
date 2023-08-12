@@ -81,5 +81,5 @@ enum class KeymeTextType(
         weight = 800,
         lineHeight = 21.6f,
         fontFamily = panchang,
-    )
+    ),
 }

@@ -8,6 +8,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.keyme.domain.entity.response.keymetest.Category
+import com.keyme.domain.entity.response.keymetest.QuestionsStatistic
 import com.keyme.presentation.myprofile.KeymeQuestionResultViewModel
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
@@ -41,7 +43,15 @@ fun KeymeQuestionResultRoute(
     val statisticsState by keymeQuestionResultViewModel.statisticsState.collectAsStateWithLifecycle()
 
     KeymeQuestionResultScreen(
-        statistics = statisticsState.questionsStatistics.first(),
+        statistics = QuestionsStatistic(
+            averageScore = 0,
+            category = Category(
+                color = "",
+                imageUrl = "",
+                name = ""
+            ),
+            description = "", keyword = "", questionId = 0
+        ),
         onBackClick = onBackClick
     )
 }

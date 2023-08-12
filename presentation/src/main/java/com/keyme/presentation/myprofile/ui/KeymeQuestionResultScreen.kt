@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,9 +39,11 @@ import com.keyme.domain.entity.response.keymetest.Category
 import com.keyme.domain.entity.response.keymetest.QuestionsStatistic
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.BottomSheetHandle
+import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.designsystem.theme.panchang
 import com.keyme.presentation.utils.clickableRippleEffect
+import com.keyme.presentation.utils.getUploadTimeString
 import com.keyme.presentation.utils.textDp
 import timber.log.Timber
 
@@ -67,31 +72,20 @@ fun KeymeQuestionResultScreen(
 
             KeymeQuestionScoreListContainer {
 
-                Text(
-                    text = "키미미미미미님의 애정 표현정도는?",
-                    style = androidx.compose.ui.text.TextStyle(
-                        fontSize = 20.sp,
-                        lineHeight = 26.sp,
-                        fontWeight = FontWeight(600),
-                        color = Color(0xFFFFFFFF),
-                    ),
-                )
+                KeymeQuestionInfo(title = "키미미미미미님의 애정 표현정도는?", solvedCount = 10)
 
-                Text(
-                    text = "응답자 수 16명",
-                    style = androidx.compose.ui.text.TextStyle(
-                        fontSize = 16.sp,
-                        lineHeight = 19.2.sp,
-                        fontWeight = FontWeight(400),
-                        color = Color(0x99FFFFFF),
-                    ),
-                )
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = Color(0x1AFFFFFF))
 
                 LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     items(100) {
-                        KeymeQuestionScoreItem("5점", System.currentTimeMillis())
+                        KeymeQuestionScoreItem("5", System.currentTimeMillis())
                     }
                 }
             }
@@ -149,6 +143,39 @@ fun ColumnScope.KeymeQuestionScoreListContainer(content: @Composable ColumnScope
 }
 
 @Composable
+fun KeymeQuestionInfo(
+    title: String,
+    solvedCount: Int,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = title,
+            style = androidx.compose.ui.text.TextStyle(
+                fontSize = 20.sp,
+                lineHeight = 26.sp,
+                fontWeight = FontWeight(600),
+                color = Color(0xFFFFFFFF),
+            ),
+        )
+
+        Text(
+            text = "응답자 수 ${solvedCount}명",
+            style = androidx.compose.ui.text.TextStyle(
+                fontSize = 16.sp,
+                lineHeight = 19.2.sp,
+                fontWeight = FontWeight(400),
+                color = Color(0x99FFFFFF),
+            ),
+        )
+    }
+}
+
+@Composable
 private fun KeymeQuestionScoreItem(
     score: String,
     timeStamp: Long,
@@ -156,10 +183,11 @@ private fun KeymeQuestionScoreItem(
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .background(color = Color(0xFF303030), shape = RoundedCornerShape(size = 16.dp))
             .padding(vertical = 16.dp, horizontal = 20.dp),
     ) {
-        Text(modifier = Modifier.align(Alignment.Center), text = "5점")
-        Text(modifier = Modifier.align(Alignment.CenterEnd), text = "2시간전")
+        KeymeText(modifier = Modifier.align(Alignment.Center), text = "${score}점")
+        KeymeText(modifier = Modifier.align(Alignment.CenterEnd), text = timeStamp.getUploadTimeString())
     }
 }
 
@@ -174,7 +202,7 @@ private fun KeymeQuestionStatisticsInfo(
             .padding(top = 4.dp, bottom = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(
+        KeymeText(
             modifier = Modifier
                 .border(
                     width = 0.5.dp,
@@ -194,7 +222,7 @@ private fun KeymeQuestionStatisticsInfo(
                 fontSize = 40.textDp(),
                 color = Color.White.copy(alpha = 0.6f),
             )
-            Text(
+            KeymeText(
                 modifier = Modifier
                     .align(Alignment.Bottom)
                     .padding(bottom = 10.dp),

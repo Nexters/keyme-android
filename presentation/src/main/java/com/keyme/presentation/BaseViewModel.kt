@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import timber.log.Timber
+import javax.inject.Inject
 
 abstract class BaseViewModel : ViewModel() {
 
@@ -19,8 +20,8 @@ abstract class BaseViewModel : ViewModel() {
         Timber.e(throwable)
     }
 
-    protected val _uiEvent = MutableSharedFlow<UiEvent>()
-    val uiEvent = _uiEvent.asSharedFlow()
+    @Inject
+    lateinit var uiEventManager: UiEventManager
 
     fun <T> apiCall(apiRequest: suspend () -> ApiResult<T>, action: (T) -> Unit) {
         baseViewModelScope.launch {
@@ -28,18 +29,14 @@ abstract class BaseViewModel : ViewModel() {
                 action(it)
             }.onApiError { code, message ->
                 baseViewModelScope.launch {
-                    _uiEvent.emit(UiEvent.Toast("($code) $message"))
+                    uiEventManager.onEvent(UiEvent.Toast("($code) $message"))
                 }
 
             }.onFailure {
                 baseViewModelScope.launch {
-                    _uiEvent.emit(UiEvent.Toast(it.message ?: ""))
+                    uiEventManager.onEvent(UiEvent.Toast(it.message ?: ""))
                 }
             }
         }
     }
-}
-
-sealed interface UiEvent {
-    class Toast(val message: String) : UiEvent
 }

@@ -14,7 +14,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.keyme.app.navigation.TopLevelDestination
-import com.keyme.presentation.UiState
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 import com.keyme.presentation.signin.SignInDestination
 import com.keyme.presentation.signin.SignInViewModel
@@ -50,9 +49,7 @@ class KeymeAppState(
     init {
         coroutineScope.launch {
             signInViewModel.keymeSignInState.collectLatest {
-                if (it is UiState.Success) {
-                    isSignIn = it.data == SignInStateEnum.MY_DAILY
-                }
+                isSignIn = it == SignInStateEnum.MY_DAILY
             }
         }
     }

@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,17 +26,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.keyme.presentation.R
-import com.keyme.presentation.UiState
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.keyme_white
 import com.keyme.presentation.designsystem.theme.white_alpha_50
 import com.keyme.presentation.signin.enums.SignInStateEnum
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SignInRoute(
@@ -46,20 +47,13 @@ fun SignInRoute(
     viewModel: SignInViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val signInState: UiState<SignInStateEnum> by viewModel.keymeSignInState.collectAsState()
+    val signInState by viewModel.keymeSignInState.collectAsStateWithLifecycle()
 
-    when (val state = signInState) {
-        is UiState.Loading -> {}
-        is UiState.Success<SignInStateEnum> -> {
-            when (state.data) {
-                SignInStateEnum.NICKNAME -> navigateToNickname.invoke()
-//                SignInStateEnum.KEYME_TEST -> navigateToKeymeTest.invoke()
-//                SignInStateEnum.MY_DAILY -> navigateToMyDaily.invoke()
-                else -> {}
-            }
-        }
-        is UiState.ApiError -> {}
-        is UiState.Failure -> {}
+    when (signInState) {
+        SignInStateEnum.NICKNAME -> navigateToNickname.invoke()
+//        SignInStateEnum.KEYME_TEST -> navigateToKeymeTest.invoke()
+//        SignInStateEnum.MY_DAILY -> navigateToMyDaily.invoke()
+        else -> {}
     }
 
     SignInScreen(
@@ -168,6 +162,7 @@ private fun signInWithKakao(
                 true -> {
                     /* TODO: Handle error */
                 }
+
                 false -> {
                     /* TODO: Handle error */
                 }
@@ -180,6 +175,7 @@ private fun signInWithKakao(
             context = context,
             callback = kakaoSignInCallback,
         )
+
         false -> UserApiClient.instance.loginWithKakaoAccount(
             context = context,
             callback = kakaoSignInCallback,

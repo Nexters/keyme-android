@@ -1,14 +1,19 @@
 package com.keyme.data.remote.api
 
-import com.keyme.domain.entity.response.SampleResponse
+import com.keyme.domain.entity.request.SignInRequest
+import com.keyme.domain.entity.response.SignInResponse
 import com.keyme.domain.entity.response.keymetest.KeymeTestResultStatisticsResponse
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface KeymeApi {
 
-    @GET("main/sample")
-    suspend fun getSample(): SampleResponse
+    @POST("/auth/login")
+    suspend fun signInWithKakao(
+        @Body signInRequest: SignInRequest,
+    ): SignInResponse
 
     @GET("tests/{id}/statistics")
     suspend fun getKeymeTestResultStatistics(

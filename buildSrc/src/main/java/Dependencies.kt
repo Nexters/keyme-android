@@ -35,6 +35,9 @@ object Dependencies {
     // ViewModel
     private val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE}"
 
+    // Kakao signIn
+    private val kakaoSignIn = "com.kakao.sdk:v2-user:${Versions.KAKAO_SIGN_IN}"
+
     // Lottie
     private val lottieCompose = "com.airbnb.android:lottie-compose:${Versions.LOTTIE_COMPOSE}"
 
@@ -102,6 +105,10 @@ object Dependencies {
 
     fun DependencyHandler.setViewModelDependencies() {
         implementation(viewModelKtx)
+    }
+
+    fun DependencyHandler.setKakaoSignInDependencies() {
+        implementation(kakaoSignIn)
     }
 
     fun DependencyHandler.setLottieDependencies() {

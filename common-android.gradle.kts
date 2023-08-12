@@ -6,11 +6,6 @@ if (!isLibraryPlugin || !isApplicationPlugin) return
 
 android {
     defaultConfig {
-        if (isApplicationPlugin) {
-            applicationId = "com.keyme.app"
-            versionCode = AppConfig.versionCode
-            versionName = AppConfig.versionName
-        }
         targetSdk = AppConfig.targetSdkVersion
         testInstrumentationRunner = AppConfig.androidTestInstrumentationRunner
     }

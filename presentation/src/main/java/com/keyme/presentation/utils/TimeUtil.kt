@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
-fun Long.getUploadTimeStamp(): String {
+fun Long.getUploadTimeString(): String {
     val uploadInterval = System.currentTimeMillis() - this
 
     val minutesUnit = TimeUnit.MINUTES.toMillis(1)

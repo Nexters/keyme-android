@@ -14,7 +14,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import com.keyme.presentation.designsystem.theme.pretendard
 
 @Composable
 fun KeymeText(
@@ -39,7 +38,7 @@ fun KeymeText(
         fontSize = keymeTextType.size.sp,
         fontStyle = null,
         fontWeight = FontWeight(keymeTextType.weight),
-        fontFamily = pretendard,
+        fontFamily = keymeTextType.fontFamily,
         letterSpacing = letterSpacing,
         textDecoration = textDecoration,
         textAlign = textAlign,
@@ -100,6 +99,21 @@ fun KeymeTextPreview() {
         KeymeText(
             text = "TOOLTIP",
             keymeTextType = KeymeTextType.TOOLTIP,
+            color = Color.White,
+        )
+        KeymeText(
+            text = "SCORE_RESULT",
+            keymeTextType = KeymeTextType.SCORE_RESULT,
+            color = Color.White,
+        )
+        KeymeText(
+            text = "SCORE_DETAIL",
+            keymeTextType = KeymeTextType.SCORE_DETAIL,
+            color = Color.White,
+        )
+        KeymeText(
+            text = "SCORE_MY_PAGE",
+            keymeTextType = KeymeTextType.SCORE_MY_PAGE,
             color = Color.White,
         )
     }

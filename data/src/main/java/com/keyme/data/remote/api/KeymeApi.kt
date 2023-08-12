@@ -10,8 +10,8 @@ interface KeymeApi {
     @GET("main/sample")
     suspend fun getSample(): SampleResponse
 
-    @GET("tests/{id}//tests/{id}/statistics")
+    @GET("tests/{id}/statistics")
     suspend fun getKeymeTestResultStatistics(
-        @Path("id") id: String,
+        @Path("id") questionId: String,
     ): KeymeTestResultStatisticsResponse
 }

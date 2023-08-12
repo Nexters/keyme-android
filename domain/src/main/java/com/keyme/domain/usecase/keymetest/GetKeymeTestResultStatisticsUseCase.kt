@@ -6,12 +6,12 @@ import com.keyme.domain.entity.response.keymetest.KeymeTestResultStatistics
 import com.keyme.domain.repository.keymetest.KeymeTestResultRepository
 import javax.inject.Inject
 
-class GetKeymeTestResultStatistics @Inject constructor(
+class GetKeymeTestResultStatisticsUseCase @Inject constructor(
     private val keymeTestResultRepository: KeymeTestResultRepository,
 ) {
-    suspend operator fun invoke(id: String): ApiResult<KeymeTestResultStatistics> {
+    suspend operator fun invoke(questionId: String): ApiResult<KeymeTestResultStatistics> {
         return apiResult {
-            keymeTestResultRepository.getStatistics(id)
+            keymeTestResultRepository.getStatistics(questionId)
         }
     }
 }

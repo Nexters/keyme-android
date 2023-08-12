@@ -2,6 +2,7 @@ package com.keyme.data.remote.di
 
 import com.keyme.data.remote.repositoryimpl.ResultCircleRepositoryImpl
 import com.keyme.data.remote.repositoryimpl.SampleRepositoryImpl
+import com.keyme.data.remote.repositoryimpl.keymetest.KeymeTestResultRepositoryImpl
 import com.keyme.domain.repository.ResultCircleRepository
 import com.keyme.domain.repository.SampleRepository
 import com.keyme.domain.repository.keymetest.KeymeTestResultRepository
@@ -21,5 +22,5 @@ abstract class RepositoryModule {
     abstract fun bindResultCircleRepository(impl: ResultCircleRepositoryImpl): ResultCircleRepository
 
     @Binds
-    abstract fun bindKeymeTestResultRepository(impl: KeymeTestResultRepository): KeymeTestResultRepository
+    abstract fun bindKeymeTestResultRepository(impl: KeymeTestResultRepositoryImpl): KeymeTestResultRepository
 }

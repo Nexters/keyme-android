@@ -4,5 +4,5 @@ import com.keyme.domain.entity.response.keymetest.KeymeTestResultStatisticsRespo
 
 interface KeymeTestResultRepository {
 
-    suspend fun getStatistics(id: String): KeymeTestResultStatisticsResponse
+    suspend fun getStatistics(questionId: String): KeymeTestResultStatisticsResponse
 }

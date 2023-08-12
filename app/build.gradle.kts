@@ -77,7 +77,6 @@ kapt {
     correctErrorTypes = true
 }
 
-
 fun getKakaoNativeAppKey(): String {
     return gradleLocalProperties(rootDir).getProperty("KAKAO_NATIVE_APP_KEY")
 }

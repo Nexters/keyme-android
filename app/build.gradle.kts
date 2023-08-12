@@ -79,5 +79,5 @@ kapt {
 
 
 fun getKakaoNativeAppKey(): String {
-    return gradleLocalProperties(rootDir).getProperty("kakao_native_app_key")
+    return gradleLocalProperties(rootDir).getProperty("KAKAO_NATIVE_APP_KEY")
 }

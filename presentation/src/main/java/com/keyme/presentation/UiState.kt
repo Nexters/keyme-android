@@ -7,7 +7,7 @@ sealed class UiState<out T : Any> {
     ) : UiState<T>()
 
     data class ApiError(
-        val statusCode: String,
+        val code: String,
         val message: String,
     ) : UiState<Nothing>()
 

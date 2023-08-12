@@ -12,7 +12,7 @@ object NicknameDestination : KeymeNavigationDestination {
 
 fun NavGraphBuilder.nicknameGraph(
     onBackClick: () -> Unit,
-//    navigateToQuestion: () -> Unit,
+//    navigateToKeymeTest: () -> Unit,
 ) {
     navigation(
         route = NicknameDestination.route,
@@ -21,7 +21,7 @@ fun NavGraphBuilder.nicknameGraph(
         composable(route = NicknameDestination.destination) {
             NicknameRoute(
                 onBackClick = onBackClick,
-//                navigateToQuestion = navigateToQuestion,
+//                navigateToKeymeTest = navigateToKeymeTest,
             )
         }
     }

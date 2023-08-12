@@ -12,7 +12,8 @@ object SignInDestination : KeymeNavigationDestination {
 
 fun NavGraphBuilder.signInGraph(
     navigateToNickname: () -> Unit,
-//    navigateToHome: () -> Unit,
+//    navigateToKeymeTest: () -> Unit,
+//    navigateToMyDaily: () -> Unit,
 ) {
     navigation(
         route = SignInDestination.route,
@@ -21,7 +22,8 @@ fun NavGraphBuilder.signInGraph(
         composable(route = SignInDestination.destination) { backStackEntry ->
             SignInRoute(
                 navigateToNickname = navigateToNickname,
-//                navigateToHome = navigateToHome,
+//                navigateToKeymeTest = navigateToKeymeTest,
+//                navigateToMyDaily = navigateToMyDaily,
             )
         }
     }

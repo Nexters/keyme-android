@@ -1,8 +1,9 @@
 package com.keyme.presentation.nickname
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -10,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun NicknameRoute(
     onBackClick: () -> Unit,
-//    navigateToQuestion: () -> Unit,
+//    navigateToKeymeTest: () -> Unit,
 ) {
     NicknameScreen(onBackClick)
 }
@@ -18,7 +19,7 @@ fun NicknameRoute(
 @Composable
 fun NicknameScreen(
     onBackClick: () -> Unit,
-//    navigateToQuestion: () -> Unit,
+//    navigateToKeymeTest: () -> Unit,
 ) {
     val contentHorizontalPadding = 16
 
@@ -35,6 +36,6 @@ fun NicknameScreen(
 fun NicknameScreenPreview() {
     NicknameScreen(
         onBackClick = {},
-//        navigateToQuestion = {},
+//        navigateToKeymeTest = {},
     )
 }

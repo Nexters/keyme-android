@@ -2,10 +2,10 @@ package com.keyme.data.remote.api
 
 import com.keyme.domain.entity.request.SignInRequest
 import com.keyme.domain.entity.response.SignInResponse
-import retrofit2.http.Body
-import retrofit2.http.POST
 import com.keyme.domain.entity.response.keymetest.KeymeTestResultStatisticsResponse
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface KeymeApi {

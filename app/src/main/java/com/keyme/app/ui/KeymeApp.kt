@@ -47,7 +47,8 @@ fun KeymeApp() {
             ) {
                 signInGraph(
                     navigateToNickname = { appState.navigate(NicknameDestination) },
-//                    navigateToHome = { appState.navigate(HomeDestination) },
+//                    navigateToKeymeTest = { appState.navigate(KeymeTestDestination) },
+//                    navigateToMyDaily = { appState.navigate(MyDailyDestination) },
                 )
                 nicknameGraph(
                     onBackClick = appState::onBackClick,

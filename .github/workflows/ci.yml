@@ -50,6 +50,10 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+    - name: Update KAKAO_NATIVE_APP_KEY from Secrets
+      env:
+            KAKAO_NATIVE_APP_KEY: $
+      run: echo KAKAO_NATIVE_APP_KEY=\"KAKAO_NATIVE_APP_KEY\" > ./local.properties
     - name: Debug Build with Gradle
       run: ./gradlew assembleDebug
     - name: Upload APK

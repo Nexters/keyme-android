@@ -24,7 +24,7 @@ class ApiModule {
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://api.keyme.com/")
+            .baseUrl("https://api.keyme.space")
             .client(getOkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

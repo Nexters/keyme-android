@@ -32,10 +32,10 @@ fun <T> ApiResult<T>.onFailure(action: (Throwable) -> Unit): ApiResult<T> {
 inline fun <T : Any> apiResult(call: () -> BaseResponse<T>): ApiResult<T> {
     return runCatching {
         val response = call()
-        if (response.statusCode == "200") {
+        if (response.code == "200") {
             ApiResult.Success(response.data)
         } else {
-            ApiResult.ApiError(response.statusCode, response.message)
+            ApiResult.ApiError(response.code, response.message)
         }
     }.getOrElse {
         ApiResult.NetworkError(it)

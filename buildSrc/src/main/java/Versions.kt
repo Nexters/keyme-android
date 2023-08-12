@@ -23,6 +23,9 @@ object Versions {
     // Lifecycle
     const val LIFECYCLE = "2.6.1"
 
+    // KakaoSignIn
+    const val KAKAO_SIGN_IN = "2.15.0"
+
     // Lottie
     const val LOTTIE_COMPOSE = "6.0.1"
 

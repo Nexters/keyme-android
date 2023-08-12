@@ -29,3 +29,16 @@ val panchang = FontFamily(
     Font(R.font.panchang_regular, FontWeight.Normal, FontStyle.Normal),
     Font(R.font.panchang_semibold, FontWeight.SemiBold, FontStyle.Normal),
 )
+
+val pretendard = FontFamily(
+    Font(R.font.pretendard_thin, FontWeight.Thin, FontStyle.Normal),
+    Font(R.font.pretendard_extralight, FontWeight.ExtraLight, FontStyle.Normal),
+    Font(R.font.pretendard_light, FontWeight.Light, FontStyle.Normal),
+    Font(R.font.pretendard_regular, FontWeight.Normal, FontStyle.Normal),
+    Font(R.font.pretendard_medium, FontWeight.Medium, FontStyle.Normal),
+    Font(R.font.pretendard_semibold, FontWeight.SemiBold, FontStyle.Normal),
+    Font(R.font.pretendard_bold, FontWeight.Bold, FontStyle.Normal),
+    Font(R.font.pretendard_extrabold, FontWeight.ExtraBold, FontStyle.Normal),
+    Font(R.font.pretendard_black, FontWeight.Black, FontStyle.Normal),
+)
+

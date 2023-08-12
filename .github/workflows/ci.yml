@@ -22,10 +22,10 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Update Username from Secrets
+      - name: Update kakao_native_app_key from Secrets
         env:
-            KAKAO_NATIVE_APP_KEY: ${{ secrets.KAKAO_NATIVE_APP_KEY }}
-        run: echo API_KEY="KAKAO_NATIVE_APP_KEY" > ./local.properties
+            kakao_native_app_key: ${{ secrets.kakao_native_app_key }}
+        run: echo API_KEY="kakao_native_app_key" > ./local.properties
       - name: App Module ktlintCheck
         run: ./gradlew app:ktlintCheck
       - name: Presentation Module ktlintCheck

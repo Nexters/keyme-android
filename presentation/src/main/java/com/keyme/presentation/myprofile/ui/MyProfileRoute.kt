@@ -18,11 +18,11 @@ object MyProfileDestination : KeymeNavigationDestination {
 }
 
 fun NavGraphBuilder.myProfileGraph(
-    navigateToDetail: () -> Unit,
+    navigateToQuestionResult: () -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     composable(route = MyProfileDestination.route) {
-        MyProfileRoute(navigateToDetail = navigateToDetail)
+        MyProfileRoute(navigateToQuestionResult = navigateToQuestionResult)
     }
     nestedGraphs()
 }
@@ -30,14 +30,14 @@ fun NavGraphBuilder.myProfileGraph(
 @Composable
 fun MyProfileRoute(
     myProfileViewModel: MyProfileViewModel = hiltViewModel(),
-    navigateToDetail: () -> Unit,
+    navigateToQuestionResult: () -> Unit,
 ) {
     val resultCircle by myProfileViewModel.resultCircleState.collectAsStateWithLifecycle()
 
     Box(modifier = Modifier.fillMaxSize()) {
         KeymeTestStatisticsScreen(
             circles = resultCircle,
-            onTestItemClick = { navigateToDetail() },
+            onTestItemClick = { navigateToQuestionResult() },
         )
     }
 }

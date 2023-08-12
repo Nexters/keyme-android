@@ -6,13 +6,12 @@ import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -33,7 +32,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.keyme.domain.entity.response.keymetest.Category
+import com.keyme.domain.entity.response.keymetest.QuestionsStatistic
 import com.keyme.presentation.R
+import com.keyme.presentation.designsystem.component.BottomSheetHandle
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.designsystem.theme.panchang
 import com.keyme.presentation.utils.clickableRippleEffect
@@ -41,7 +43,10 @@ import com.keyme.presentation.utils.textDp
 import timber.log.Timber
 
 @Composable
-fun KeymeTestResultDetailScreen(onBackClick: () -> Unit) {
+fun KeymeQuestionResultScreen(
+    statistics: QuestionsStatistic,
+    onBackClick: () -> Unit,
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         Icon(
             modifier = Modifier
@@ -56,59 +61,11 @@ fun KeymeTestResultDetailScreen(onBackClick: () -> Unit) {
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            KeymeTestInfo()
+            KeymeQuestionStatisticsInfo(statistics)
 
-            Box(
-                modifier = Modifier
-                    .padding(top = 12.dp, start = 30.dp, end = 30.dp, bottom = 30.dp)
-                    .weight(1f)
-                    .aspectRatio(1f)
-                    .shadow(
-                        elevation = 20.dp,
-                        spotColor = Color(0x00000000),
-                        ambientColor = Color(0x00000000),
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = Color(0x4DFFFFFF),
-                        shape = RoundedCornerShape(size = 320.00003.dp),
-                    )
-                    .background(color = Color(0x4DFFFFFF), shape = RoundedCornerShape(size = 320.00003.dp)),
-            )
+            KeymeQuestionStatisticsCircle()
 
-            var bottomWeightValue by remember {
-                mutableStateOf(1f)
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = Color(0xFF232323),
-                        RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-                    )
-                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                    .weight(bottomWeightValue),
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(14.dp)
-                        .pointerInput(Unit) {
-                            detectVerticalDragGestures { _, dragAmount ->
-                                bottomWeightValue = (bottomWeightValue - dragAmount / 200).coerceIn(1f, 5f)
-                                Timber.d("bottomWeightValue: $bottomWeightValue")
-                            }
-                        },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .width(40.dp)
-                            .height(4.dp)
-                            .background(color = Color(0x4DFFFFFF), shape = RoundedCornerShape(size = 2.dp)),
-                    )
-                }
+            KeymeQuestionScoreListContainer {
 
                 Text(
                     text = "키미미미미미님의 애정 표현정도는?",
@@ -119,6 +76,7 @@ fun KeymeTestResultDetailScreen(onBackClick: () -> Unit) {
                         color = Color(0xFFFFFFFF),
                     ),
                 )
+
                 Text(
                     text = "응답자 수 16명",
                     style = androidx.compose.ui.text.TextStyle(
@@ -133,7 +91,7 @@ fun KeymeTestResultDetailScreen(onBackClick: () -> Unit) {
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     items(100) {
-                        Item()
+                        KeymeQuestionScoreItem("5점", System.currentTimeMillis())
                     }
                 }
             }
@@ -142,7 +100,59 @@ fun KeymeTestResultDetailScreen(onBackClick: () -> Unit) {
 }
 
 @Composable
-private fun Item() {
+fun ColumnScope.KeymeQuestionStatisticsCircle() {
+    Box(
+        modifier = Modifier
+            .padding(top = 12.dp, start = 30.dp, end = 30.dp, bottom = 30.dp)
+            .weight(1f)
+            .aspectRatio(1f)
+            .shadow(
+                elevation = 20.dp,
+                spotColor = Color(0x00000000),
+                ambientColor = Color(0x00000000),
+            )
+            .border(
+                width = 1.dp,
+                color = Color(0x4DFFFFFF),
+                shape = RoundedCornerShape(size = 320.00003.dp),
+            )
+            .background(color = Color(0x4DFFFFFF), shape = RoundedCornerShape(size = 320.00003.dp)),
+    )
+}
+
+@Composable
+fun ColumnScope.KeymeQuestionScoreListContainer(content: @Composable ColumnScope.() -> Unit) {
+    var bottomWeightValue by remember { mutableStateOf(1f) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = Color(0xFF232323),
+                RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+            )
+            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+            .weight(bottomWeightValue),
+    ) {
+        BottomSheetHandle(
+            modifier = Modifier
+                .pointerInput(Unit) {
+                    detectVerticalDragGestures { _, dragAmount ->
+                        bottomWeightValue = (bottomWeightValue - dragAmount / 200).coerceIn(1f, 5f)
+                        Timber.d("bottomWeightValue: $bottomWeightValue")
+                    }
+                },
+        )
+
+        content()
+    }
+}
+
+@Composable
+private fun KeymeQuestionScoreItem(
+    score: String,
+    timeStamp: Long,
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -154,7 +164,10 @@ private fun Item() {
 }
 
 @Composable
-private fun KeymeTestInfo() {
+private fun KeymeQuestionStatisticsInfo(
+    questionsStatistic: QuestionsStatistic,
+) {
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -170,12 +183,12 @@ private fun KeymeTestInfo() {
                 )
                 .background(color = Color(0x33FFFFFF), shape = RoundedCornerShape(size = 16.dp))
                 .padding(start = 10.dp, top = 5.dp, end = 10.dp, bottom = 5.dp),
-            text = "표현력",
+            text = questionsStatistic.category.name,
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
-                text = "4.0",
+                text = questionsStatistic.averageScore.toString(),
                 fontFamily = panchang,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 40.textDp(),
@@ -196,13 +209,22 @@ private fun KeymeTestInfo() {
 
 @Preview(showBackground = true, backgroundColor = 0x000000)
 @Composable
-private fun KeymeTestDetailScreenPreview() {
+private fun KeymeQuestionDetailScreenPreview() {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = keyme_black),
     ) {
-        KeymeTestResultDetailScreen(
+        KeymeQuestionResultScreen(
+            statistics = QuestionsStatistic(
+                averageScore = 0,
+                category = Category(
+                    color = "",
+                    imageUrl = "",
+                    name = "",
+                ),
+                description = "", keyword = "", questionId = 0,
+            ),
             onBackClick = {},
         )
     }

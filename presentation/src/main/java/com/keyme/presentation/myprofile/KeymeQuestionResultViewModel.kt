@@ -5,7 +5,7 @@ import com.keyme.domain.entity.onSuccess
 import com.keyme.domain.entity.response.keymetest.KeymeTestResultStatistics
 import com.keyme.domain.usecase.keymetest.GetKeymeTestResultStatisticsUseCase
 import com.keyme.presentation.BaseViewModel
-import com.keyme.presentation.myprofile.ui.KeymeTestResultDetailDestination
+import com.keyme.presentation.myprofile.ui.KeymeQuestionResultDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,13 +13,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class KeymeTestResultDetailViewModel @Inject constructor(
+class KeymeQuestionResultViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getKeymeTestResultStatistics: GetKeymeTestResultStatisticsUseCase,
 ) : BaseViewModel() {
-    private val questionId: String? = savedStateHandle[KeymeTestResultDetailDestination.Argument.questionIdName]
+    private val questionId: String? = savedStateHandle[KeymeQuestionResultDestination.Argument.questionIdName]
 
-    private val _statisticsState = MutableStateFlow<KeymeTestResultStatistics?>(null)
+    private val _statisticsState = MutableStateFlow(KeymeTestResultStatistics())
     val statisticsState = _statisticsState.asStateFlow()
 
     init {

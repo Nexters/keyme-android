@@ -23,7 +23,7 @@ interface KeymeApi {
         @Path("id") questionId: String,
     ): KeymeTestResultStatisticsResponse
 
-    @GET("members/{memberId}/statistics")
+    @GET("members/{memberId}/stataistics")
     suspend fun getMemberStatistics(
         @Path("memberId") memberId: String,
         @Query("type") type: MemberStatistics.StatisticsType,

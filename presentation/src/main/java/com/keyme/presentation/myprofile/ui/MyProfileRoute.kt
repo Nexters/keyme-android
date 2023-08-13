@@ -32,12 +32,10 @@ fun MyProfileRoute(
     myProfileViewModel: MyProfileViewModel = hiltViewModel(),
     navigateToQuestionResult: () -> Unit,
 ) {
-    val resultCircle by myProfileViewModel.resultCircleState.collectAsStateWithLifecycle()
+    val myStatistics by myProfileViewModel.myStatisticsState.collectAsStateWithLifecycle()
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        KeymeTestStatisticsScreen(
-            circles = resultCircle,
-            onTestItemClick = { navigateToQuestionResult() },
-        )
-    }
+    KeymeMemberStatisticsScreen(
+        memberStatistics = myStatistics,
+        onTestItemClick = { navigateToQuestionResult() },
+    )
 }

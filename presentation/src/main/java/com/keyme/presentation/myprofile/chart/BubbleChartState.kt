@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,21 +27,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.drawToBitmap
-import com.keyme.domain.entity.response.Circle
+import com.keyme.domain.entity.response.Coordinate
 import com.keyme.presentation.utils.scale
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @Composable
 fun rememberBubbleChartState(
-    circles: List<Circle>,
+    coordinates: List<Coordinate>,
+    colors: List<Color>,
     containerSize: Size,
     onBubbleClick: () -> Unit,
 ): BubbleChartState {
     val coroutineScope = rememberCoroutineScope()
-    return remember(Unit) {
-        BubbleChartState(coroutineScope, circles, containerSize, onBubbleClick)
+    return remember(coordinates, containerSize) {
+        BubbleChartState(coroutineScope, coordinates, colors, containerSize, onBubbleClick)
     }
 }
 
@@ -54,18 +59,19 @@ enum class BubbleChartInitialState {
 
 class BubbleChartState(
     private val coroutineScope: CoroutineScope,
-    private val circles: List<Circle>,
+    val coordinates: List<Coordinate>,
+    val colors: List<Color>,
     private val containerSize: Size,
     private val onBubbleClick: () -> Unit,
 ) {
-    val scale = containerSize.width.toInt()
-    val bubbleRectList = circles.map { circle ->
+    private val scale = containerSize.width.toInt()
+    val bubbleRectList = coordinates.map { coordinate ->
         Rect(
             center = Offset(
-                x = circle.x.scale(scale) + containerSize.center.x,
-                y = circle.y.scale(scale) + containerSize.center.y,
+                x = coordinate.x.scale(scale) + containerSize.center.x,
+                y = coordinate.y.scale(scale) + containerSize.center.y,
             ),
-            radius = circle.r.scale(scale),
+            radius = coordinate.r.scale(scale),
         )
     }
 
@@ -75,17 +81,28 @@ class BubbleChartState(
 
     @Composable
     fun init() {
-        bubbleChartInitialState = BubbleChartInitialState.Loading
+        Timber.d("init()")
+        if (coordinates.isNotEmpty()) {
+            bubbleChartInitialState = BubbleChartInitialState.Loading
 
-        bubbleRectList.forEachIndexed { index, _ ->
-            val snapShot = CaptureBitmap(content = { BubbleChartItem() })
-            coroutineScope.launch {
-                bubbleChartItemBitmaps.add(snapShot.invoke())
-                if (index == bubbleRectList.lastIndex) {
-                    bubbleChartInitialState = BubbleChartInitialState.Finish
-                    Timber.d("bubbleChartInitialState: $bubbleChartInitialState, bitmaps: ${bubbleChartItemBitmaps.size}")
-                }
+            val snapShotSets = bubbleRectList.map {
+                CaptureBitmap(content = { BubbleChartItem() })
             }
+
+//            LaunchedEffect(key1 = bubbleRectList) {
+//                while (bubbleChartInitialState.isFinish().not()) {
+//                    val item = snapShotSets.firstOrNull()
+//                    if (item != null) {
+//                        val bitmap = kotlin.runCatching { item() }.onFailure { Timber.e(it) }.getOrNull()
+//                        bitmap?.let { bubbleChartItemBitmaps.add(bitmap) }
+//                    } else {
+//                        bubbleChartInitialState = BubbleChartInitialState.Finish
+//                        Timber.d("bubbleChartInitialState: $bubbleChartInitialState, bitmaps: ${bubbleChartItemBitmaps.size}")
+//                    }
+//                }
+//            }
+
+            bubbleChartInitialState = BubbleChartInitialState.Finish
         }
     }
 

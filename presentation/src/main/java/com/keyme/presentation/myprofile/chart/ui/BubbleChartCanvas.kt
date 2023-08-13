@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import com.keyme.presentation.myprofile.chart.BubbleChartState
+import timber.log.Timber
 
 @Composable
 fun BubbleChartCanvas(
@@ -21,10 +22,11 @@ fun BubbleChartCanvas(
         onDraw = {
             repeat(bubbleChartState.bubbleRectList.size) { index ->
                 val rect = bubbleChartState.bubbleRectList[index]
-                val itemBitmap = bubbleChartState.bubbleChartItemBitmaps[index]
+                val color = bubbleChartState.colors[index]
+//                val itemBitmap = bubbleChartState.bubbleChartItemBitmaps[index]
 
-                drawResultBubble(rect, colors[index])
-                drawResultItem(rect, itemBitmap)
+                drawResultBubble(rect, color)
+//                drawResultItem(rect, itemBitmap)
             }
         },
     )

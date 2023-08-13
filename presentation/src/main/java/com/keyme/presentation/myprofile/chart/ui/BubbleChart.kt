@@ -10,21 +10,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.zIndex
-import com.keyme.domain.entity.response.Circle
+import com.keyme.domain.entity.response.Result
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.myprofile.chart.rememberBubbleChartState
+import com.keyme.presentation.utils.ColorUtil
+import timber.log.Timber
 
 @Composable
-fun BubbleChart(circles: List<Circle>, onBubbleClick: () -> Unit) {
+fun BubbleChart(
+    results: List<Result>,
+    onBubbleClick: () -> Unit,
+) {
+    Timber.d("resultSize: ${results.size}")
+
     BubbleChartContainer {
         val bubbleChartState = rememberBubbleChartState(
-            circles = circles,
+            coordinates = results.map { it.coordinate },
+            colors = results.map {
+                ColorUtil.hexStringToColor(it.question.category.color)
+            },
             containerSize = Size(
                 constraints.maxWidth.toFloat(),
                 constraints.maxHeight.toFloat(),
             ),
             onBubbleClick = onBubbleClick,
         )
+
+
 
         if (bubbleChartState.bubbleChartInitialState.isInit()) bubbleChartState.init()
 

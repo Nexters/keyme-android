@@ -1,8 +1,7 @@
 package com.keyme.data.remote.di
 
+import com.keyme.data.BuildConfig
 import com.keyme.data.remote.api.KeymeApi
-import com.keyme.domain.entity.member.Member
-import com.keyme.domain.usecase.GetMyCharacterUseCase
 import com.keyme.domain.usecase.GetMyMemberTokenUseCase
 import dagger.Module
 import dagger.Provides
@@ -34,19 +33,27 @@ class ApiModule {
     }
 
     private fun getOkHttpClient(memberToken: String): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(
+        val builder = OkHttpClient.Builder()
+
+        builder.addInterceptor { chain ->
+            val origin = chain.request()
+            chain.request().newBuilder()
+                .header("Content-Type", "application/json;charset=UTF-8")
+                .header("Authorization", "Bearer $memberToken")
+                .method(origin.method, origin.body)
+                .build()
+                .let(chain::proceed)
+        }
+
+
+        if (BuildConfig.DEBUG) {
+            builder.addInterceptor(
                 HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 },
             )
-            .addInterceptor { chain ->
-                chain.request().newBuilder()
-                    .header("Content-Type", "application/json;charset=UTF-8")
-                    .header("Authorization", "Bearer $memberToken")
-                    .build()
-                    .let(chain::proceed)
-            }
-            .build()
+        }
+
+        return builder.build()
     }
 }

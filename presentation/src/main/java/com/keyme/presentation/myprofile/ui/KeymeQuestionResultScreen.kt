@@ -40,6 +40,7 @@ import com.keyme.domain.entity.response.keymetest.QuestionsStatistic
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.BottomSheetHandle
 import com.keyme.presentation.designsystem.component.KeymeText
+import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.designsystem.theme.panchang
 import com.keyme.presentation.utils.clickableRippleEffect
@@ -186,8 +187,16 @@ private fun KeymeQuestionScoreItem(
             .background(color = Color(0xFF303030), shape = RoundedCornerShape(size = 16.dp))
             .padding(vertical = 16.dp, horizontal = 20.dp),
     ) {
-        KeymeText(modifier = Modifier.align(Alignment.Center), text = "${score}점")
-        KeymeText(modifier = Modifier.align(Alignment.CenterEnd), text = timeStamp.getUploadTimeString())
+        KeymeText(
+            modifier = Modifier.align(Alignment.Center),
+            text = "${score}점",
+            keymeTextType = KeymeTextType.BODY_3_REGULAR,
+        )
+        KeymeText(
+            modifier = Modifier.align(Alignment.CenterEnd),
+            text = timeStamp.getUploadTimeString(),
+            keymeTextType = KeymeTextType.BODY_3_REGULAR,
+        )
     }
 }
 
@@ -212,6 +221,7 @@ private fun KeymeQuestionStatisticsInfo(
                 .background(color = Color(0x33FFFFFF), shape = RoundedCornerShape(size = 16.dp))
                 .padding(start = 10.dp, top = 5.dp, end = 10.dp, bottom = 5.dp),
             text = questionsStatistic.category.name,
+            keymeTextType = KeymeTextType.BODY_3_REGULAR
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -227,8 +237,7 @@ private fun KeymeQuestionStatisticsInfo(
                     .align(Alignment.Bottom)
                     .padding(bottom = 10.dp),
                 text = "점",
-                fontSize = 12.textDp(),
-                fontWeight = FontWeight.Medium,
+                keymeTextType = KeymeTextType.BODY_3_REGULAR,
                 color = Color.White.copy(alpha = 0.6f),
             )
         }

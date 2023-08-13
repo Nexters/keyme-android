@@ -1,6 +1,9 @@
 package com.keyme.data.remote.di
 
 import com.keyme.data.remote.api.KeymeApi
+import com.keyme.domain.entity.member.Member
+import com.keyme.domain.usecase.GetMyCharacterUseCase
+import com.keyme.domain.usecase.GetMyMemberTokenUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,19 +21,19 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideKeymeApi(): KeymeApi {
-        return getRetrofit().create()
+    fun provideKeymeApi(getMyMemberTokenUseCase: GetMyMemberTokenUseCase): KeymeApi {
+        return getRetrofit(getMyMemberTokenUseCase()).create()
     }
 
-    private fun getRetrofit(): Retrofit {
+    private fun getRetrofit(memberToken: String): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://api.keyme.space")
-            .client(getOkHttpClient())
+            .client(getOkHttpClient(memberToken))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    private fun getOkHttpClient(): OkHttpClient {
+    private fun getOkHttpClient(memberToken: String): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(
                 HttpLoggingInterceptor().apply {
@@ -39,6 +42,8 @@ class ApiModule {
             )
             .addInterceptor { chain ->
                 chain.request().newBuilder()
+                    .header("Content-Type", "application/json;charset=UTF-8")
+                    .header("Authorization", "Bearer $memberToken")
                     .build()
                     .let(chain::proceed)
             }

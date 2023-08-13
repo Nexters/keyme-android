@@ -31,12 +31,14 @@ fun KeymeApp() {
 
     KeymeTheme {
         Scaffold(
-//            bottomBar = {
-//                KeymeBottomBar(
-//                    currentDestination = appState.currentDestination,
-//                    onNavigateToDestination = appState::navigate,
-//                )
-//            },
+            bottomBar = {
+                if (appState.isSignIn) {
+                    KeymeBottomBar(
+                        currentDestination = appState.currentDestination,
+                        onNavigateToDestination = appState::navigate,
+                    )
+                }
+            },
         ) { innerPadding ->
             NavHost(
                 navController = appState.navController,

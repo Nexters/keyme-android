@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -30,11 +32,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.keyme.domain.entity.response.keymetest.Category
 import com.keyme.domain.entity.response.keymetest.QuestionsStatistic
 import com.keyme.presentation.R
@@ -43,6 +53,7 @@ import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.designsystem.theme.panchang
+import com.keyme.presentation.utils.ColorUtil
 import com.keyme.presentation.utils.clickableRippleEffect
 import com.keyme.presentation.utils.getUploadTimeString
 import com.keyme.presentation.utils.textDp
@@ -69,7 +80,7 @@ fun KeymeQuestionResultScreen(
         ) {
             KeymeQuestionStatisticsInfo(statistics)
 
-            KeymeQuestionStatisticsCircle()
+            KeymeQuestionStatisticsCircle(statistics)
 
             KeymeQuestionScoreListContainer {
                 KeymeQuestionInfo(title = "키미미미미미님의 애정 표현정도는?", solvedCount = 10)
@@ -94,7 +105,14 @@ fun KeymeQuestionResultScreen(
 }
 
 @Composable
-fun ColumnScope.KeymeQuestionStatisticsCircle() {
+fun ColumnScope.KeymeQuestionStatisticsCircle(statistics: QuestionsStatistic) {
+    val density = LocalDensity.current
+    var containerCircleSize by remember { mutableStateOf(IntSize.Zero) }
+    val avgScoreCircleSize = DpSize(
+        width = with(density) { ((containerCircleSize.width / 5) * statistics.averageScore).toDp() },
+        height = with(density) { ((containerCircleSize.height / 5) * statistics.averageScore).toDp() },
+    )
+
     Box(
         modifier = Modifier
             .padding(top = 12.dp, start = 30.dp, end = 30.dp, bottom = 30.dp)
@@ -110,8 +128,33 @@ fun ColumnScope.KeymeQuestionStatisticsCircle() {
                 color = Color(0x4DFFFFFF),
                 shape = RoundedCornerShape(size = 320.00003.dp),
             )
-            .background(color = Color(0x4DFFFFFF), shape = RoundedCornerShape(size = 320.00003.dp)),
-    )
+            .background(color = Color(0x4DFFFFFF), shape = CircleShape)
+            .clip(CircleShape)
+            .onGloballyPositioned {
+                containerCircleSize = it.size
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+
+        Box(
+            modifier = Modifier
+                .size(avgScoreCircleSize)
+                .background(
+                    color = ColorUtil.hexStringToColor(statistics.category.color),
+                    shape = CircleShape,
+                )
+                .clip(CircleShape),
+        )
+
+        AsyncImage(
+            modifier = Modifier.size(48.dp),
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(statistics.category.imageUrl)
+                .build(),
+            contentDescription = "",
+            contentScale = ContentScale.Crop,
+        )
+    }
 }
 
 @Composable

@@ -44,14 +44,14 @@ fun KeymeQuestionResultRoute(
 
     KeymeQuestionResultScreen(
         statistics = QuestionsStatistic(
-            averageScore = 0,
+            averageScore = 4,
             category = Category(
-                color = "",
-                imageUrl = "",
-                name = "",
+                color = "FFFFFF",
+                imageUrl = "https://keyme-ec2-access-s3.s3.ap-northeast-2.amazonaws.com/test_star.png",
+                name = "의사_표현",
             ),
-            description = "",
-            keyword = "",
+            description = "자신의 의견을 확고하게 말하시나요?",
+            keyword = "의견",
             questionId = 0,
         ),
         onBackClick = onBackClick,

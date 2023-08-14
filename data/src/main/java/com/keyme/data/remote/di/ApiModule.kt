@@ -1,6 +1,8 @@
 package com.keyme.data.remote.di
 
+import com.keyme.data.BuildConfig
 import com.keyme.data.remote.api.KeymeApi
+import com.keyme.domain.usecase.GetMyMemberTokenUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,30 +20,39 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideKeymeApi(): KeymeApi {
-        return getRetrofit().create()
+    fun provideKeymeApi(getMyMemberTokenUseCase: GetMyMemberTokenUseCase): KeymeApi {
+        return getRetrofit(getMyMemberTokenUseCase()).create()
     }
 
-    private fun getRetrofit(): Retrofit {
+    private fun getRetrofit(memberToken: String): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://api.keyme.space")
-            .client(getOkHttpClient())
+            .client(getOkHttpClient(memberToken))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    private fun getOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(
+    private fun getOkHttpClient(memberToken: String): OkHttpClient {
+        val builder = OkHttpClient.Builder()
+
+        builder.addInterceptor { chain ->
+            val origin = chain.request()
+            chain.request().newBuilder()
+                .header("Content-Type", "application/json;charset=UTF-8")
+                .header("Authorization", "Bearer $memberToken")
+                .method(origin.method, origin.body)
+                .build()
+                .let(chain::proceed)
+        }
+
+        if (BuildConfig.DEBUG) {
+            builder.addInterceptor(
                 HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 },
             )
-            .addInterceptor { chain ->
-                chain.request().newBuilder()
-                    .build()
-                    .let(chain::proceed)
-            }
-            .build()
+        }
+
+        return builder.build()
     }
 }

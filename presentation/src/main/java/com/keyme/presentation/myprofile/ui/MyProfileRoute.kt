@@ -1,14 +1,12 @@
 package com.keyme.presentation.myprofile.ui
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.keyme.domain.entity.response.Question
 import com.keyme.presentation.myprofile.MyProfileViewModel
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
@@ -18,11 +16,11 @@ object MyProfileDestination : KeymeNavigationDestination {
 }
 
 fun NavGraphBuilder.myProfileGraph(
-    navigateToDetail: () -> Unit,
+    navigateToQuestionResult: (Question) -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     composable(route = MyProfileDestination.route) {
-        MyProfileRoute(navigateToDetail = navigateToDetail)
+        MyProfileRoute(navigateToQuestionResult = navigateToQuestionResult)
     }
     nestedGraphs()
 }
@@ -30,14 +28,16 @@ fun NavGraphBuilder.myProfileGraph(
 @Composable
 fun MyProfileRoute(
     myProfileViewModel: MyProfileViewModel = hiltViewModel(),
-    navigateToDetail: () -> Unit,
+    navigateToQuestionResult: (Question) -> Unit,
 ) {
-    val resultCircle by myProfileViewModel.resultCircleState.collectAsStateWithLifecycle()
+    val myCharacter by myProfileViewModel.myCharacterState.collectAsStateWithLifecycle()
+    val mySimilarStatistics by myProfileViewModel.mySimilarStatisticsState.collectAsStateWithLifecycle()
+    val myDifferentStatistics by myProfileViewModel.myDifferentStatisticsState.collectAsStateWithLifecycle()
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        KeymeTestStatisticsScreen(
-            circles = resultCircle,
-            onTestItemClick = { navigateToDetail() },
-        )
-    }
+    MyProfileScreen(
+        myCharacter = myCharacter,
+        mySimilarStatistics = mySimilarStatistics,
+        myDifferentStatistics = myDifferentStatistics,
+        onQuestionClick = navigateToQuestionResult,
+    )
 }

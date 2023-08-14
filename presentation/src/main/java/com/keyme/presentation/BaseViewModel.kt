@@ -21,10 +21,12 @@ abstract class BaseViewModel : ViewModel() {
     @Inject
     lateinit var uiEventManager: UiEventManager
 
-    fun <T> apiCall(apiRequest: suspend () -> ApiResult<T>, action: (T) -> Unit) {
+    fun <T> apiCall(apiRequest: suspend () -> ApiResult<T>, action: suspend (T) -> Unit) {
         baseViewModelScope.launch {
             apiRequest().onSuccess {
-                action(it)
+                baseViewModelScope.launch {
+                    action(it)
+                }
             }.onApiError { code, message ->
                 baseViewModelScope.launch {
                     uiEventManager.onEvent(UiEvent.Toast("($code) $message"))

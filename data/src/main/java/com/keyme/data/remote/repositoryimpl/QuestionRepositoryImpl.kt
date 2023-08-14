@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class QuestionRepositoryImpl @Inject constructor(
     private val keymeApi: KeymeApi,
-): QuestionRepository {
+) : QuestionRepository {
     override suspend fun getStatistics(questionId: String): QuestionStatisticsResponse {
         return keymeApi.getQuestionStatistics(id = questionId, ownerId = 1)
     }

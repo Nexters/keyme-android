@@ -48,6 +48,6 @@ interface KeymeApi {
         @Query("cursor") cursor: Int?,
         @Path("id") id: String,
         @Query("limit") limit: Int = 20,
-        @Query("ownerId") ownerId: Int
+        @Query("ownerId") ownerId: Int,
     ): SolvedScoreListResponse
 }

@@ -1,62 +1,76 @@
 package com.keyme.presentation.myprofile.chart.ui
 
-import android.graphics.Bitmap
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.keyme.presentation.designsystem.component.KeymeText
+import com.keyme.presentation.designsystem.component.KeymeTextType
+import com.keyme.presentation.designsystem.theme.panchang
 import com.keyme.presentation.myprofile.chart.BubbleChartState
-import timber.log.Timber
+import com.keyme.presentation.myprofile.chart.BubbleItem
+import com.keyme.presentation.utils.textDp
 
 @Composable
 fun BubbleChartCanvas(
-    bubbleChartState: BubbleChartState,
+    state: BubbleChartState,
 ) {
-    Canvas(
-        modifier = Modifier.bubbleChart(bubbleChartState),
-        onDraw = {
-            repeat(bubbleChartState.bubbleRectList.size) { index ->
-                val rect = bubbleChartState.bubbleRectList[index]
-                val color = bubbleChartState.colors[index]
-//                val itemBitmap = bubbleChartState.bubbleChartItemBitmaps[index]
-
-                drawResultBubble(rect, color)
-//                drawResultItem(rect, itemBitmap)
-            }
-        },
-    )
+    Box(modifier = Modifier.bubbleChart()) {
+        state.bubbleItems.forEach {
+            BubbleChartItem(bubbleItem = it, onClick = { state.onBubbleItemClick(it) })
+        }
+    }
 }
 
-private val colors = listOf(
-    Color.Blue,
-    Color.Green,
-    Color.Gray,
-    Color.Red,
-    Color.LightGray,
-    Color.Green,
-    Color.Cyan,
-    Color.Yellow,
-    Color.Red,
-    Color.LightGray,
-)
-
-private fun DrawScope.drawResultBubble(
-    bubbleRect: Rect,
-    color: Color,
+@Composable
+fun BubbleChartItem(
+    bubbleItem: BubbleItem,
+    onClick: () -> Unit,
 ) {
-    val circlePath = Path().apply { addOval(bubbleRect) }
-    drawPath(circlePath, color)
-}
+    Box(
+        modifier = Modifier
+            .bubbleChartItem(bubbleItem)
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            AsyncImage(
+                modifier = Modifier.size(48.dp),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(bubbleItem.question.category.iconUrl)
+                    .build(),
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+            )
 
-private fun DrawScope.drawResultItem(bubbleRect: Rect, item: Bitmap) {
-    val targetX = bubbleRect.center.x - (item.width / 2)
-    val targetY = bubbleRect.center.y - (item.height / 2)
-    val targetOffset = Offset(targetX, targetY)
+            Spacer(modifier = Modifier.height(6.dp))
 
-    drawImage(image = item.asImageBitmap(), topLeft = targetOffset)
+            KeymeText(
+                text = bubbleItem.question.category.name,
+                keymeTextType = KeymeTextType.BODY_3_SEMIBOLD,
+                color = Color.White,
+            )
+
+            Text(
+                text = bubbleItem.question.avgScore.toString(),
+                fontFamily = panchang,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 18.textDp(),
+                color = Color.White,
+            )
+        }
+    }
 }

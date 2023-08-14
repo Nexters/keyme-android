@@ -1,25 +1,34 @@
 package com.keyme.presentation.myprofile.chart.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.dp
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.myprofile.chart.BubbleChartState
+import com.keyme.presentation.myprofile.chart.BubbleItem
+import com.keyme.presentation.utils.ColorUtil
 import timber.log.Timber
 
-fun Modifier.bubbleChart(bubbleChartState: BubbleChartState) = composed {
+fun Modifier.bubbleChart() = composed {
     var offset by remember { mutableStateOf(Offset.Zero) }
     var scale by remember { mutableStateOf(1f) }
     val state = rememberTransformableState { zoomChange, offsetChange, _ ->
@@ -31,20 +40,6 @@ fun Modifier.bubbleChart(bubbleChartState: BubbleChartState) = composed {
         .fillMaxSize()
         .background(color = keyme_black)
         .clipToBounds()
-        .pointerInput(Unit) {
-            detectTapGestures(
-                onTap = { tapOffset ->
-                    Timber.d("offset: $offset, tapOffset: $tapOffset")
-
-                    val tapOffset = tapOffset - offset
-                    bubbleChartState.bubbleRectList
-                        .find { it.contains(tapOffset) }
-                        ?.let {
-                            bubbleChartState.onBubbleItemClick(it)
-                        }
-                },
-            )
-        }
         .transformable(state)
         .graphicsLayer(
             translationX = offset.x,
@@ -52,4 +47,12 @@ fun Modifier.bubbleChart(bubbleChartState: BubbleChartState) = composed {
             scaleX = scale,
             scaleY = scale,
         )
+}
+
+fun Modifier.bubbleChartItem(item: BubbleItem) = composed {
+    Modifier
+        .offset(item.offSet.x.dp, item.offSet.y.dp)
+        .size(item.size)
+        .clip(CircleShape)
+        .background(color = ColorUtil.hexStringToColor(item.question.category.color), shape = CircleShape)
 }

@@ -50,7 +50,9 @@ fun KeymeQuestionResultRoute(
                 imageUrl = "",
                 name = "",
             ),
-            description = "", keyword = "", questionId = 0,
+            description = "",
+            keyword = "",
+            questionId = 0,
         ),
         onBackClick = onBackClick,
     )

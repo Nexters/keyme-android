@@ -1,8 +1,6 @@
 package com.keyme.presentation.myprofile.chart.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,15 +16,11 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.keyme.presentation.designsystem.theme.keyme_black
-import com.keyme.presentation.myprofile.chart.BubbleChartState
 import com.keyme.presentation.myprofile.chart.BubbleItem
 import com.keyme.presentation.utils.ColorUtil
-import timber.log.Timber
 
 fun Modifier.bubbleChart() = composed {
     var offset by remember { mutableStateOf(Offset.Zero) }

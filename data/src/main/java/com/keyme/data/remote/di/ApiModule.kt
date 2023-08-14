@@ -45,7 +45,6 @@ class ApiModule {
                 .let(chain::proceed)
         }
 
-
         if (BuildConfig.DEBUG) {
             builder.addInterceptor(
                 HttpLoggingInterceptor().apply {

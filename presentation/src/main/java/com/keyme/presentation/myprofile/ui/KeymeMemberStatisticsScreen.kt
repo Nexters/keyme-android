@@ -17,5 +17,3 @@ fun KeymeMemberStatisticsScreen(
         },
     )
 }
-
-

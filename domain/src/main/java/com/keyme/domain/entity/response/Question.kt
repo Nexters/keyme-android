@@ -5,5 +5,5 @@ data class Question(
     val category: Category,
     val keyword: String,
     val questionId: Int,
-    val title: String
+    val title: String,
 )

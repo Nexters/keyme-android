@@ -72,7 +72,6 @@ fun KeymeQuestionResultScreen(
             KeymeQuestionStatisticsCircle()
 
             KeymeQuestionScoreListContainer {
-
                 KeymeQuestionInfo(title = "키미미미미미님의 애정 표현정도는?", solvedCount = 10)
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -204,7 +203,6 @@ private fun KeymeQuestionScoreItem(
 private fun KeymeQuestionStatisticsInfo(
     questionsStatistic: QuestionsStatistic,
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -221,7 +219,7 @@ private fun KeymeQuestionStatisticsInfo(
                 .background(color = Color(0x33FFFFFF), shape = RoundedCornerShape(size = 16.dp))
                 .padding(start = 10.dp, top = 5.dp, end = 10.dp, bottom = 5.dp),
             text = questionsStatistic.category.name,
-            keymeTextType = KeymeTextType.BODY_3_REGULAR
+            keymeTextType = KeymeTextType.BODY_3_REGULAR,
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -260,7 +258,9 @@ private fun KeymeQuestionDetailScreenPreview() {
                     imageUrl = "",
                     name = "",
                 ),
-                description = "", keyword = "", questionId = 0,
+                description = "",
+                keyword = "",
+                questionId = 0,
             ),
             onBackClick = {},
         )

@@ -51,7 +51,6 @@ class BubbleChartState(
         return BubbleItem(question, Offset(offsetX, offsetY), dpSize)
     }
 
-
     fun onBubbleItemClick(item: BubbleItem) {
         Timber.d("onBubbleItemClick: $item")
         onBubbleClick(item)

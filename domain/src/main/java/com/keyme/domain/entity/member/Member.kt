@@ -6,4 +6,8 @@ data class Member(
     val nickname: String,
     val profileImage: String,
     val profileThumbnail: String,
-)
+) {
+    companion object{
+        val EMPTY = Member(friendCode = "", id = 0, nickname = "", profileImage = "", profileThumbnail = "")
+    }
+}

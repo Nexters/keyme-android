@@ -6,7 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.keyme.domain.entity.member.Member
+import com.keyme.domain.entity.response.Question
 import com.keyme.presentation.myprofile.MyProfileViewModel
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
@@ -16,7 +16,7 @@ object MyProfileDestination : KeymeNavigationDestination {
 }
 
 fun NavGraphBuilder.myProfileGraph(
-    navigateToQuestionResult: () -> Unit,
+    navigateToQuestionResult: (Question) -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     composable(route = MyProfileDestination.route) {
@@ -28,22 +28,16 @@ fun NavGraphBuilder.myProfileGraph(
 @Composable
 fun MyProfileRoute(
     myProfileViewModel: MyProfileViewModel = hiltViewModel(),
-    navigateToQuestionResult: () -> Unit,
+    navigateToQuestionResult: (Question) -> Unit,
 ) {
-    val myStatistics by myProfileViewModel.mySimilarStatisticsState.collectAsStateWithLifecycle()
+    val myCharacter by myProfileViewModel.myCharacterState.collectAsStateWithLifecycle()
+    val mySimilarStatistics by myProfileViewModel.mySimilarStatisticsState.collectAsStateWithLifecycle()
+    val myDifferentStatistics by myProfileViewModel.myDifferentStatisticsState.collectAsStateWithLifecycle()
 
     MyProfileScreen(
-        myCharacter = Member(
-            friendCode = "",
-            id = 0,
-            nickname = "Anonymous",
-            profileImage = "",
-            profileThumbnail = "",
-        ),
-        mySimilarStatistics = myStatistics,
-        myDifferentStatistics = myStatistics,
-        onQuestionClick = {
-            navigateToQuestionResult()
-        },
+        myCharacter = myCharacter,
+        mySimilarStatistics = mySimilarStatistics,
+        myDifferentStatistics = myDifferentStatistics,
+        onQuestionClick = navigateToQuestionResult,
     )
 }

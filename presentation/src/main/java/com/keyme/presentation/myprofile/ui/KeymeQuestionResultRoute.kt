@@ -14,7 +14,7 @@ import com.keyme.presentation.myprofile.KeymeQuestionResultViewModel
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
 object KeymeQuestionResultDestination : KeymeNavigationDestination {
-    override val route: String = "keyme_test_result_detail_route/{${Argument.questionIdName}}"
+    override val route: String = "keyme_test_result_detail_route"
     override val destination: String = "keyme_test_result_detail_destination"
 
     object Argument {
@@ -24,7 +24,7 @@ object KeymeQuestionResultDestination : KeymeNavigationDestination {
 
 fun NavGraphBuilder.keymeQuestionResultGraph(onBackClick: () -> Unit) {
     composable(
-        route = KeymeQuestionResultDestination.route,
+        route = "${KeymeQuestionResultDestination.route}/{${KeymeQuestionResultDestination.Argument.questionIdName}}",
         arguments = listOf(
             navArgument(KeymeQuestionResultDestination.Argument.questionIdName) {
                 type = NavType.StringType
@@ -38,7 +38,7 @@ fun NavGraphBuilder.keymeQuestionResultGraph(onBackClick: () -> Unit) {
 @Composable
 fun KeymeQuestionResultRoute(
     keymeQuestionResultViewModel: KeymeQuestionResultViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     val statisticsState by keymeQuestionResultViewModel.statisticsState.collectAsStateWithLifecycle()
 
@@ -48,10 +48,10 @@ fun KeymeQuestionResultRoute(
             category = Category(
                 color = "",
                 imageUrl = "",
-                name = ""
+                name = "",
             ),
-            description = "", keyword = "", questionId = 0
+            description = "", keyword = "", questionId = 0,
         ),
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
     )
 }

@@ -62,7 +62,12 @@ fun KeymeApp() {
                     },
                 )
                 myProfileGraph(
-                    navigateToQuestionResult = { appState.navigate(KeymeQuestionResultDestination) },
+                    navigateToQuestionResult = { question ->
+                        appState.navigate(
+                            KeymeQuestionResultDestination,
+                            question.questionId,
+                        )
+                    },
                     nestedGraphs = {
                         keymeQuestionResultGraph(onBackClick = appState::onBackClick)
                     },

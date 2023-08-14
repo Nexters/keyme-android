@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "19408891207",
+    "project_id": "keyme-61920",
+    "storage_bucket": "keyme-61920.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19408891207:android:e738a91617ab61d2697062",
+        "android_client_info": {
+          "package_name": "com.keyme.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "19408891207-dqp7as78pu6fu7tsgbrld213f55rlnrl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNKY4hckuVQncwHrWiW9MU_uH8-WMdjes"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "19408891207-dqp7as78pu6fu7tsgbrld213f55rlnrl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "19408891207-6r8rlo10ga95ij334914vlomknkikqf0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "team.humanwave.Keyme",
+                "app_store_id": "363590051"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

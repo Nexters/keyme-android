@@ -21,8 +21,10 @@ import timber.log.Timber
 
 fun Modifier.bubbleChart(bubbleChartState: BubbleChartState) = composed {
     var offset by remember { mutableStateOf(Offset.Zero) }
-    val state = rememberTransformableState { _, offsetChange, _ ->
+    var scale by remember { mutableStateOf(1f) }
+    val state = rememberTransformableState { zoomChange, offsetChange, _ ->
         offset += offsetChange
+        scale = (scale * zoomChange).coerceIn(0.6f, 1.8f)
     }
 
     Modifier
@@ -47,5 +49,7 @@ fun Modifier.bubbleChart(bubbleChartState: BubbleChartState) = composed {
         .graphicsLayer(
             translationX = offset.x,
             translationY = offset.y,
+            scaleX = scale,
+            scaleY = scale,
         )
 }

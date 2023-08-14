@@ -14,6 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.keyme.app.navigation.TopLevelDestination
+import com.keyme.presentation.myprofile.ui.MyProfileDestination
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 import com.keyme.presentation.signin.SignInDestination
 import com.keyme.presentation.signin.SignInViewModel
@@ -42,7 +43,7 @@ class KeymeAppState(
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
-    val startDestination = SignInDestination
+    val startDestination = MyProfileDestination
 
     var isSignIn by mutableStateOf(false)
 

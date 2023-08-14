@@ -12,4 +12,8 @@ data class SolvedScoreList(
 data class SolvedScore(
     val createAt: String,
     val score: Int,
-)
+) {
+    companion object {
+        val EMPTY = SolvedScore("", 0)
+    }
+}

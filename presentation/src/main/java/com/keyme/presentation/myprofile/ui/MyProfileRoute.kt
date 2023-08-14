@@ -1,14 +1,12 @@
 package com.keyme.presentation.myprofile.ui
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.keyme.domain.entity.member.Member
 import com.keyme.presentation.myprofile.MyProfileViewModel
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
@@ -34,8 +32,18 @@ fun MyProfileRoute(
 ) {
     val myStatistics by myProfileViewModel.myStatisticsState.collectAsStateWithLifecycle()
 
-    KeymeMemberStatisticsScreen(
-        memberStatistics = myStatistics,
-        onTestItemClick = { navigateToQuestionResult() },
+    MyProfileScreen(
+        myCharacter = Member(
+            friendCode = "",
+            id = 0,
+            nickname = "Anonymous",
+            profileImage = "",
+            profileThumbnail = "",
+        ),
+        mySimilarStatistics = myStatistics,
+        myDifferentStatistics = myStatistics,
+        onQuestionClick = {
+            navigateToQuestionResult()
+        },
     )
 }

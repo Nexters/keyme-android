@@ -2,17 +2,20 @@ package com.keyme.presentation.myprofile.ui
 
 import androidx.compose.runtime.Composable
 import com.keyme.domain.entity.response.MemberStatistics
+import com.keyme.domain.entity.response.Question
 import com.keyme.presentation.myprofile.chart.ui.BubbleChart
 
 @Composable
 fun KeymeMemberStatisticsScreen(
     memberStatistics: MemberStatistics,
-    onTestItemClick: () -> Unit,
+    onQuestionClick: (Question) -> Unit,
 ) {
     BubbleChart(
         results = memberStatistics.results,
         onBubbleClick = {
-            onTestItemClick()
+            onQuestionClick(it.question)
         },
     )
 }
+
+

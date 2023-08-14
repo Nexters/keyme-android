@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,6 +24,8 @@ class KeymeQuestionResultViewModel @Inject constructor(
     val statisticsState = _statisticsState.asStateFlow()
 
     init {
+        Timber.d("questionId: $questionId")
+
         baseViewModelScope.launch {
             questionId?.let {
                 getKeymeTestResultStatistics(questionId).onSuccess {

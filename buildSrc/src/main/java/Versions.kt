@@ -46,6 +46,10 @@ object Versions {
     const val HILT = "2.44"
     const val JAVA_X_INJECT = "1"
 
+    // Paging
+    const val paging = "3.1.1"
+    const val paging_compose = "3.2.0"
+
     // Test
     const val JUNIT = "4.13.2"
 

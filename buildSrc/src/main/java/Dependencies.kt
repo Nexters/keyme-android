@@ -65,6 +65,11 @@ object Dependencies {
     private val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.HILT}"
     private val javaXInject = "javax.inject:javax.inject:${Versions.JAVA_X_INJECT}"
 
+    // Paging
+    private val paging_runtime = "androidx.paging:paging-runtime-ktx:${Versions.paging}"
+    private val paging_common = "androidx.paging:paging-common-ktx:${Versions.paging}"
+    private val paging_compose = "androidx.paging:paging-compose:${Versions.paging_compose}"
+
     // Test
     private val junit = "junit:junit:${Versions.JUNIT}"
 
@@ -152,6 +157,12 @@ object Dependencies {
 
     fun DependencyHandler.setTestDependencies() {
         testImplementation(junit)
+    }
+
+    fun DependencyHandler.setPagingDependencies() {
+        implementation(paging_compose)
+        implementation(paging_compose)
+        implementation(paging_runtime)
     }
 
     fun DependencyHandler.setAndroidTestDependencies() {

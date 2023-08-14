@@ -30,7 +30,7 @@ fun MyProfileRoute(
     myProfileViewModel: MyProfileViewModel = hiltViewModel(),
     navigateToQuestionResult: () -> Unit,
 ) {
-    val myStatistics by myProfileViewModel.myStatisticsState.collectAsStateWithLifecycle()
+    val myStatistics by myProfileViewModel.mySimilarStatisticsState.collectAsStateWithLifecycle()
 
     MyProfileScreen(
         myCharacter = Member(

@@ -31,7 +31,6 @@ object Dependencies {
     private val composeNavigation = "androidx.navigation:navigation-compose:${Versions.COMPOSE_NAVIGATION}"
     private val runtime_compose = "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
 
-
     // ViewModel
     private val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE}"
 
@@ -43,6 +42,11 @@ object Dependencies {
 
     // Image
     private val glide = "com.github.bumptech.glide:glide:${Versions.GLIDE}"
+
+    // Coil
+    private val coil = "io.coil-kt:coil:${Versions.coil}"
+    private val coil_compose = "io.coil-kt:coil-compose:${Versions.coil}"
+    private val coil_gif = "io.coil-kt:coil-gif:${Versions.coil}"
 
     // Network
     private val retrofit = "com.squareup.retrofit2:retrofit:${Versions.RETROFIT}"
@@ -60,6 +64,11 @@ object Dependencies {
     private val hiltCompose = "androidx.hilt:hilt-navigation-compose:1.0.0"
     private val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.HILT}"
     private val javaXInject = "javax.inject:javax.inject:${Versions.JAVA_X_INJECT}"
+
+    // Paging
+    private val paging_runtime = "androidx.paging:paging-runtime-ktx:${Versions.paging}"
+    private val paging_common = "androidx.paging:paging-common-ktx:${Versions.paging}"
+    private val paging_compose = "androidx.paging:paging-compose:${Versions.paging_compose}"
 
     // fcm
     private val firebase_bom = "com.google.firebase:firebase-bom:32.2.2"
@@ -121,6 +130,9 @@ object Dependencies {
 
     fun DependencyHandler.setImageDependencies() {
         implementation(glide)
+        implementation(coil)
+        implementation(coil_compose)
+        implementation(coil_gif)
     }
 
     fun DependencyHandler.setNetworkDependencies() {
@@ -154,6 +166,12 @@ object Dependencies {
 
     fun DependencyHandler.setTestDependencies() {
         testImplementation(junit)
+    }
+
+    fun DependencyHandler.setPagingDependencies() {
+        implementation(paging_compose)
+        implementation(paging_compose)
+        implementation(paging_runtime)
     }
 
     fun DependencyHandler.setAndroidTestDependencies() {

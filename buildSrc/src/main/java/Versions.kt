@@ -35,6 +35,9 @@ object Versions {
     // Image
     const val GLIDE = "4.15.1"
 
+    // Coil
+    const val coil = "2.4.0"
+
     // Network
     const val RETROFIT = "2.9.0"
     const val OKHTTP_INTERCEPTOR = "4.10.0"
@@ -45,6 +48,10 @@ object Versions {
     // Dependency injection
     const val HILT = "2.44"
     const val JAVA_X_INJECT = "1"
+
+    // Paging
+    const val paging = "3.1.1"
+    const val paging_compose = "3.2.0"
 
     // Test
     const val JUNIT = "4.13.2"

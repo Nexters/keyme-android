@@ -5,9 +5,9 @@ import com.keyme.domain.entity.BaseResponse
 class KeymeTestResultStatisticsResponse : BaseResponse<KeymeTestResultStatistics>()
 
 data class KeymeTestResultStatistics(
-    val averageRate: Int,
-    val questionsStatistics: List<QuestionsStatistic>,
-    val solvedCount: Int,
+    val averageRate: Int = 0,
+    val questionsStatistics: List<QuestionsStatistic> = listOf(),
+    val solvedCount: Int = 0,
 )
 
 data class Category(

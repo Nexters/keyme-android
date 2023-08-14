@@ -66,6 +66,18 @@ class KeymeAppState(
         }
     }
 
+    fun navigate(destination: KeymeNavigationDestination, args: Any) {
+        if (destination is TopLevelDestination) {
+            navController.navigate("${destination.route}/$args") {
+                popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                launchSingleTop = true
+                restoreState = true
+            }
+        } else {
+            navController.navigate("${destination.route}/$args")
+        }
+    }
+
     fun onBackClick() {
         navController.popBackStack()
     }

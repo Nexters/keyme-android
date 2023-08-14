@@ -32,6 +32,9 @@ object Versions {
     // Image
     const val GLIDE = "4.15.1"
 
+    // Coil
+    const val coil = "2.4.0"
+
     // Network
     const val RETROFIT = "2.9.0"
     const val OKHTTP_INTERCEPTOR = "4.10.0"

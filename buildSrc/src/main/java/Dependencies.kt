@@ -31,7 +31,6 @@ object Dependencies {
     private val composeNavigation = "androidx.navigation:navigation-compose:${Versions.COMPOSE_NAVIGATION}"
     private val runtime_compose = "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
 
-
     // ViewModel
     private val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE}"
 
@@ -43,6 +42,11 @@ object Dependencies {
 
     // Image
     private val glide = "com.github.bumptech.glide:glide:${Versions.GLIDE}"
+
+    // Coil
+    private val coil = "io.coil-kt:coil:${Versions.coil}"
+    private val coil_compose = "io.coil-kt:coil-compose:${Versions.coil}"
+    private val coil_gif = "io.coil-kt:coil-gif:${Versions.coil}"
 
     // Network
     private val retrofit = "com.squareup.retrofit2:retrofit:${Versions.RETROFIT}"
@@ -117,6 +121,9 @@ object Dependencies {
 
     fun DependencyHandler.setImageDependencies() {
         implementation(glide)
+        implementation(coil)
+        implementation(coil_compose)
+        implementation(coil_gif)
     }
 
     fun DependencyHandler.setNetworkDependencies() {

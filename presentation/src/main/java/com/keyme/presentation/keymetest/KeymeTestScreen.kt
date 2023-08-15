@@ -1,25 +1,29 @@
-package com.keyme.presentation.nickname
+package com.keyme.presentation.keymetest
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.keyme.presentation.designsystem.component.KeymeText
+import com.keyme.presentation.designsystem.component.KeymeTextType
 
 @Composable
-fun NicknameRoute(
+fun KeymeTestRoute(
     onBackClick: () -> Unit,
-//    navigateToKeymeTest: () -> Unit,
+    navigateToMyDaily: () -> Unit,
 ) {
-    NicknameScreen(onBackClick)
+    KeymeTestScreen(
+        onBackClick = onBackClick,
+        navigateToMyDaily = navigateToMyDaily,
+    )
 }
 
 @Composable
-fun NicknameScreen(
+fun KeymeTestScreen(
     onBackClick: () -> Unit,
-//    navigateToKeymeTest: () -> Unit,
+    navigateToMyDaily: () -> Unit,
 ) {
     val contentHorizontalPadding = 16
 
@@ -27,15 +31,18 @@ fun NicknameScreen(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text("Nickname")
+        KeymeText(
+            text = "KeymeTest",
+            keymeTextType = KeymeTextType.HEADING_1,
+        )
     }
 }
 
 @Composable
 @Preview(showBackground = true)
-fun NicknameScreenPreview() {
-    NicknameScreen(
+fun KeymeTestScreenPreview() {
+    KeymeTestScreen(
         onBackClick = {},
-//        navigateToKeymeTest = {},
+        navigateToMyDaily = {},
     )
 }

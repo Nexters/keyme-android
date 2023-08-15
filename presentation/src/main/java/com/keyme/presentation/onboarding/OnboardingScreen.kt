@@ -78,9 +78,11 @@ fun OnboardingScreen(
         }
     }
 
-    LaunchedEffect(remoteOnboardingState) {
-        pagerState.scrollToPage(remoteOnboardingState)
-    }
+//    LaunchedEffect(remoteOnboardingState) {
+//        pagerState.scrollToPage(remoteOnboardingState)
+//    }
+
+    if (remoteOnboardingState) navigateToMyDaily.invoke()
 
     when (pagerState.currentPage) {
         0 -> BackHandler(enabled = true) { /*TODO*/ }

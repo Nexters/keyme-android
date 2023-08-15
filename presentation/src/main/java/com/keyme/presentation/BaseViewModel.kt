@@ -1,5 +1,6 @@
 package com.keyme.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.keyme.domain.entity.ApiResult
@@ -28,10 +29,13 @@ abstract class BaseViewModel : ViewModel() {
                     action(it)
                 }
             }.onApiError { code, message ->
+                val message = "($code) $message"
+                Timber.d(message)
                 baseViewModelScope.launch {
-                    uiEventManager.onEvent(UiEvent.Toast("($code) $message"))
+                    uiEventManager.onEvent(UiEvent.Toast(message))
                 }
             }.onFailure {
+                Timber.e(it)
                 baseViewModelScope.launch {
                     uiEventManager.onEvent(UiEvent.Toast(it.message ?: ""))
                 }

@@ -35,14 +35,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.keyme.domain.entity.response.QuestionSolvedScore
-import com.keyme.domain.entity.response.keymetest.QuestionsStatistic
+import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.utils.ColorUtil
 import timber.log.Timber
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ColumnScope.KeymeQuestionStatisticsCircle(
-    statistics: QuestionsStatistic,
+    statistics: QuestionStatistic,
     myScore: QuestionSolvedScore?,
     onPressedUp: () -> Unit,
     onPressedDown: () -> Unit,
@@ -50,8 +50,8 @@ fun ColumnScope.KeymeQuestionStatisticsCircle(
     val density = LocalDensity.current
     var containerCircleSize by remember { mutableStateOf(IntSize.Zero) }
     val avgScoreCircleSize = DpSize(
-        width = with(density) { ((containerCircleSize.width / 5) * statistics.averageScore).toDp() },
-        height = with(density) { ((containerCircleSize.height / 5) * statistics.averageScore).toDp() },
+        width = with(density) { ((containerCircleSize.width / 5) * statistics.avgScore).toDp() },
+        height = with(density) { ((containerCircleSize.height / 5) * statistics.avgScore).toDp() },
     )
 
     val myScoreCircleSize = if (myScore != null) {
@@ -116,7 +116,7 @@ fun ColumnScope.KeymeQuestionStatisticsCircle(
         AsyncImage(
             modifier = Modifier.size(48.dp),
             model = ImageRequest.Builder(LocalContext.current)
-                .data(statistics.category.imageUrl)
+                .data(statistics.category.iconUrl)
                 .build(),
             contentDescription = "",
             contentScale = ContentScale.Crop,

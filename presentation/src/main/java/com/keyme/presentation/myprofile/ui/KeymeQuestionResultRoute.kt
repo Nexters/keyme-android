@@ -8,8 +8,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.keyme.domain.entity.response.keymetest.Category
-import com.keyme.domain.entity.response.keymetest.QuestionsStatistic
+import com.keyme.domain.entity.response.Category
+import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.myprofile.KeymeQuestionResultViewModel
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
@@ -44,14 +44,14 @@ fun KeymeQuestionResultRoute(
     val myScore by keymeQuestionResultViewModel.myScoreState.collectAsStateWithLifecycle()
 
     KeymeQuestionResultScreen(
-        statistics = QuestionsStatistic(
-            averageScore = 4,
+        statistics = QuestionStatistic(
+            avgScore = 4f,
             category = Category(
                 color = "FFFFFF",
-                imageUrl = "https://keyme-ec2-access-s3.s3.ap-northeast-2.amazonaws.com/test_star.png",
+                iconUrl = "https://keyme-ec2-access-s3.s3.ap-northeast-2.amazonaws.com/test_star.png",
                 name = "의사_표현",
             ),
-            description = "자신의 의견을 확고하게 말하시나요?",
+            title = "자신의 의견을 확고하게 말하시나요?",
             keyword = "의견",
             questionId = 0,
         ),

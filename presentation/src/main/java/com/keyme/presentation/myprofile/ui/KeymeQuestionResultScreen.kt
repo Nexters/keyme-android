@@ -25,8 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.keyme.domain.entity.response.QuestionSolvedScore
-import com.keyme.domain.entity.response.keymetest.Category
-import com.keyme.domain.entity.response.keymetest.QuestionsStatistic
+import com.keyme.domain.entity.response.Category
+import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
@@ -37,7 +37,7 @@ import com.keyme.presentation.utils.textDp
 
 @Composable
 fun KeymeQuestionResultScreen(
-    statistics: QuestionsStatistic,
+    statistics: QuestionStatistic,
     myScore: QuestionSolvedScore? = null,
     onBackClick: () -> Unit,
 ) {
@@ -74,7 +74,7 @@ fun KeymeQuestionResultScreen(
 
 @Composable
 private fun KeymeQuestionStatisticsInfo(
-    questionsStatistic: QuestionsStatistic,
+    questionStatistic: QuestionStatistic,
     showMyScore: Boolean = false,
     myScore: QuestionSolvedScore?,
 ) {
@@ -96,7 +96,7 @@ private fun KeymeQuestionStatisticsInfo(
             text = if (showMyScore) {
                 "내가 준 점수"
             } else {
-                questionsStatistic.category.name
+                questionStatistic.category.name
             },
             keymeTextType = KeymeTextType.BODY_3_REGULAR,
         )
@@ -106,7 +106,7 @@ private fun KeymeQuestionStatisticsInfo(
                 text = if (showMyScore) {
                     myScore?.score?.toString() ?: "0"
                 } else {
-                    questionsStatistic.averageScore.toString()
+                    questionStatistic.avgScore.toString()
                 },
                 fontFamily = panchang,
                 fontWeight = FontWeight.ExtraBold,
@@ -134,14 +134,14 @@ private fun KeymeQuestionDetailScreenPreview() {
             .background(color = keyme_black),
     ) {
         KeymeQuestionResultScreen(
-            statistics = QuestionsStatistic(
-                averageScore = 3,
+            statistics = QuestionStatistic(
+                avgScore = 3f,
                 category = Category(
                     color = "FFFFFF",
-                    imageUrl = "",
+                    iconUrl = "",
                     name = "",
                 ),
-                description = "",
+                title = "",
                 keyword = "",
                 questionId = 0,
             ),

@@ -2,6 +2,7 @@ import Dependencies.setAndroidTestDependencies
 import Dependencies.setComposeDependencies
 import Dependencies.setCoreKtxDependencies
 import Dependencies.setCoroutinesDependencies
+import Dependencies.setFirebaseDependencies
 import Dependencies.setHiltDependencies
 import Dependencies.setImageDependencies
 import Dependencies.setKakaoSignInDependencies
@@ -60,6 +61,7 @@ dependencies {
     setKakaoSignInDependencies()
     setLottieDependencies()
     setImageDependencies()
+    setFirebaseDependencies()
 
     setHiltDependencies()
     setPagingDependencies()

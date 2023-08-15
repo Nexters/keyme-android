@@ -70,6 +70,10 @@ object Dependencies {
     private val paging_common = "androidx.paging:paging-common-ktx:${Versions.paging}"
     private val paging_compose = "androidx.paging:paging-compose:${Versions.paging_compose}"
 
+    // fcm
+    private val firebase_bom = "com.google.firebase:firebase-bom:32.2.2"
+    private val firebase_messaging = "com.google.firebase:firebase-messaging-ktx"
+
     // Test
     private val junit = "junit:junit:${Versions.JUNIT}"
 
@@ -135,6 +139,11 @@ object Dependencies {
         implementation(retrofit)
         implementation(gsonConverter)
         implementation(okhttpInterceptor)
+    }
+
+    fun DependencyHandler.setFirebaseDependencies() {
+        implementation(platform(firebase_bom))
+        implementation(firebase_messaging)
     }
 
     fun DependencyHandler.setDatabaseDependencies() {

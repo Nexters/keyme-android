@@ -2,6 +2,7 @@ import Dependencies.setActivityDepdendencies
 import Dependencies.setAndroidTestDependencies
 import Dependencies.setComposeDependencies
 import Dependencies.setCoreKtxDependencies
+import Dependencies.setFirebaseDependencies
 import Dependencies.setHiltDependencies
 import Dependencies.setKakaoSignInDependencies
 import Dependencies.setKotlinStdLibDependencies
@@ -18,6 +19,7 @@ plugins {
     id("com.android.application")
     id("com.google.dagger.hilt.android")
     id("org.jlleitschuh.gradle.ktlint") version Versions.KTLINT
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -64,6 +66,8 @@ dependencies {
     setActivityDepdendencies()
     setComposeDependencies()
     setKakaoSignInDependencies()
+
+    setFirebaseDependencies()
 
     setHiltDependencies()
 

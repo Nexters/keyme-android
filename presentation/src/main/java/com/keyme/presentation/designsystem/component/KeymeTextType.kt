@@ -64,6 +64,12 @@ enum class KeymeTextType(
         lineHeight = 20f,
         fontFamily = pretendard,
     ),
+    KEYME_LOGOTYPE(
+        size = 36,
+        weight = 800,
+        lineHeight = 46.8f,
+        fontFamily = panchang,
+    ),
     SCORE_RESULT(
         size = 32,
         weight = 800,

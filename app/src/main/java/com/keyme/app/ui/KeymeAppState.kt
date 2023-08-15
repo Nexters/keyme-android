@@ -44,12 +44,12 @@ class KeymeAppState(
 
     val startDestination = OnboardingDestination
 
-    var isSignIn by mutableStateOf(false)
+    var isOnBoarding by mutableStateOf(false)
 
     init {
         coroutineScope.launch {
             onboardingViewModel.localOnboardingState.collectLatest {
-                isSignIn = it == OnboardingStepsEnum.MY_DAILY.ordinal
+                isOnBoarding = it == OnboardingStepsEnum.MY_DAILY.ordinal
             }
         }
     }

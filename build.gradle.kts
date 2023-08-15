@@ -2,6 +2,7 @@
 plugins {
     id("com.google.dagger.hilt.android") version Versions.HILT apply false
     id("org.jetbrains.kotlin.android") version Versions.KOTLIN apply false
+    id("com.google.gms.google-services") version Versions.GOOGLE apply false
 }
 
 buildscript {

@@ -6,6 +6,9 @@ object Versions {
     // Kotlin
     const val KOTLIN = "1.8.0"
 
+    // Google-Serivces
+    const val GOOGLE = "4.3.15"
+
     // Coroutines
     const val COROUTINES = "1.3.9"
 

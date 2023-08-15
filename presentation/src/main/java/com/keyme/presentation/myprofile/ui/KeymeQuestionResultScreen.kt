@@ -24,6 +24,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.QuestionSolvedScore
 import com.keyme.domain.entity.response.Category
 import com.keyme.domain.entity.response.QuestionStatistic
@@ -34,10 +38,13 @@ import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.designsystem.theme.panchang
 import com.keyme.presentation.utils.clickableRippleEffect
 import com.keyme.presentation.utils.textDp
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun KeymeQuestionResultScreen(
+    myCharacter: Member,
     statistics: QuestionStatistic,
+    solvedScorePagingItem: LazyPagingItems<QuestionSolvedScore>,
     myScore: QuestionSolvedScore? = null,
     onBackClick: () -> Unit,
 ) {
@@ -66,7 +73,7 @@ fun KeymeQuestionResultScreen(
                 onPressedDown = { showMyScore = false },
             )
 
-            KeymeQuestionSolvedScoreList()
+            KeymeQuestionSolvedScoreList(myCharacter, statistics, solvedScorePagingItem)
         }
     }
 }
@@ -134,6 +141,7 @@ private fun KeymeQuestionDetailScreenPreview() {
             .background(color = keyme_black),
     ) {
         KeymeQuestionResultScreen(
+            myCharacter = Member.EMPTY,
             statistics = QuestionStatistic(
                 avgScore = 3f,
                 category = Category(
@@ -145,7 +153,8 @@ private fun KeymeQuestionDetailScreenPreview() {
                 keyword = "",
                 questionId = 0,
             ),
-            myScore = QuestionSolvedScore("", 4.3f),
+            solvedScorePagingItem = flowOf(PagingData.empty<QuestionSolvedScore>()).collectAsLazyPagingItems(),
+            myScore = QuestionSolvedScore(0, "", 4.3f),
             onBackClick = {},
         )
     }

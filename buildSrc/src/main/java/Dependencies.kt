@@ -170,8 +170,12 @@ object Dependencies {
 
     fun DependencyHandler.setPagingDependencies() {
         implementation(paging_compose)
-        implementation(paging_compose)
+        implementation(paging_common)
         implementation(paging_runtime)
+    }
+
+    fun DependencyHandler.setPagingDependenciesForDomain() {
+        implementation(paging_common)
     }
 
     fun DependencyHandler.setAndroidTestDependencies() {

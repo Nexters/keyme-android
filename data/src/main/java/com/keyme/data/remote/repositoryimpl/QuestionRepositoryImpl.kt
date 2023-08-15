@@ -1,10 +1,16 @@
 package com.keyme.data.remote.repositoryimpl
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.keyme.data.remote.api.KeymeApi
+import com.keyme.data.remote.datasource.QuestionSolvedScoreListPagingSource
+import com.keyme.domain.entity.response.QuestionSolvedScore
 import com.keyme.domain.entity.response.QuestionStatisticsResponse
 import com.keyme.domain.entity.response.QuestionSolvedScoreListResponse
 import com.keyme.domain.entity.response.QuestionSolvedScoreResponse
 import com.keyme.domain.repository.QuestionRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class QuestionRepositoryImpl @Inject constructor(
@@ -18,12 +24,13 @@ class QuestionRepositoryImpl @Inject constructor(
         return keymeApi.getQuestionStatistics(id = questionId, ownerId = 1)
     }
 
-    override suspend fun getSolvedScoreList(
-        cursor: Int?,
+    override fun getSolvedScoreList(
         questionId: String,
         limit: Int,
         ownerId: Int,
-    ): QuestionSolvedScoreListResponse {
-        return keymeApi.getQuestionSolvedScoreList(cursor, questionId, limit, ownerId)
+    ): Pager<Int, QuestionSolvedScore> {
+        return Pager(config = PagingConfig(pageSize = limit)) {
+            QuestionSolvedScoreListPagingSource(keymeApi, questionId, ownerId)
+        }
     }
 }

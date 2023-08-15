@@ -1,6 +1,8 @@
 import Dependencies.setJavaXInjectDependencies
 import Dependencies.setKotlinStdLibDependencies
 import Dependencies.setLoggerDependencies
+import Dependencies.setPagingDependencies
+import Dependencies.setPagingDependenciesForDomain
 import Dependencies.setTestDependencies
 
 
@@ -20,4 +22,5 @@ dependencies {
     setJavaXInjectDependencies()
     setTestDependencies()
     setLoggerDependencies()
+    setPagingDependenciesForDomain()
 }

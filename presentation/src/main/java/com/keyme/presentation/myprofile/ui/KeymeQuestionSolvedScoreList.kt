@@ -28,21 +28,35 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
+import com.keyme.domain.entity.member.Member
+import com.keyme.domain.entity.response.QuestionSolvedScore
+import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.designsystem.component.BottomSheetHandle
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.utils.getUploadTimeString
 import timber.log.Timber
+import java.sql.Timestamp
 
 
 @Composable
-fun ColumnScope.KeymeQuestionSolvedScoreList() {
+fun ColumnScope.KeymeQuestionSolvedScoreList(
+    myCharacter: Member,
+    statistic: QuestionStatistic,
+    solvedScorePagingItem: LazyPagingItems<QuestionSolvedScore>,
+) {
     KeymeQuestionScoreListContainer {
-        KeymeQuestionInfo(title = "키미미미미미님의 애정 표현정도는?", solvedCount = 10)
+        KeymeQuestionInfo(
+            title = "${myCharacter.nickname}님의 ${statistic.keyword}정도는?",
+            solvedCount = solvedScorePagingItem.itemCount,
+        )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = Color(0x1AFFFFFF))
+
 
         LazyColumn(
             modifier = Modifier
@@ -50,8 +64,14 @@ fun ColumnScope.KeymeQuestionSolvedScoreList() {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            items(100) {
-                KeymeQuestionScoreItem("5", System.currentTimeMillis())
+            items(
+                count = solvedScorePagingItem.itemCount,
+                key = solvedScorePagingItem.itemKey(key = { item -> item.id }),
+            ) {
+                val item = solvedScorePagingItem[it]
+                item?.let {
+                    KeymeQuestionScoreItem(item.score.toString(), Timestamp.valueOf(item.createAt).time)
+                }
             }
         }
     }

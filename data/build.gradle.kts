@@ -6,6 +6,7 @@ import Dependencies.setHiltDependencies
 import Dependencies.setKotlinStdLibDependencies
 import Dependencies.setLoggerDependencies
 import Dependencies.setNetworkDependencies
+import Dependencies.setPagingDependencies
 import Dependencies.setTestDependencies
 
 
@@ -43,6 +44,7 @@ dependencies {
 
     setNetworkDependencies()
     setDatabaseDependencies()
+    setPagingDependencies()
 
     setHiltDependencies()
 

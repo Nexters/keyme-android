@@ -17,13 +17,14 @@ import com.keyme.app.navigation.keymeTopLevelDestinations
 import com.keyme.presentation.alarm.ui.AlarmDestination
 import com.keyme.presentation.alarm.ui.alarmGraph
 import com.keyme.presentation.designsystem.theme.KeymeTheme
+import com.keyme.presentation.feed.ui.FeedDestination
 import com.keyme.presentation.feed.ui.feedGraph
+import com.keyme.presentation.keymetest.KeymeTestDestination
+import com.keyme.presentation.keymetest.keymeTestGraph
 import com.keyme.presentation.myprofile.ui.KeymeQuestionResultDestination
 import com.keyme.presentation.myprofile.ui.keymeQuestionResultGraph
 import com.keyme.presentation.myprofile.ui.myProfileGraph
-import com.keyme.presentation.nickname.NicknameDestination
-import com.keyme.presentation.nickname.nicknameGraph
-import com.keyme.presentation.signin.signInGraph
+import com.keyme.presentation.onboarding.onboardingGraph
 
 @Composable
 fun KeymeApp() {
@@ -47,13 +48,13 @@ fun KeymeApp() {
                     .fillMaxSize()
                     .padding(innerPadding),
             ) {
-                signInGraph(
-                    navigateToNickname = { appState.navigate(NicknameDestination) },
-//                    navigateToKeymeTest = { appState.navigate(KeymeTestDestination) },
-//                    navigateToMyDaily = { appState.navigate(MyDailyDestination) },
+                onboardingGraph(
+                    navigateToOnboardingTest = { appState.navigate(KeymeTestDestination) },
+                    navigateToMyDaily = { appState.navigate(FeedDestination) },
                 )
-                nicknameGraph(
+                keymeTestGraph(
                     onBackClick = appState::onBackClick,
+                    navigateToMyDaily = { appState.navigate(FeedDestination) },
                 )
                 feedGraph(
                     navigateToAlarm = { appState.navigate(AlarmDestination) },

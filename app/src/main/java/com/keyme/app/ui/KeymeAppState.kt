@@ -15,21 +15,21 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.keyme.app.navigation.TopLevelDestination
 import com.keyme.presentation.navigation.KeymeNavigationDestination
-import com.keyme.presentation.signin.SignInDestination
-import com.keyme.presentation.signin.SignInViewModel
-import com.keyme.presentation.signin.enums.SignInStateEnum
+import com.keyme.presentation.onboarding.OnboardingDestination
+import com.keyme.presentation.onboarding.OnboardingStepsEnum
+import com.keyme.presentation.onboarding.OnboardingViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Composable
 fun rememberKeymeAppState(
-    signInViewModel: SignInViewModel = hiltViewModel(),
+    onboardingViewModel: OnboardingViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
 ): KeymeAppState {
     val coroutineScope = rememberCoroutineScope()
     return remember(navController) {
-        KeymeAppState(coroutineScope, navController, signInViewModel)
+        KeymeAppState(coroutineScope, navController, onboardingViewModel)
     }
 }
 
@@ -37,19 +37,19 @@ fun rememberKeymeAppState(
 class KeymeAppState(
     private val coroutineScope: CoroutineScope,
     val navController: NavHostController,
-    private val signInViewModel: SignInViewModel,
+    private val onboardingViewModel: OnboardingViewModel,
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
-    val startDestination = SignInDestination
+    val startDestination = OnboardingDestination
 
     var isSignIn by mutableStateOf(false)
 
     init {
         coroutineScope.launch {
-            signInViewModel.keymeSignInState.collectLatest {
-                isSignIn = it == SignInStateEnum.MY_DAILY
+            onboardingViewModel.localOnboardingState.collectLatest {
+                isSignIn = it == OnboardingStepsEnum.MY_DAILY.ordinal
             }
         }
     }

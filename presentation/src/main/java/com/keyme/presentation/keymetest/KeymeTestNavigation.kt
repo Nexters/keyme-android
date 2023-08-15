@@ -21,7 +21,7 @@ fun NavGraphBuilder.keymeTestGraph(
         composable(route = KeymeTestDestination.destination) {
             KeymeTestRoute(
                 onBackClick = onBackClick,
-                navigateToMyDaily = navigateToMyDaily
+                navigateToMyDaily = navigateToMyDaily,
             )
         }
     }

@@ -44,8 +44,8 @@ import com.keyme.presentation.designsystem.component.KeymeTextButton
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.black_alpha_60
 import com.keyme.presentation.designsystem.theme.gray400
-import com.keyme.presentation.designsystem.theme.keyme_white
 import com.keyme.presentation.designsystem.theme.gray500
+import com.keyme.presentation.designsystem.theme.keyme_white
 
 @Composable
 fun NicknameScreen(

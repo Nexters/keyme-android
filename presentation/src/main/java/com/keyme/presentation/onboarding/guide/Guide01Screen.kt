@@ -56,7 +56,7 @@ fun Guide01Screen(
                     .padding(horizontal = 16.dp)
                     .padding(bottom = 54.dp)
                     .align(Alignment.BottomCenter),
-                enabled = true
+                enabled = true,
             )
         }
         KeymeText(

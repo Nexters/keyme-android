@@ -29,7 +29,7 @@ class OnboardingViewModel @Inject constructor(
         apiCall(apiRequest = { signInUseCase.invoke(token) }) {
             Timber.d("$it")
             _remoteOnboardingState.emit(
-                true
+                true,
 //                when {
 //                    it.nickname.isNullOrBlank() -> OnboardingStepsEnum.NICKNAME
 //                    it.onboardingTestResultId == null -> OnboardingStepsEnum.GUIDE_01

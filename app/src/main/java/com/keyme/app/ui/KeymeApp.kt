@@ -54,7 +54,7 @@ fun KeymeApp() {
                 )
                 keymeTestGraph(
                     onBackClick = appState::onBackClick,
-                    navigateToMyDaily = { appState.navigate(FeedDestination) }
+                    navigateToMyDaily = { appState.navigate(FeedDestination) },
                 )
                 feedGraph(
                     navigateToAlarm = { appState.navigate(AlarmDestination) },

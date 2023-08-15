@@ -2,7 +2,7 @@ package com.keyme.presentation.myprofile
 
 import androidx.lifecycle.SavedStateHandle
 import com.keyme.domain.entity.response.Question
-import com.keyme.domain.entity.response.SolvedScore
+import com.keyme.domain.entity.response.QuestionSolvedScore
 import com.keyme.domain.usecase.GetMySolvedScoreUseCase
 import com.keyme.domain.usecase.GetQuestionStatisticsUseCase
 import com.keyme.presentation.BaseViewModel
@@ -24,7 +24,7 @@ class KeymeQuestionResultViewModel @Inject constructor(
     private val _statisticsState = MutableStateFlow(Question.EMPTY)
     val statisticsState = _statisticsState.asStateFlow()
 
-    private val _myScoreState = MutableStateFlow(SolvedScore.EMPTY)
+    private val _myScoreState = MutableStateFlow<QuestionSolvedScore?>(null)
     val myScoreState = _myScoreState.asStateFlow()
 
     init {
@@ -37,7 +37,9 @@ class KeymeQuestionResultViewModel @Inject constructor(
             apiCall(apiRequest = { getQuestionStatisticsUseCase.invoke(questionId) }) {
                 _statisticsState.value = it
             }
-            _myScoreState.value = getMySolvedScoreUseCase.invoke()
+            apiCall(apiRequest = { getMySolvedScoreUseCase.invoke(questionId) }) {
+                _myScoreState.value = it
+            }
         }
     }
 

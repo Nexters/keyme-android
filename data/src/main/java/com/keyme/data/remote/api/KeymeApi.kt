@@ -3,9 +3,10 @@ package com.keyme.data.remote.api
 import com.keyme.domain.entity.request.SignInRequest
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.MemberStatisticsResponse
+import com.keyme.domain.entity.response.QuestionSolvedScoreResponse
 import com.keyme.domain.entity.response.QuestionStatisticsResponse
 import com.keyme.domain.entity.response.SignInResponse
-import com.keyme.domain.entity.response.SolvedScoreListResponse
+import com.keyme.domain.entity.response.QuestionSolvedScoreListResponse
 import com.keyme.domain.entity.response.keymetest.KeymeTestResultStatisticsResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -31,23 +32,23 @@ interface KeymeApi {
         @Query("type") type: MemberStatistics.StatisticsType,
     ): MemberStatisticsResponse
 
-//    @GET("questions/{id}/score")
-//    suspend fun getMyQuestionScore(
-//        @Path("id") id: String,
-//        @Query("ownerId") ownerId: String,
-//    ): MyQuestionScoreResponse
-
     @GET("questions/{id}/statistics")
     suspend fun getQuestionStatistics(
         @Path("id") id: String,
         @Query("ownerId") ownerId: Int,
     ): QuestionStatisticsResponse
 
+    @GET("questions/{id}/score")
+    suspend fun getQuestionSolvedScore(
+        @Path("id") id: String,
+        @Query("ownerId") ownerId: String,
+    ): QuestionSolvedScoreResponse
+
     @GET("questions/{id}/solved-scores")
-    suspend fun getSolvedScoreList(
+    suspend fun getQuestionSolvedScoreList(
         @Query("cursor") cursor: Int?,
         @Path("id") id: String,
         @Query("limit") limit: Int = 20,
         @Query("ownerId") ownerId: Int,
-    ): SolvedScoreListResponse
+    ): QuestionSolvedScoreListResponse
 }

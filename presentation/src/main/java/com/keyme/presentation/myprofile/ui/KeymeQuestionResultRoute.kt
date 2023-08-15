@@ -41,6 +41,7 @@ fun KeymeQuestionResultRoute(
     onBackClick: () -> Unit,
 ) {
     val statisticsState by keymeQuestionResultViewModel.statisticsState.collectAsStateWithLifecycle()
+    val myScore by keymeQuestionResultViewModel.myScoreState.collectAsStateWithLifecycle()
 
     KeymeQuestionResultScreen(
         statistics = QuestionsStatistic(

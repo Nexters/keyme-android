@@ -67,6 +67,7 @@ fun MyProfileScreen(
         HorizontalPager(
             pageCount = myProfileTabs.size,
             state = pagerState,
+            userScrollEnabled = false,
         ) {
             when (myProfileTabs[it]) {
                 MyProfileTab.Similar -> KeymeMemberStatisticsScreen(

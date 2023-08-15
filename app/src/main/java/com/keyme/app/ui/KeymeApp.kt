@@ -24,6 +24,7 @@ import com.keyme.presentation.keymetest.keymeTestGraph
 import com.keyme.presentation.myprofile.ui.KeymeQuestionResultDestination
 import com.keyme.presentation.myprofile.ui.keymeQuestionResultGraph
 import com.keyme.presentation.myprofile.ui.myProfileGraph
+import com.keyme.presentation.onboarding.OnboardingDestination
 import com.keyme.presentation.onboarding.onboardingGraph
 
 @Composable
@@ -33,7 +34,7 @@ fun KeymeApp() {
     KeymeTheme {
         Scaffold(
             bottomBar = {
-                if (appState.isSignIn) {
+                if (appState.currentDestination.isOnBoarding().not()) {
                     KeymeBottomBar(
                         currentDestination = appState.currentDestination,
                         onNavigateToDestination = appState::navigate,
@@ -76,6 +77,10 @@ fun KeymeApp() {
             }
         }
     }
+}
+
+private fun NavDestination?.isOnBoarding(): Boolean {
+    return this?.hierarchy?.any { it.route == OnboardingDestination.route } == true
 }
 
 @Composable

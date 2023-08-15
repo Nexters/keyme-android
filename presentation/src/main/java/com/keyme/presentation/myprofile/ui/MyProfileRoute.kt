@@ -6,7 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.keyme.domain.entity.response.Question
+import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.myprofile.MyProfileViewModel
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
@@ -16,7 +16,7 @@ object MyProfileDestination : KeymeNavigationDestination {
 }
 
 fun NavGraphBuilder.myProfileGraph(
-    navigateToQuestionResult: (Question) -> Unit,
+    navigateToQuestionResult: (QuestionStatistic) -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     composable(route = MyProfileDestination.route) {
@@ -28,7 +28,7 @@ fun NavGraphBuilder.myProfileGraph(
 @Composable
 fun MyProfileRoute(
     myProfileViewModel: MyProfileViewModel = hiltViewModel(),
-    navigateToQuestionResult: (Question) -> Unit,
+    navigateToQuestionResult: (QuestionStatistic) -> Unit,
 ) {
     val myCharacter by myProfileViewModel.myCharacterState.collectAsStateWithLifecycle()
     val mySimilarStatistics by myProfileViewModel.mySimilarStatisticsState.collectAsStateWithLifecycle()

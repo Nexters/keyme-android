@@ -2,21 +2,14 @@ package com.keyme.presentation.myprofile.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,31 +19,33 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.keyme.domain.entity.response.keymetest.Category
-import com.keyme.domain.entity.response.keymetest.QuestionsStatistic
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.keyme.domain.entity.member.Member
+import com.keyme.domain.entity.response.Category
+import com.keyme.domain.entity.response.QuestionSolvedScore
+import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.R
-import com.keyme.presentation.designsystem.component.BottomSheetHandle
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.designsystem.theme.panchang
 import com.keyme.presentation.utils.clickableRippleEffect
-import com.keyme.presentation.utils.getUploadTimeString
 import com.keyme.presentation.utils.textDp
-import timber.log.Timber
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun KeymeQuestionResultScreen(
-    statistics: QuestionsStatistic,
+    myCharacter: Member,
+    statistics: QuestionStatistic,
+    solvedScorePagingItem: LazyPagingItems<QuestionSolvedScore>,
+    myScore: QuestionSolvedScore? = null,
     onBackClick: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -67,141 +62,27 @@ fun KeymeQuestionResultScreen(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            KeymeQuestionStatisticsInfo(statistics)
+            var showMyScore by remember(myScore) { mutableStateOf(false) }
 
-            KeymeQuestionStatisticsCircle()
+            KeymeQuestionStatisticsInfo(statistics, showMyScore, myScore)
 
-            KeymeQuestionScoreListContainer {
-                KeymeQuestionInfo(title = "키미미미미미님의 애정 표현정도는?", solvedCount = 10)
+            KeymeQuestionStatisticsCircle(
+                statistics,
+                myScore,
+                onPressedUp = { showMyScore = true },
+                onPressedDown = { showMyScore = false },
+            )
 
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = Color(0x1AFFFFFF))
-
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
-                    items(100) {
-                        KeymeQuestionScoreItem("5", System.currentTimeMillis())
-                    }
-                }
-            }
+            KeymeQuestionSolvedScoreList(myCharacter, statistics, solvedScorePagingItem)
         }
     }
 }
 
 @Composable
-fun ColumnScope.KeymeQuestionStatisticsCircle() {
-    Box(
-        modifier = Modifier
-            .padding(top = 12.dp, start = 30.dp, end = 30.dp, bottom = 30.dp)
-            .weight(1f)
-            .aspectRatio(1f)
-            .shadow(
-                elevation = 20.dp,
-                spotColor = Color(0x00000000),
-                ambientColor = Color(0x00000000),
-            )
-            .border(
-                width = 1.dp,
-                color = Color(0x4DFFFFFF),
-                shape = RoundedCornerShape(size = 320.00003.dp),
-            )
-            .background(color = Color(0x4DFFFFFF), shape = RoundedCornerShape(size = 320.00003.dp)),
-    )
-}
-
-@Composable
-fun ColumnScope.KeymeQuestionScoreListContainer(content: @Composable ColumnScope.() -> Unit) {
-    var bottomWeightValue by remember { mutableStateOf(1f) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = Color(0xFF232323),
-                RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-            )
-            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-            .weight(bottomWeightValue),
-    ) {
-        BottomSheetHandle(
-            modifier = Modifier
-                .pointerInput(Unit) {
-                    detectVerticalDragGestures { _, dragAmount ->
-                        bottomWeightValue = (bottomWeightValue - dragAmount / 200).coerceIn(1f, 5f)
-                        Timber.d("bottomWeightValue: $bottomWeightValue")
-                    }
-                },
-        )
-
-        content()
-    }
-}
-
-@Composable
-fun KeymeQuestionInfo(
-    title: String,
-    solvedCount: Int,
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Text(
-            text = title,
-            style = androidx.compose.ui.text.TextStyle(
-                fontSize = 20.sp,
-                lineHeight = 26.sp,
-                fontWeight = FontWeight(600),
-                color = Color(0xFFFFFFFF),
-            ),
-        )
-
-        Text(
-            text = "응답자 수 ${solvedCount}명",
-            style = androidx.compose.ui.text.TextStyle(
-                fontSize = 16.sp,
-                lineHeight = 19.2.sp,
-                fontWeight = FontWeight(400),
-                color = Color(0x99FFFFFF),
-            ),
-        )
-    }
-}
-
-@Composable
-private fun KeymeQuestionScoreItem(
-    score: String,
-    timeStamp: Long,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = Color(0xFF303030), shape = RoundedCornerShape(size = 16.dp))
-            .padding(vertical = 16.dp, horizontal = 20.dp),
-    ) {
-        KeymeText(
-            modifier = Modifier.align(Alignment.Center),
-            text = "${score}점",
-            keymeTextType = KeymeTextType.BODY_3_REGULAR,
-        )
-        KeymeText(
-            modifier = Modifier.align(Alignment.CenterEnd),
-            text = timeStamp.getUploadTimeString(),
-            keymeTextType = KeymeTextType.BODY_3_REGULAR,
-        )
-    }
-}
-
-@Composable
 private fun KeymeQuestionStatisticsInfo(
-    questionsStatistic: QuestionsStatistic,
+    questionStatistic: QuestionStatistic,
+    showMyScore: Boolean = false,
+    myScore: QuestionSolvedScore?,
 ) {
     Column(
         modifier = Modifier
@@ -218,13 +99,21 @@ private fun KeymeQuestionStatisticsInfo(
                 )
                 .background(color = Color(0x33FFFFFF), shape = RoundedCornerShape(size = 16.dp))
                 .padding(start = 10.dp, top = 5.dp, end = 10.dp, bottom = 5.dp),
-            text = questionsStatistic.category.name,
+            text = if (showMyScore) {
+                "내가 준 점수"
+            } else {
+                questionStatistic.category.name
+            },
             keymeTextType = KeymeTextType.BODY_3_REGULAR,
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
-                text = questionsStatistic.averageScore.toString(),
+                text = if (showMyScore) {
+                    myScore?.score?.toString() ?: "0"
+                } else {
+                    questionStatistic.avgScore.toString()
+                },
                 fontFamily = panchang,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 40.textDp(),
@@ -251,17 +140,20 @@ private fun KeymeQuestionDetailScreenPreview() {
             .background(color = keyme_black),
     ) {
         KeymeQuestionResultScreen(
-            statistics = QuestionsStatistic(
-                averageScore = 0,
+            myCharacter = Member.EMPTY,
+            statistics = QuestionStatistic(
+                avgScore = 3f,
                 category = Category(
-                    color = "",
-                    imageUrl = "",
+                    color = "FFFFFF",
+                    iconUrl = "",
                     name = "",
                 ),
-                description = "",
+                title = "",
                 keyword = "",
                 questionId = 0,
             ),
+            solvedScorePagingItem = flowOf(PagingData.empty<QuestionSolvedScore>()).collectAsLazyPagingItems(),
+            myScore = QuestionSolvedScore(0, "", 4.3f),
             onBackClick = {},
         )
     }

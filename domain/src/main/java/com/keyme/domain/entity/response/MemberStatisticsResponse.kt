@@ -12,3 +12,14 @@ data class MemberStatistics(
         SIMILAR, DIFFERENT
     }
 }
+
+data class Result(
+    val coordinate: Coordinate,
+    val questionStatistic: QuestionStatistic,
+)
+
+data class Coordinate(
+    val r: Double,
+    val x: Double,
+    val y: Double,
+)

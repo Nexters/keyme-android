@@ -48,5 +48,5 @@ fun Modifier.bubbleChartItem(item: BubbleItem) = composed {
         .offset(item.offSet.x.dp, item.offSet.y.dp)
         .size(item.size)
         .clip(CircleShape)
-        .background(color = ColorUtil.hexStringToColor(item.question.category.color), shape = CircleShape)
+        .background(color = ColorUtil.hexStringToColor(item.statistics.category.color), shape = CircleShape)
 }

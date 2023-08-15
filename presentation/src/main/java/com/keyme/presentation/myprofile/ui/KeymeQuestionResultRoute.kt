@@ -8,8 +8,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.keyme.domain.entity.response.keymetest.Category
-import com.keyme.domain.entity.response.keymetest.QuestionsStatistic
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.keyme.domain.entity.response.Category
+import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.myprofile.KeymeQuestionResultViewModel
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
@@ -41,19 +42,24 @@ fun KeymeQuestionResultRoute(
     onBackClick: () -> Unit,
 ) {
     val statisticsState by keymeQuestionResultViewModel.statisticsState.collectAsStateWithLifecycle()
+    val myScore by keymeQuestionResultViewModel.myScoreState.collectAsStateWithLifecycle()
+    val myCharacter by keymeQuestionResultViewModel.myCharacterState.collectAsStateWithLifecycle()
+    val solvedScorePagingItem = keymeQuestionResultViewModel.solvedScorePagingFlow.collectAsLazyPagingItems()
 
     KeymeQuestionResultScreen(
-        statistics = QuestionsStatistic(
-            averageScore = 0,
+        myCharacter = myCharacter,
+        statistics = QuestionStatistic(
+            avgScore = 4f,
             category = Category(
-                color = "",
-                imageUrl = "",
-                name = "",
+                color = "FFFFFF",
+                iconUrl = "https://keyme-ec2-access-s3.s3.ap-northeast-2.amazonaws.com/test_star.png",
+                name = "의사_표현",
             ),
-            description = "",
-            keyword = "",
+            title = "자신의 의견을 확고하게 말하시나요?",
+            keyword = "의견",
             questionId = 0,
         ),
+        solvedScorePagingItem = solvedScorePagingItem,
         onBackClick = onBackClick,
     )
 }

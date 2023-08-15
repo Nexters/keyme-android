@@ -86,7 +86,6 @@ fun ColumnScope.KeymeQuestionStatisticsCircle(
             },
         contentAlignment = Alignment.Center,
     ) {
-
         Box(
             modifier = Modifier
                 .size(avgScoreCircleSize)

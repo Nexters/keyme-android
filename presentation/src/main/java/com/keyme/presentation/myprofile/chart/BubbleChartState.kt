@@ -9,8 +9,8 @@ import androidx.compose.ui.geometry.center
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.keyme.domain.entity.response.Result
 import com.keyme.domain.entity.response.QuestionStatistic
+import com.keyme.domain.entity.response.Result
 import com.keyme.presentation.utils.scale
 import timber.log.Timber
 

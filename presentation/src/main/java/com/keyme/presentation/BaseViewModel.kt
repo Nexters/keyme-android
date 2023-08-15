@@ -1,6 +1,5 @@
 package com.keyme.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.keyme.domain.entity.ApiResult

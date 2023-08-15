@@ -40,7 +40,6 @@ import com.keyme.presentation.utils.getUploadTimeString
 import timber.log.Timber
 import java.sql.Timestamp
 
-
 @Composable
 fun ColumnScope.KeymeQuestionSolvedScoreList(
     myCharacter: Member,
@@ -56,7 +55,6 @@ fun ColumnScope.KeymeQuestionSolvedScoreList(
         Spacer(modifier = Modifier.height(12.dp))
 
         Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = Color(0x1AFFFFFF))
-
 
         LazyColumn(
             modifier = Modifier

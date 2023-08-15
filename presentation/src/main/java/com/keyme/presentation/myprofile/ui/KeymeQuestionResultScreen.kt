@@ -28,8 +28,8 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.keyme.domain.entity.member.Member
-import com.keyme.domain.entity.response.QuestionSolvedScore
 import com.keyme.domain.entity.response.Category
+import com.keyme.domain.entity.response.QuestionSolvedScore
 import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
@@ -77,7 +77,6 @@ fun KeymeQuestionResultScreen(
         }
     }
 }
-
 
 @Composable
 private fun KeymeQuestionStatisticsInfo(

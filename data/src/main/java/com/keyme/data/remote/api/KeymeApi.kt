@@ -1,12 +1,15 @@
 package com.keyme.data.remote.api
 
 import com.keyme.domain.entity.request.SignInRequest
+import com.keyme.domain.entity.response.DailyTestResponse
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.MemberStatisticsResponse
+import com.keyme.domain.entity.response.OnBoardingTestResponse
 import com.keyme.domain.entity.response.QuestionSolvedScoreListResponse
 import com.keyme.domain.entity.response.QuestionSolvedScoreResponse
 import com.keyme.domain.entity.response.QuestionStatisticsResponse
 import com.keyme.domain.entity.response.SignInResponse
+import com.keyme.domain.entity.response.TestStatisticResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -19,11 +22,6 @@ interface KeymeApi {
     suspend fun signInWithKakao(
         @Body signInRequest: SignInRequest,
     ): SignInResponse
-
-//    @GET("tests/{id}/statistics")
-//    suspend fun getKeymeTestResultStatistics(
-//        @Path("id") questionId: String,
-//    ): KeymeTestResultStatisticsResponse
 
     @GET("members/{memberId}/statistics")
     suspend fun getMemberStatistics(
@@ -50,4 +48,15 @@ interface KeymeApi {
         @Query("limit") limit: Int = 20,
         @Query("ownerId") ownerId: Int,
     ): QuestionSolvedScoreListResponse
+
+    @GET("tests/onboarding")
+    suspend fun getOnBoardingTest(): OnBoardingTestResponse
+
+    @GET("tests/daily")
+    suspend fun getDailyTest(): DailyTestResponse
+
+    @GET("tests/{id}/statistics")
+    suspend fun getTestStatistic(
+        @Path("id") testId: Int,
+    ): TestStatisticResponse
 }

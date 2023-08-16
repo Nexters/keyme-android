@@ -1,7 +1,6 @@
 package com.keyme.presentation.utils
 
 import androidx.compose.ui.graphics.Color
-import timber.log.Timber
 
 object ColorUtil {
     fun hexStringToColor(value: String): Color {
@@ -15,8 +14,6 @@ object ColorUtil {
                 (red and 0xFF shl 16) or
                 (green and 0xFF shl 8) or
                 (blue and 0xFF)
-
-            Timber.d("argbColor = $argbColor")
 
             Color(argbColor)
         } else {

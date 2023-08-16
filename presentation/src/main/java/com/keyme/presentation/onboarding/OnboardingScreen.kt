@@ -1,6 +1,5 @@
 package com.keyme.presentation.onboarding
 
-import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
@@ -14,19 +13,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.model.ClientError
-import com.kakao.sdk.common.model.ClientErrorCause
-import com.kakao.sdk.user.UserApiClient
 import com.keyme.presentation.R
 import com.keyme.presentation.onboarding.guide.Guide01Screen
 import com.keyme.presentation.onboarding.guide.Guide02Screen
@@ -55,10 +48,8 @@ fun OnboardingScreen(
     navigateToOnboardingTest: () -> Unit,
     navigateToMyDaily: () -> Unit,
 ) {
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_signin_background))
-    val remoteOnboardingState by viewModel.remoteOnboardingState.collectAsStateWithLifecycle()
 
     val pagerState = rememberPagerState(initialPage = 0)
     val onboardingSteps = listOf(
@@ -70,20 +61,21 @@ fun OnboardingScreen(
         OnboardingStepsEnum.GUIDE_04,
     )
 
-    LaunchedEffect(viewModel) { // Todo: Set local data value.
+    LaunchedEffect(viewModel) {
+//        TODO: 토큰만 있는 상태에서 메인으로 넘기기 위해 주석처리
+//        viewModel.userAuthState.collectLatest {
+//            when {
+//                it?.accessToken == null -> pagerState.scrollToPage(OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal)
+//                it.nickname == null -> pagerState.scrollToPage(OnboardingStepsEnum.NICKNAME.ordinal)
+//                it.onboardingTestResultId == null -> pagerState.scrollToPage(OnboardingStepsEnum.GUIDE_01.ordinal)
+//                else -> navigateToMyDaily.invoke()
+//            }
+//        }
+//        TODO: 토큰만 있는 상태에서 메인으로 넘기는 부분
         viewModel.userAuthState.collectLatest {
-            when {
-                it?.accessToken == null -> pagerState.scrollToPage(OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal)
-                it.nickname == null -> pagerState.scrollToPage(OnboardingStepsEnum.NICKNAME.ordinal)
-                it.onboardingTestResultId == null -> pagerState.scrollToPage(OnboardingStepsEnum.GUIDE_01.ordinal)
-                else -> navigateToMyDaily.invoke()
-            }
+            if (it?.accessToken != null) navigateToMyDaily.invoke()
         }
     }
-
-//    LaunchedEffect(remoteOnboardingState) {
-//        pagerState.scrollToPage(remoteOnboardingState)
-//    }
 
     when (pagerState.currentPage) {
         0 -> BackHandler(enabled = true) { /*TODO*/ }
@@ -118,9 +110,7 @@ fun OnboardingScreen(
         ) {
             when (onboardingSteps[it]) {
                 OnboardingStepsEnum.KAKAO_SIGN_IN -> SignInScreen(
-                    onClickKakaoSignIn = {
-                        signInWithKakao(context, viewModel::signInWithKeyme)
-                    },
+                    signInWithKeyme = viewModel::signInWithKeyme,
                 )
                 OnboardingStepsEnum.NICKNAME -> NicknameScreen(
                     onBackClick = {
@@ -164,44 +154,10 @@ fun OnboardingScreen(
     }
 }
 
-private fun signInWithKakao(
-    context: Context,
-    signInWithKeyme: (String) -> Unit,
-) {
-    val kakaoSignInCallback: (OAuthToken?, Throwable?) -> Unit = { oAuthToken, error ->
-        oAuthToken?.let {
-            signInWithKeyme(it.accessToken)
-        }
-        error?.let {
-            when (it is ClientError && it.reason == ClientErrorCause.Cancelled) {
-                true -> {
-                    /* TODO: Handle error */
-                }
-
-                false -> {
-                    /* TODO: Handle error */
-                }
-            }
-        }
-    }
-
-    when (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-        true -> UserApiClient.instance.loginWithKakaoTalk(
-            context = context,
-            callback = kakaoSignInCallback,
-        )
-
-        false -> UserApiClient.instance.loginWithKakaoAccount(
-            context = context,
-            callback = kakaoSignInCallback,
-        )
-    }
-}
-
 @Composable
 @Preview(showBackground = true)
 fun OnboardingScreenPreview() {
     SignInScreen(
-        onClickKakaoSignIn = {},
+        signInWithKeyme = {},
     )
 }

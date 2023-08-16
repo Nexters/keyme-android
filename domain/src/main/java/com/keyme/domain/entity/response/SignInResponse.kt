@@ -9,7 +9,7 @@ data class SignInResult(
     val nickname: String?,
     val profileImage: String,
     val profileThumbnail: String,
-    val friendCode: String,
+    val friendCode: String?,
     val onboardingTestResultId: Int?,
     val token: Token,
 ) {

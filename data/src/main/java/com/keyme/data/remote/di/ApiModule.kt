@@ -2,11 +2,13 @@ package com.keyme.data.remote.di
 
 import com.keyme.data.BuildConfig
 import com.keyme.data.remote.api.KeymeApi
-import com.keyme.domain.usecase.GetMyMemberTokenUseCase
+import com.keyme.domain.usecase.GetUserAuthUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,29 +22,40 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideKeymeApi(getMyMemberTokenUseCase: GetMyMemberTokenUseCase): KeymeApi {
-        return getRetrofit(getMyMemberTokenUseCase()).create()
+    fun provideKeymeApi(
+        getUserAuthUseCase: GetUserAuthUseCase,
+    ): KeymeApi {
+        return getRetrofit(getUserAuthUseCase).create()
     }
 
-    private fun getRetrofit(memberToken: String): Retrofit {
+    private fun getRetrofit(
+        getUserAuthUseCase: GetUserAuthUseCase,
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://api.keyme.space")
-            .client(getOkHttpClient(memberToken))
+            .client(getOkHttpClient(getUserAuthUseCase))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    private fun getOkHttpClient(memberToken: String): OkHttpClient {
+    private fun getOkHttpClient(
+        getUserAuthUseCase: GetUserAuthUseCase,
+    ): OkHttpClient {
         val builder = OkHttpClient.Builder()
 
         builder.addInterceptor { chain ->
             val origin = chain.request()
-            chain.request().newBuilder()
+            val requestBuilder = origin.newBuilder()
                 .header("Content-Type", "application/json;charset=UTF-8")
-                .header("Authorization", "Bearer $memberToken")
                 .method(origin.method, origin.body)
-                .build()
-                .let(chain::proceed)
+
+            if (!origin.url.toString().contains("/auth/login")) {
+                val token = runBlocking {
+                    getUserAuthUseCase.getUserAuth().first()?.accessToken
+                }
+                requestBuilder.header("Authorization", "Bearer $token")
+            }
+            chain.proceed(requestBuilder.build())
         }
 
         if (BuildConfig.DEBUG) {

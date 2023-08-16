@@ -17,7 +17,7 @@ import com.keyme.app.navigation.keymeTopLevelDestinations
 import com.keyme.presentation.alarm.ui.AlarmDestination
 import com.keyme.presentation.alarm.ui.alarmGraph
 import com.keyme.presentation.designsystem.theme.KeymeTheme
-import com.keyme.presentation.dailykeymetest.DailyKeymeTest
+import com.keyme.presentation.dailykeymetest.DailyKeymeTestDestination
 import com.keyme.presentation.dailykeymetest.dailyKeymeTestGraph
 import com.keyme.presentation.keymetest.KeymeTestDestination
 import com.keyme.presentation.keymetest.keymeTestGraph
@@ -51,11 +51,11 @@ fun KeymeApp() {
             ) {
                 onboardingGraph(
                     navigateToOnboardingTest = { appState.navigate(KeymeTestDestination) },
-                    navigateToMyDaily = { appState.navigate(DailyKeymeTest) },
+                    navigateToMyDaily = { appState.navigate(DailyKeymeTestDestination) },
                 )
                 keymeTestGraph(
                     onBackClick = appState::onBackClick,
-                    navigateToMyDaily = { appState.navigate(DailyKeymeTest) },
+                    navigateToMyDaily = { appState.navigate(DailyKeymeTestDestination) },
                 )
                 dailyKeymeTestGraph(
                     navigateToAlarm = { appState.navigate(AlarmDestination) },

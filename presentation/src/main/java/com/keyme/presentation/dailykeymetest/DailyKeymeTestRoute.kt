@@ -15,10 +15,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.keyme.domain.entity.member.Member
 import com.keyme.presentation.R
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
-object DailyKeymeTest : KeymeNavigationDestination {
+object DailyKeymeTestDestination : KeymeNavigationDestination {
     override val route = "daily_keyme_test_route"
     override val destination = "daily_keyme_test_destination"
 }
@@ -28,10 +29,10 @@ fun NavGraphBuilder.dailyKeymeTestGraph(
     nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     navigation(
-        route = DailyKeymeTest.route,
-        startDestination = DailyKeymeTest.destination,
+        route = DailyKeymeTestDestination.route,
+        startDestination = DailyKeymeTestDestination.destination,
     ) {
-        composable(route = DailyKeymeTest.destination) {
+        composable(route = DailyKeymeTestDestination.destination) {
             DailyKeymeTestRoute(navigateToAlarm = navigateToAlarm)
         }
         nestedGraphs()
@@ -42,16 +43,14 @@ fun NavGraphBuilder.dailyKeymeTestGraph(
 fun DailyKeymeTestRoute(
     navigateToAlarm: () -> Unit,
 ) {
-    Row(modifier = Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            Icon(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(16.dp)
-                    .clickable { navigateToAlarm() },
-                painter = painterResource(id = R.drawable.icon_noti),
-                contentDescription = "",
-            )
-        }
-    }
+
+    DailyKeymeTestScreen(
+        myCharacter = Member(
+            friendCode = "",
+            id = 0,
+            nickname = "",
+            profileImage = "",
+            profileThumbnail = "",
+        ),
+    )
 }

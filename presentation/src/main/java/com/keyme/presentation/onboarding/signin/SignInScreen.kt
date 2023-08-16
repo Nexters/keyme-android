@@ -1,5 +1,6 @@
 package com.keyme.presentation.onboarding.signin
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -17,9 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.user.UserApiClient
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
@@ -28,8 +34,10 @@ import com.keyme.presentation.designsystem.theme.white_alpha_50
 
 @Composable
 fun SignInScreen(
-    onClickKakaoSignIn: () -> Unit,
+    signInWithKeyme: (String) -> Unit,
 ) {
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -40,7 +48,7 @@ fun SignInScreen(
             Spacer(modifier = Modifier.weight(1f))
             KeymeLogotype()
             Spacer(modifier = Modifier.weight(1f))
-            KakaoSignInButton(onClickKakaoSignIn)
+            KakaoSignInButton { signInWithKakao(context, signInWithKeyme) }
             Spacer(modifier = Modifier.size(30.dp))
             SignInPoliciesText(
                 onClickServicePolicy = { /*TODO*/ },
@@ -120,10 +128,44 @@ fun SignInPoliciesText(
     }
 }
 
+private fun signInWithKakao(
+    context: Context,
+    signInWithKeyme: (String) -> Unit,
+) {
+    val kakaoSignInCallback: (OAuthToken?, Throwable?) -> Unit = { oAuthToken, error ->
+        oAuthToken?.let {
+            signInWithKeyme(it.accessToken)
+        }
+        error?.let {
+            when (it is ClientError && it.reason == ClientErrorCause.Cancelled) {
+                true -> {
+                    /* TODO: Handle error */
+                }
+
+                false -> {
+                    /* TODO: Handle error */
+                }
+            }
+        }
+    }
+
+    when (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+        true -> UserApiClient.instance.loginWithKakaoTalk(
+            context = context,
+            callback = kakaoSignInCallback,
+        )
+
+        false -> UserApiClient.instance.loginWithKakaoAccount(
+            context = context,
+            callback = kakaoSignInCallback,
+        )
+    }
+}
+
 @Composable
 @Preview(showBackground = true)
 fun SignInScreenPreview() {
     SignInScreen(
-        onClickKakaoSignIn = {},
+        signInWithKeyme = {},
     )
 }

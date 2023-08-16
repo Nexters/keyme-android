@@ -17,7 +17,6 @@ import com.keyme.app.navigation.TopLevelDestination
 import com.keyme.presentation.dailykeymetest.DailyKeymeTestDestination
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 import com.keyme.presentation.onboarding.OnboardingDestination
-import com.keyme.presentation.onboarding.OnboardingStepsEnum
 import com.keyme.presentation.onboarding.OnboardingViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
@@ -49,8 +48,9 @@ class KeymeAppState(
 
     init {
         coroutineScope.launch {
-            onboardingViewModel.localOnboardingState.collectLatest {
-                isOnBoarding = it == OnboardingStepsEnum.MY_DAILY.ordinal
+            onboardingViewModel.userAuthState.collectLatest {
+                isOnBoarding = it?.accessToken == null
+//                isOnBoarding = it?.onboardingTestResultId == null
             }
         }
     }

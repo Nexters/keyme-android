@@ -1,4 +1,4 @@
-package com.keyme.presentation.feed.ui
+package com.keyme.presentation.dailykeymetest
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

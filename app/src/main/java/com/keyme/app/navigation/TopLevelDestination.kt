@@ -1,7 +1,7 @@
 package com.keyme.app.navigation
 
 import androidx.annotation.DrawableRes
-import com.keyme.presentation.feed.ui.DailyKeymeTest
+import com.keyme.presentation.dailykeymetest.DailyKeymeTest
 import com.keyme.presentation.myprofile.ui.MyProfileDestination
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 

@@ -105,10 +105,10 @@ private fun DailyKeymeTestCircle(
 
     var expand by remember { mutableStateOf(false) }
 
-    var selectedIndex = 0
+    var selectedIndex by remember { mutableStateOf(0) }
     var selectedCategory by remember { mutableStateOf(categories[selectedIndex++]) }
 
-    LaunchedEffect(key1 = selectedCategory) {
+    LaunchedEffect(key1 = selectedCategory, key2 = selectedIndex) {
         expand = true
         delay(800L)
         expand = false

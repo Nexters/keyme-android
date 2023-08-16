@@ -1,3 +1,4 @@
+import Dependencies.setCoroutinesDependencies
 import Dependencies.setJavaXInjectDependencies
 import Dependencies.setKotlinStdLibDependencies
 import Dependencies.setLoggerDependencies
@@ -18,6 +19,8 @@ java {
 dependencies {
     setKotlinStdLibDependencies()
     setJavaXInjectDependencies()
+    setCoroutinesDependencies()
+
     setTestDependencies()
     setLoggerDependencies()
 }

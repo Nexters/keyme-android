@@ -34,6 +34,7 @@ import com.keyme.presentation.onboarding.guide.Guide03Screen
 import com.keyme.presentation.onboarding.guide.Guide04Screen
 import com.keyme.presentation.onboarding.nickname.NicknameScreen
 import com.keyme.presentation.onboarding.signin.SignInScreen
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Composable
@@ -70,10 +71,12 @@ fun OnboardingScreen(
     )
 
     LaunchedEffect(viewModel) { // Todo: Set local data value.
-        viewModel.localOnboardingState.collect { newPage ->
-            when (newPage == OnboardingStepsEnum.MY_DAILY.ordinal) {
-                true -> navigateToMyDaily.invoke()
-                false -> pagerState.scrollToPage(newPage)
+        viewModel.userAuthState.collectLatest {
+            when {
+                it?.accessToken == null -> pagerState.scrollToPage(OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal)
+                it.nickname == null -> pagerState.scrollToPage(OnboardingStepsEnum.NICKNAME.ordinal)
+                it.onboardingTestResultId == null -> pagerState.scrollToPage(OnboardingStepsEnum.GUIDE_01.ordinal)
+                else -> navigateToMyDaily.invoke()
             }
         }
     }
@@ -81,8 +84,6 @@ fun OnboardingScreen(
 //    LaunchedEffect(remoteOnboardingState) {
 //        pagerState.scrollToPage(remoteOnboardingState)
 //    }
-
-    if (remoteOnboardingState) navigateToMyDaily.invoke()
 
     when (pagerState.currentPage) {
         0 -> BackHandler(enabled = true) { /*TODO*/ }

@@ -16,8 +16,6 @@ object ColorUtil {
                 (green and 0xFF shl 8) or
                 (blue and 0xFF)
 
-            Timber.d("argbColor = $argbColor")
-
             Color(argbColor)
         } else {
             Color.Unspecified

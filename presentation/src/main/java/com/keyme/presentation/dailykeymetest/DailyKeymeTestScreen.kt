@@ -39,6 +39,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.Category
+import com.keyme.domain.entity.response.Test
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.keyme_black
@@ -52,17 +53,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun DailyKeymeTestScreen(
     myCharacter: Member,
+    dailyKeymeTest: Test,
+    onDailyKeymeTestClick: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         WelComeTextTitle(modifier = Modifier.zIndex(1f), myCharacter = myCharacter)
 
         DailyKeymeTestCircle(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .clickableRippleEffect(bounded = false) {
-
-                },
-            categories = categories,
+            modifier = Modifier.align(Alignment.Center),
+            categories = dailyKeymeTest.questions.map { it.category },
+            onClick = onDailyKeymeTestClick,
         )
     }
 }
@@ -79,31 +79,14 @@ private fun WelComeTextTitle(modifier: Modifier = Modifier, myCharacter: Member)
     )
 }
 
-val categories = listOf(
-    Category(
-        color = "FFB2F5",
-        iconUrl = "https://keyme-ec2-access-s3.s3.ap-northeast-2.amazonaws.com/test_star.png",
-        name = "",
-    ),
-    Category(
-        color = "E5D85C",
-        iconUrl = "https://keyme-ec2-access-s3.s3.ap-northeast-2.amazonaws.com/test_star.png",
-        name = "",
-    ),
-    Category(
-        color = "993800",
-        iconUrl = "https://keyme-ec2-access-s3.s3.ap-northeast-2.amazonaws.com/test_star.png",
-        name = "",
-    ),
-    Category(
-        color = "6B66FF",
-        iconUrl = "https://keyme-ec2-access-s3.s3.ap-northeast-2.amazonaws.com/test_star.png",
-        name = "",
-    ),
-)
-
 @Composable
-private fun DailyKeymeTestCircle(modifier: Modifier = Modifier, categories: List<Category>) {
+private fun DailyKeymeTestCircle(
+    modifier: Modifier = Modifier,
+    categories: List<Category>,
+    onClick: () -> Unit,
+) {
+    if (categories.isEmpty()) return
+
     var expand by remember { mutableStateOf(false) }
 
     var selectedIndex = 0
@@ -128,7 +111,7 @@ private fun DailyKeymeTestCircle(modifier: Modifier = Modifier, categories: List
             }
     }
 
-    DailyKeymeTestCircleImpl(modifier, expand = expand, category = selectedCategory)
+    DailyKeymeTestCircleImpl(modifier, expand = expand, category = selectedCategory, onClick = onClick)
 }
 
 private val initialSize = 0.dp
@@ -139,6 +122,7 @@ private fun DailyKeymeTestCircleImpl(
     modifier: Modifier = Modifier,
     expand: Boolean,
     category: Category,
+    onClick: () -> Unit,
 ) {
     val size by animateDpAsState(
         targetValue = if (expand) expandedSize else initialSize,
@@ -159,7 +143,8 @@ private fun DailyKeymeTestCircleImpl(
             .background(color = Color(0x26FFFFFF), shape = CircleShape)
             .onGloballyPositioned {
                 it.size
-            },
+            }
+            .clickableRippleEffect { onClick() },
         contentAlignment = Alignment.Center,
     ) {
         Box(
@@ -204,6 +189,29 @@ fun DailyKeymeTestCirclePreview() {
             .background(color = keyme_black),
         contentAlignment = Alignment.Center,
     ) {
-        DailyKeymeTestCircle(categories = categories)
+        DailyKeymeTestCircle(categories = categories, onClick = { })
     }
 }
+
+val categories = listOf(
+    Category(
+        color = "FFB2F5",
+        iconUrl = "https://keyme-ec2-access-s3.s3.ap-northeast-2.amazonaws.com/test_star.png",
+        name = "",
+    ),
+    Category(
+        color = "E5D85C",
+        iconUrl = "https://keyme-ec2-access-s3.s3.ap-northeast-2.amazonaws.com/test_star.png",
+        name = "",
+    ),
+    Category(
+        color = "993800",
+        iconUrl = "https://keyme-ec2-access-s3.s3.ap-northeast-2.amazonaws.com/test_star.png",
+        name = "",
+    ),
+    Category(
+        color = "6B66FF",
+        iconUrl = "https://keyme-ec2-access-s3.s3.ap-northeast-2.amazonaws.com/test_star.png",
+        name = "",
+    ),
+)

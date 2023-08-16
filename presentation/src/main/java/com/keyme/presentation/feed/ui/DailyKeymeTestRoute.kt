@@ -18,28 +18,28 @@ import androidx.navigation.navigation
 import com.keyme.presentation.R
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
-object FeedDestination : KeymeNavigationDestination {
-    override val route = "feed_route"
-    override val destination = "feed_destination"
+object DailyKeymeTest : KeymeNavigationDestination {
+    override val route = "daily_keyme_test_route"
+    override val destination = "daily_keyme_test_destination"
 }
 
-fun NavGraphBuilder.feedGraph(
+fun NavGraphBuilder.dailyKeymeTestGraph(
     navigateToAlarm: () -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     navigation(
-        route = FeedDestination.route,
-        startDestination = FeedDestination.destination,
+        route = DailyKeymeTest.route,
+        startDestination = DailyKeymeTest.destination,
     ) {
-        composable(route = FeedDestination.destination) {
-            FeedRoute(navigateToAlarm = navigateToAlarm)
+        composable(route = DailyKeymeTest.destination) {
+            DailyKeymeTestRoute(navigateToAlarm = navigateToAlarm)
         }
         nestedGraphs()
     }
 }
 
 @Composable
-fun FeedRoute(
+fun DailyKeymeTestRoute(
     navigateToAlarm: () -> Unit,
 ) {
     Row(modifier = Modifier.fillMaxSize()) {

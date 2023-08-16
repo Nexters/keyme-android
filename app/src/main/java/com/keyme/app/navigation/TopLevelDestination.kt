@@ -1,7 +1,7 @@
 package com.keyme.app.navigation
 
 import androidx.annotation.DrawableRes
-import com.keyme.presentation.feed.ui.FeedDestination
+import com.keyme.presentation.feed.ui.DailyKeymeTest
 import com.keyme.presentation.myprofile.ui.MyProfileDestination
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
@@ -14,8 +14,8 @@ data class TopLevelDestination(
 
 val keymeTopLevelDestinations = listOf(
     TopLevelDestination(
-        route = FeedDestination.route,
-        destination = FeedDestination.destination,
+        route = DailyKeymeTest.route,
+        destination = DailyKeymeTest.destination,
         selectedIconResId = com.keyme.presentation.R.drawable.icon_tab_feed,
         unselectedIconResId = com.keyme.presentation.R.drawable.icon_tab_feed_unselected,
     ),

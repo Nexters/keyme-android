@@ -3,6 +3,7 @@ package com.keyme.data.remote.repositoryimpl
 import com.keyme.data.remote.api.KeymeApi
 import com.keyme.domain.entity.response.DailyTestResponse
 import com.keyme.domain.entity.response.OnBoardingTestResponse
+import com.keyme.domain.entity.response.TestStatisticResponse
 import com.keyme.domain.repository.KeymeTestRepository
 import javax.inject.Inject
 
@@ -15,5 +16,9 @@ class KeymeTestRepositoryImpl @Inject constructor(
 
     override suspend fun getDailyTest(): DailyTestResponse {
         return keymeApi.getDailyTest()
+    }
+
+    override suspend fun getTestStatistic(testId: Int): TestStatisticResponse {
+        return keymeApi.getTestStatistic(testId)
     }
 }

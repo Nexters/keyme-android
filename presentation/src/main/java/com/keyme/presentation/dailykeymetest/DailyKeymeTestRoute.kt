@@ -48,10 +48,12 @@ fun DailyKeymeTestRoute(
 ) {
     val myCharacter by dailyKeymeTestViewModel.myCharacterState.collectAsStateWithLifecycle()
     val dailyKeymeTest by dailyKeymeTestViewModel.dailyKeymeTestState.collectAsStateWithLifecycle()
+    val dailyKeymeTestStatistic by dailyKeymeTestViewModel.dailyKeymeTestStatisticState.collectAsStateWithLifecycle()
 
     DailyKeymeTestScreen(
         myCharacter = myCharacter,
         dailyKeymeTest = dailyKeymeTest,
+        dailyKeymeTestStatistic = dailyKeymeTestStatistic,
         onDailyKeymeTestClick = {
             // todo navigate to keyme test
         }

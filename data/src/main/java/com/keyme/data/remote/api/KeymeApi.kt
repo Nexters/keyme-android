@@ -9,6 +9,7 @@ import com.keyme.domain.entity.response.QuestionSolvedScoreListResponse
 import com.keyme.domain.entity.response.QuestionSolvedScoreResponse
 import com.keyme.domain.entity.response.QuestionStatisticsResponse
 import com.keyme.domain.entity.response.SignInResponse
+import com.keyme.domain.entity.response.TestStatisticResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -21,11 +22,6 @@ interface KeymeApi {
     suspend fun signInWithKakao(
         @Body signInRequest: SignInRequest,
     ): SignInResponse
-
-//    @GET("tests/{id}/statistics")
-//    suspend fun getKeymeTestResultStatistics(
-//        @Path("id") questionId: String,
-//    ): KeymeTestResultStatisticsResponse
 
     @GET("members/{memberId}/statistics")
     suspend fun getMemberStatistics(
@@ -58,4 +54,9 @@ interface KeymeApi {
 
     @GET("tests/daily")
     suspend fun getDailyTest(): DailyTestResponse
+
+    @GET("tests/{id}/statistics")
+    suspend fun getTestStatistic(
+        @Path("id") testId: Int,
+    ): TestStatisticResponse
 }

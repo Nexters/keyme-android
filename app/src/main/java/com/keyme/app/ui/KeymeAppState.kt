@@ -42,7 +42,7 @@ class KeymeAppState(
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
-    val startDestination = DailyKeymeTestDestination
+    val startDestination = OnboardingDestination
 
     var isOnBoarding by mutableStateOf(false)
 

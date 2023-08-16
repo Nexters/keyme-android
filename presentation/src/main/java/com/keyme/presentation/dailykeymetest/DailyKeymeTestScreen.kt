@@ -10,6 +10,7 @@ import androidx.compose.animation.slideOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,6 +41,7 @@ import coil.request.ImageRequest
 import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.Category
 import com.keyme.domain.entity.response.Test
+import com.keyme.domain.entity.response.TestStatistic
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.keyme_black
@@ -54,17 +56,31 @@ import kotlinx.coroutines.launch
 fun DailyKeymeTestScreen(
     myCharacter: Member,
     dailyKeymeTest: Test,
+    dailyKeymeTestStatistic: TestStatistic? = null,
     onDailyKeymeTestClick: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        WelComeTextTitle(modifier = Modifier.zIndex(1f), myCharacter = myCharacter)
-
-        DailyKeymeTestCircle(
-            modifier = Modifier.align(Alignment.Center),
-            categories = dailyKeymeTest.questions.map { it.category },
-            onClick = onDailyKeymeTestClick,
-        )
+        if (dailyKeymeTestStatistic != null) {
+            DailyKeymeTestStatisticScreen(myCharacter, dailyKeymeTestStatistic)
+        } else {
+            DailKeymeTestScreen(myCharacter, dailyKeymeTest, onDailyKeymeTestClick)
+        }
     }
+}
+
+@Composable
+fun BoxScope.DailKeymeTestScreen(
+    myCharacter: Member,
+    dailyKeymeTest: Test,
+    onDailyKeymeTestClick: () -> Unit,
+) {
+    WelComeTextTitle(modifier = Modifier.zIndex(1f), myCharacter = myCharacter)
+
+    DailyKeymeTestCircle(
+        modifier = Modifier.align(Alignment.Center),
+        categories = dailyKeymeTest.questions.map { it.category },
+        onClick = onDailyKeymeTestClick,
+    )
 }
 
 @Composable

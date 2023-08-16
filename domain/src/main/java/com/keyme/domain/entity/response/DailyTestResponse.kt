@@ -2,4 +2,4 @@ package com.keyme.domain.entity.response
 
 import com.keyme.domain.entity.BaseResponse
 
-class DailyTestResponse: BaseResponse<Test>()
+class DailyTestResponse : BaseResponse<Test>()

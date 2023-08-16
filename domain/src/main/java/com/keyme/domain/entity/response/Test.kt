@@ -20,7 +20,10 @@ data class Test(
                 profileImage = "",
                 profileThumbnail = "",
             ),
-            solvedCount = 0, testId = 0, testResultId = 0, title = "",
+            solvedCount = 0,
+            testId = 0,
+            testResultId = 0,
+            title = "",
         )
     }
 }

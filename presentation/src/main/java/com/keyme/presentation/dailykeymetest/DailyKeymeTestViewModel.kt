@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -49,7 +48,7 @@ class DailyKeymeTestViewModel @Inject constructor(
             .filter { it != 0 }
             .distinctUntilChanged()
             .onEach {
-                apiCall(apiRequest = { getKeymeTestStatisticUseCase(it) }) {statistic ->
+                apiCall(apiRequest = { getKeymeTestStatisticUseCase(it) }) { statistic ->
                     _dailyKeymeTestStatisticState.value = statistic
                 }
             }.launchIn(baseViewModelScope)

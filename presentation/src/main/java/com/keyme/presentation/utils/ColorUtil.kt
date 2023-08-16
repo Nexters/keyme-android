@@ -1,7 +1,6 @@
 package com.keyme.presentation.utils
 
 import androidx.compose.ui.graphics.Color
-import timber.log.Timber
 
 object ColorUtil {
     fun hexStringToColor(value: String): Color {

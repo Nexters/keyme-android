@@ -50,7 +50,7 @@ fun BubbleChartItem(
             AsyncImage(
                 modifier = Modifier.size(48.dp),
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(bubbleItem.question.category.iconUrl)
+                    .data(bubbleItem.statistics.category.iconUrl)
                     .build(),
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
@@ -59,13 +59,13 @@ fun BubbleChartItem(
             Spacer(modifier = Modifier.height(6.dp))
 
             KeymeText(
-                text = bubbleItem.question.category.name,
+                text = bubbleItem.statistics.category.name,
                 keymeTextType = KeymeTextType.BODY_3_SEMIBOLD,
                 color = Color.White,
             )
 
             Text(
-                text = bubbleItem.question.avgScore.toString(),
+                text = bubbleItem.statistics.avgScore.toString(),
                 fontFamily = panchang,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 18.textDp(),

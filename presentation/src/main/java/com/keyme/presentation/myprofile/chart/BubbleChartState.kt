@@ -9,7 +9,7 @@ import androidx.compose.ui.geometry.center
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.keyme.domain.entity.response.Question
+import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.domain.entity.response.Result
 import com.keyme.presentation.utils.scale
 import timber.log.Timber
@@ -48,7 +48,7 @@ class BubbleChartState(
         val offsetY = rect.topLeft.y / density
         val dpSize = (rect.size.width / density).dp
 
-        return BubbleItem(question, Offset(offsetX, offsetY), dpSize)
+        return BubbleItem(questionStatistic, Offset(offsetX, offsetY), dpSize)
     }
 
     fun onBubbleItemClick(item: BubbleItem) {
@@ -58,7 +58,7 @@ class BubbleChartState(
 }
 
 data class BubbleItem(
-    val question: Question,
+    val statistics: QuestionStatistic,
     val offSet: Offset,
     val size: Dp,
 )

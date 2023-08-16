@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.keyme.app.navigation.TopLevelDestination
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 import com.keyme.presentation.onboarding.OnboardingDestination
+import com.keyme.presentation.onboarding.OnboardingStepsEnum
 import com.keyme.presentation.onboarding.OnboardingViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
@@ -43,12 +44,12 @@ class KeymeAppState(
 
     val startDestination = OnboardingDestination
 
-    var isSignIn by mutableStateOf(false)
+    var isOnBoarding by mutableStateOf(false)
 
     init {
         coroutineScope.launch {
-            onboardingViewModel.userAuthState.collectLatest {
-                isSignIn = it?.accessToken != null
+            onboardingViewModel.localOnboardingState.collectLatest {
+                isOnBoarding = it == OnboardingStepsEnum.MY_DAILY.ordinal
             }
         }
     }

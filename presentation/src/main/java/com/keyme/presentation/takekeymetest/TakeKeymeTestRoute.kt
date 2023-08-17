@@ -58,7 +58,6 @@ fun TakeKeymeTestRoute(
             )
         } else {
             KeymeTestResultScreen {
-
             }
         }
     } else {

@@ -19,8 +19,6 @@ import com.keyme.presentation.dailykeymetest.dailyKeymeTestGraph
 import com.keyme.presentation.designsystem.theme.KeymeTheme
 import com.keyme.presentation.keymetest.KeymeTestDestination
 import com.keyme.presentation.keymetest.keymeTestGraph
-import com.keyme.presentation.keymetestresult.KeymeTestResultDestination
-import com.keyme.presentation.keymetestresult.keymeTestResultGraph
 import com.keyme.presentation.myprofile.ui.KeymeQuestionResultDestination
 import com.keyme.presentation.myprofile.ui.keymeQuestionResultGraph
 import com.keyme.presentation.myprofile.ui.myProfileGraph
@@ -68,14 +66,8 @@ fun KeymeApp() {
                     navigateToTakeKeymeTest = { appState.navigate(TakeKeymeTestDestination, it) },
                     nestedGraphs = {
                         takeKeymeTestGraph(
-                            navigateToKeymeTestResult = {
-                                appState.onBackClick()
-                                appState.navigate(KeymeTestResultDestination, it)
-                            },
                             onBackClick = appState::onBackClick,
                         )
-
-                        keymeTestResultGraph(onCloseClick = appState::onBackClick)
                     },
                 )
 

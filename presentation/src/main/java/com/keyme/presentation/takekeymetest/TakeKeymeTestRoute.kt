@@ -1,6 +1,10 @@
 package com.keyme.presentation.takekeymetest
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -15,7 +19,6 @@ object TakeKeymeTestDestination : KeymeNavigationDestination {
 }
 
 fun NavGraphBuilder.takeKeymeTestGraph(
-    navigateToKeymeTestResult: (Int) -> Unit,
     onBackClick: () -> Unit,
 ) {
     composable(
@@ -27,7 +30,6 @@ fun NavGraphBuilder.takeKeymeTestGraph(
         ),
     ) {
         TakeKeymeTestRoute(
-            navigateToKeymeTestResult = navigateToKeymeTestResult,
             onBackClick = onBackClick,
             onCloseClick = { onBackClick() },
         )
@@ -37,20 +39,29 @@ fun NavGraphBuilder.takeKeymeTestGraph(
 @Composable
 fun TakeKeymeTestRoute(
     takeKeymeTestViewModel: TakeKeymeTestViewModel = hiltViewModel(),
-    navigateToKeymeTestResult: (Int) -> Unit,
     onBackClick: () -> Unit,
     onCloseClick: () -> Unit,
 ) {
     val loadTestUrl = takeKeymeTestViewModel.keymeTestUrl
+    var testResultId by remember { mutableStateOf(0) }
+    val isTestSolved = testResultId != 0
 
     if (loadTestUrl.isNotEmpty()) {
-        TakeKeymeTestScreen(
-            loadTestUrl = loadTestUrl,
-            onTestSolved = navigateToKeymeTestResult,
-            onBackClick = onBackClick,
-            onCloseClick = onCloseClick,
-        )
+        if (isTestSolved.not()) {
+            TakeKeymeTestScreen(
+                loadTestUrl = loadTestUrl,
+                onTestSolved = {
+                    testResultId = it
+                },
+                onBackClick = onBackClick,
+                onCloseClick = onCloseClick,
+            )
+        } else {
+            KeymeTestResultScreen {
+
+            }
+        }
     } else {
-        onCloseClick()
+        onBackClick()
     }
 }

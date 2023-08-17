@@ -39,7 +39,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -62,7 +61,9 @@ import com.keyme.presentation.designsystem.theme.black_alpha_60
 import com.keyme.presentation.designsystem.theme.black_alpha_80
 import com.keyme.presentation.designsystem.theme.gray500
 import com.keyme.presentation.designsystem.theme.gray600
+import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.designsystem.theme.keyme_white
+import com.keyme.presentation.designsystem.theme.white_alpha_15
 import com.keyme.presentation.designsystem.theme.white_alpha_30
 import com.keyme.presentation.designsystem.theme.white_alpha_40
 import com.keyme.presentation.onboarding.OnboardingViewModel
@@ -72,9 +73,6 @@ fun NicknameScreen(
     viewModel: OnboardingViewModel,
     onBackClick: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val contentResolver = context.contentResolver
-
     var nickname by remember { mutableStateOf("") }
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
     val verifyNicknameState by viewModel.verifyNicknameState.collectAsState()
@@ -130,34 +128,14 @@ fun NicknameScreen(
             }
 
             Spacer(modifier = Modifier.weight(1f))
-            KeymeTextButton(
-                text = "다음",
-                onClick = {
-                    if (nickname.isBlank() || verifyNicknameState?.valid != true) {
-                        Toast.makeText(context, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
-                    } else if (selectedImage == null) {
-                        Toast.makeText(context, "프로필 사진을 선택해주세요", Toast.LENGTH_SHORT).show()
-                    } else {
-                        run {
-                            val inputStream = contentResolver.openInputStream(selectedImage!!)
-                            val imageBytes = inputStream?.readBytes()
+            NicknameInputGuide()
 
-                            val imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT)
-                            inputStream?.close()
-
-                            imageBytes?.let {
-                                viewModel.uploadProfileImage(imageString)
-                            }?.run {
-                                Toast.makeText(context, "프로필 사진을 불러올 수 없습니다", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(horizontal = 16.dp),
-                enabled = true,
+            Spacer(modifier = Modifier.size(64.dp))
+            NextButton(
+                nickname = nickname,
+                isNicknameValidated = verifyNicknameState?.valid ?: false,
+                selectedImage = selectedImage,
+                uploadProfileImage = viewModel::uploadProfileImage,
             )
 
             Spacer(modifier = Modifier.size(54.dp))
@@ -182,7 +160,7 @@ fun SignUpToolbar(
                 .padding(start = 12.dp)
                 .padding(vertical = 12.dp)
                 .clickable { onBackClick() },
-            tint = Color.White,
+            tint = keyme_white,
         )
         KeymeText(
             text = "회원가입",
@@ -213,7 +191,7 @@ fun ProfileImage(
             modifier = Modifier
                 .size(160.dp)
                 .background(
-                    color = Color.DarkGray,
+                    color = white_alpha_15,
                     shape = CircleShape,
                 )
                 .border(
@@ -233,7 +211,7 @@ fun ProfileImage(
                 ),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(
+            Image(
                 painter = painterResource(id = R.drawable.icon_gallery),
                 contentDescription = null,
             )
@@ -361,8 +339,62 @@ fun NicknameVerifyResult(
         KeymeText(
             text = result.description,
             keymeTextType = KeymeTextType.CAPTION_1,
+            color = keyme_white,
         )
     }
+}
+
+@Composable
+fun NicknameInputGuide() {
+    KeymeText(
+        text = "친구들이 원활하게 문제를 풀 수 있도록, 나를 가장 잘 나타내는 닉네임으로 설정해주세요",
+        keymeTextType = KeymeTextType.BODY_4,
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .background(
+                color = keyme_black,
+                shape = RoundedCornerShape(8.dp),
+            )
+            .padding(all = 16.dp),
+        color = keyme_white,
+    )
+}
+
+@Composable
+fun NextButton(
+    nickname: String,
+    isNicknameValidated: Boolean,
+    selectedImage: Uri?,
+    uploadProfileImage: (String) -> Unit,
+) {
+    val context = LocalContext.current
+    val contentResolver = context.contentResolver
+
+    KeymeTextButton(
+        text = "다음",
+        onClick = {
+            if (nickname.isBlank() || !isNicknameValidated) {
+                Toast.makeText(context, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
+            } else if (selectedImage == null) {
+                Toast.makeText(context, "프로필 사진을 선택해주세요", Toast.LENGTH_SHORT).show()
+            } else {
+                run {
+                    val inputStream = contentResolver.openInputStream(selectedImage)
+                    val imageBytes = inputStream?.readBytes()
+                    val imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT)
+                    inputStream?.close()
+
+                    uploadProfileImage.invoke(imageString)
+                }
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(horizontal = 16.dp),
+        enabled = true,
+    )
 }
 
 @Composable

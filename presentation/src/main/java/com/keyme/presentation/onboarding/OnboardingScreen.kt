@@ -28,7 +28,6 @@ import com.keyme.presentation.onboarding.guide.Guide03Screen
 import com.keyme.presentation.onboarding.guide.Guide04Screen
 import com.keyme.presentation.onboarding.nickname.NicknameScreen
 import com.keyme.presentation.onboarding.signin.SignInScreen
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Composable

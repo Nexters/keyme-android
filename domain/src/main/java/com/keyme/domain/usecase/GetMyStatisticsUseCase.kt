@@ -9,5 +9,5 @@ class GetMyStatisticsUseCase @Inject constructor(
     private val memberRepository: MemberRepository,
 ) {
     suspend operator fun invoke(type: MemberStatistics.StatisticsType) =
-        apiResult { memberRepository.getStatistics(memberId = "1", type = type) }
+        apiResult { memberRepository.getStatistics(memberId = "2", type = type) }
 }

@@ -53,8 +53,13 @@ fun KeymeApp() {
             ) {
                 onboardingGraph(
                     navigateToOnboardingTest = { appState.navigate(KeymeTestDestination) },
-                    navigateToMyDaily = { appState.navigate(DailyKeymeTestDestination) },
+                    navigateToMyDaily = {
+                        appState.onBackClick()
+                        appState.navigate(DailyKeymeTestDestination)
+                    },
                 )
+                // NOTE: 문제 풀이 화면인지? 확실하지 않아서 문제 풀이 화면 - takeKeymeTest 로 구현함
+                // 확인 후 제거 필요
                 keymeTestGraph(
                     onBackClick = appState::onBackClick,
                     navigateToMyDaily = { appState.navigate(DailyKeymeTestDestination) },

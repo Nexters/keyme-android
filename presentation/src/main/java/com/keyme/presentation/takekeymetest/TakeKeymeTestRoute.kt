@@ -6,30 +6,26 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.keyme.presentation.myprofile.ui.KeymeQuestionResultDestination
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
 object TakeKeymeTestDestination : KeymeNavigationDestination {
+    const val testIdArg = "testId"
     override val route = "take_keyme_test_route"
     override val destination = "take_keyme_test_destination"
-
-    object Argument {
-        val testIdName: String = "testId"
-    }
 }
 
 fun NavGraphBuilder.takeKeymeTestGraph(
     onBackClick: () -> Unit,
 ) {
     composable(
-        route = "${TakeKeymeTestDestination.route}/${TakeKeymeTestDestination.Argument.testIdName}",
+        route = "${TakeKeymeTestDestination.route}/{${TakeKeymeTestDestination.testIdArg}}",
         arguments = listOf(
-            navArgument(KeymeQuestionResultDestination.Argument.questionIdName) {
+            navArgument(TakeKeymeTestDestination.testIdArg) {
                 type = NavType.IntType
             },
         ),
     ) {
-        TakeKeymeTestRoute(onBackClick = onBackClick, onCloseClick = { })
+        TakeKeymeTestRoute(onBackClick = onBackClick, onCloseClick = { onBackClick() })
     }
 }
 
@@ -39,8 +35,7 @@ fun TakeKeymeTestRoute(
     onBackClick: () -> Unit,
     onCloseClick: () -> Unit,
 ) {
-//    val loadTestUrl = takeKeymeTestViewModel.keymeTestUrl
-    val loadTestUrl = "https://keyme-frontend.vercel.app/test/5"
+    val loadTestUrl = takeKeymeTestViewModel.keymeTestUrl
 
     if (loadTestUrl.isNotEmpty()) {
         TakeKeymeTestScreen(

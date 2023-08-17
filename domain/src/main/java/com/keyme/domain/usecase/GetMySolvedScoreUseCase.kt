@@ -11,7 +11,7 @@ class GetMySolvedScoreUseCase @Inject constructor(
         apiResult {
             questionRepository.getSolvedScore(
                 questionId = questionId,
-                ownerId = "1",
+                ownerId = "2",
             )
         }
 }

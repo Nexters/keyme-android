@@ -45,12 +45,12 @@ class SignInRepositoryImpl @Inject constructor(
     override suspend fun updateMember(
         nickname: String,
         profileImage: String,
-        profileThumbnail: String
+        profileThumbnail: String,
     ): UpdateMemberResponse {
         return signInDataSource.updateMember(
             nickname = nickname,
             profileImage = profileImage,
-            profileThumbnail = profileThumbnail
+            profileThumbnail = profileThumbnail,
         )
     }
 }

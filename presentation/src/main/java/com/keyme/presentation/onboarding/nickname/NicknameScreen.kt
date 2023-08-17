@@ -60,11 +60,11 @@ import com.keyme.presentation.designsystem.component.KeymeTextButton
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.black_alpha_60
 import com.keyme.presentation.designsystem.theme.black_alpha_80
-import com.keyme.presentation.designsystem.theme.white_alpha_40
 import com.keyme.presentation.designsystem.theme.gray500
 import com.keyme.presentation.designsystem.theme.gray600
 import com.keyme.presentation.designsystem.theme.keyme_white
 import com.keyme.presentation.designsystem.theme.white_alpha_30
+import com.keyme.presentation.designsystem.theme.white_alpha_40
 import com.keyme.presentation.onboarding.OnboardingViewModel
 
 @Composable
@@ -135,21 +135,21 @@ fun NicknameScreen(
                 onClick = {
                     if (nickname.isBlank() || verifyNicknameState?.valid != true) {
                         Toast.makeText(context, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
-
                     } else if (selectedImage == null) {
                         Toast.makeText(context, "프로필 사진을 선택해주세요", Toast.LENGTH_SHORT).show()
+                    } else {
+                        run {
+                            val inputStream = contentResolver.openInputStream(selectedImage!!)
+                            val imageBytes = inputStream?.readBytes()
 
-                    } else run {
-                        val inputStream = contentResolver.openInputStream(selectedImage!!)
-                        val imageBytes = inputStream?.readBytes()
+                            val imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT)
+                            inputStream?.close()
 
-                        val imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT)
-                        inputStream?.close()
-
-                        imageBytes?.let {
-                            viewModel.uploadProfileImage(imageString)
-                        }?.run {
-                            Toast.makeText(context, "프로필 사진을 불러올 수 없습니다", Toast.LENGTH_SHORT).show()
+                            imageBytes?.let {
+                                viewModel.uploadProfileImage(imageString)
+                            }?.run {
+                                Toast.makeText(context, "프로필 사진을 불러올 수 없습니다", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 },

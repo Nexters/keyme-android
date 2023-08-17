@@ -12,13 +12,13 @@ class UpdateMemberUseCase @Inject constructor(
     suspend operator fun invoke(
         nickname: String,
         profileImage: String,
-        profileThumbnail: String
+        profileThumbnail: String,
     ): ApiResult<UpdateMember> {
         return apiResult {
             signInRepository.updateMember(
                 nickname = nickname,
                 profileImage = profileImage,
-                profileThumbnail = profileThumbnail
+                profileThumbnail = profileThumbnail,
             )
         }
     }

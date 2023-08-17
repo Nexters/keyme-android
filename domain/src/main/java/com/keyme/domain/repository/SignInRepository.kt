@@ -21,6 +21,6 @@ interface SignInRepository {
     suspend fun updateMember(
         nickname: String,
         profileImage: String,
-        profileThumbnail: String
+        profileThumbnail: String,
     ): UpdateMemberResponse
 }

@@ -2,10 +2,10 @@ package com.keyme.presentation.onboarding
 
 import androidx.lifecycle.viewModelScope
 import com.keyme.domain.entity.response.UploadProfileImage
+import com.keyme.domain.entity.response.VerifyNickname
 import com.keyme.domain.entity.room.UserAuth
 import com.keyme.domain.usecase.GetUserAuthUseCase
 import com.keyme.domain.usecase.InsertUserAuthUseCase
-import com.keyme.domain.entity.response.VerifyNickname
 import com.keyme.domain.usecase.SignInUseCase
 import com.keyme.domain.usecase.UpdateMemberUseCase
 import com.keyme.domain.usecase.UploadProfileImageUseCase
@@ -50,7 +50,7 @@ class OnboardingViewModel @Inject constructor(
     ) {
         apiCall(apiRequest = {
             signInUseCase.invoke(token)
-        }) {
+        },) {
             Timber.d("$it")
             insertUserAuthUseCase.invoke(
                 UserAuth(
@@ -73,7 +73,7 @@ class OnboardingViewModel @Inject constructor(
         verifyNicknameJob = viewModelScope.launch {
             apiCall(apiRequest = {
                 verifyNicknameUseCase.invoke(nickname)
-            }) {
+            },) {
                 _verifyNicknameState.emit(it)
             }
         }
@@ -84,7 +84,7 @@ class OnboardingViewModel @Inject constructor(
     ) {
         apiCall(apiRequest = {
             uploadProfileImageUseCase.invoke(imageString = imageString)
-        }) {
+        },) {
             _uploadProfileImageState.emit(it)
         }
     }
@@ -101,7 +101,7 @@ class OnboardingViewModel @Inject constructor(
                 profileImage = originalUrl,
                 profileThumbnail = thumbnailUrl,
             )
-        }) {
+        },) {
             insertUserAuthUseCase.invoke(
                 UserAuth(
                     id = it.id,

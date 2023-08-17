@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -45,13 +46,14 @@ fun TakeKeymeTestRoute(
     val loadTestUrl = takeKeymeTestViewModel.keymeTestUrl
     var testResultId by remember { mutableStateOf(0) }
     val isTestSolved = testResultId != 0
+    val keymeTestResult by takeKeymeTestViewModel.keymeTestResultState.collectAsStateWithLifecycle()
 
     if (loadTestUrl.isNotEmpty()) {
         if (isTestSolved.not()) {
             TakeKeymeTestScreen(
                 loadTestUrl = loadTestUrl,
                 onTestSolved = {
-                    testResultId = it
+                    takeKeymeTestViewModel.registrationResult("")
                 },
                 onBackClick = onBackClick,
                 onCloseClick = onCloseClick,

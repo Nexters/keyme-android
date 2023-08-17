@@ -1,7 +1,9 @@
 package com.keyme.data.remote.api
 
+import com.keyme.domain.entity.request.RegistrationRequest
 import com.keyme.domain.entity.request.SignInRequest
 import com.keyme.domain.entity.response.DailyTestResponse
+import com.keyme.domain.entity.response.EmptyResponse
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.MemberStatisticsResponse
 import com.keyme.domain.entity.response.OnBoardingTestResponse
@@ -9,6 +11,7 @@ import com.keyme.domain.entity.response.QuestionSolvedScoreListResponse
 import com.keyme.domain.entity.response.QuestionSolvedScoreResponse
 import com.keyme.domain.entity.response.QuestionStatisticsResponse
 import com.keyme.domain.entity.response.SignInResponse
+import com.keyme.domain.entity.response.TestResultResponse
 import com.keyme.domain.entity.response.TestStatisticResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -59,4 +62,14 @@ interface KeymeApi {
     suspend fun getTestStatistic(
         @Path("id") testId: Int,
     ): TestStatisticResponse
+
+    @GET("tests/result/{resultId}")
+    suspend fun getTestResult(
+        @Path("resultId") resultId: String
+    ): TestResultResponse
+
+    @POST("tests/result/register")
+    suspend fun registrationTestResult(
+        @Body registrationRequest: RegistrationRequest
+    ): EmptyResponse
 }

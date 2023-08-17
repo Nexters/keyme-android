@@ -26,6 +26,8 @@ import com.keyme.presentation.myprofile.ui.keymeQuestionResultGraph
 import com.keyme.presentation.myprofile.ui.myProfileGraph
 import com.keyme.presentation.onboarding.OnboardingDestination
 import com.keyme.presentation.onboarding.onboardingGraph
+import com.keyme.presentation.takekeymetest.TakeKeymeTestDestination
+import com.keyme.presentation.takekeymetest.takeKeymeTestGraph
 
 @Composable
 fun KeymeApp() {
@@ -58,9 +60,9 @@ fun KeymeApp() {
                     navigateToMyDaily = { appState.navigate(DailyKeymeTestDestination) },
                 )
                 dailyKeymeTestGraph(
-                    navigateToAlarm = { appState.navigate(AlarmDestination) },
+                    navigateToTakeKeymeTest = { appState.navigate(TakeKeymeTestDestination, it) },
                     nestedGraphs = {
-                        alarmGraph(onBackClick = appState::onBackClick)
+                        takeKeymeTestGraph(onBackClick = appState::onBackClick)
                     },
                 )
                 myProfileGraph(

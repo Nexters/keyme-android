@@ -15,7 +15,7 @@ object DailyKeymeTestDestination : KeymeNavigationDestination {
 }
 
 fun NavGraphBuilder.dailyKeymeTestGraph(
-    navigateToAlarm: () -> Unit,
+    navigateToTakeKeymeTest: (testId: Int) -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     navigation(
@@ -23,7 +23,7 @@ fun NavGraphBuilder.dailyKeymeTestGraph(
         startDestination = DailyKeymeTestDestination.destination,
     ) {
         composable(route = DailyKeymeTestDestination.destination) {
-            DailyKeymeTestRoute()
+            DailyKeymeTestRoute(navigateToTakeKeymeTest = navigateToTakeKeymeTest)
         }
         nestedGraphs()
     }
@@ -32,6 +32,7 @@ fun NavGraphBuilder.dailyKeymeTestGraph(
 @Composable
 fun DailyKeymeTestRoute(
     dailyKeymeTestViewModel: DailyKeymeTestViewModel = hiltViewModel(),
+    navigateToTakeKeymeTest: (testId: Int) -> Unit,
 ) {
     val myCharacter by dailyKeymeTestViewModel.myCharacterState.collectAsStateWithLifecycle()
     val dailyKeymeTest by dailyKeymeTestViewModel.dailyKeymeTestState.collectAsStateWithLifecycle()
@@ -42,7 +43,7 @@ fun DailyKeymeTestRoute(
         dailyKeymeTest = dailyKeymeTest,
         dailyKeymeTestStatistic = dailyKeymeTestStatistic,
         onDailyKeymeTestClick = {
-            // todo navigate to keyme test
+            navigateToTakeKeymeTest(dailyKeymeTest.testId)
         },
     )
 }

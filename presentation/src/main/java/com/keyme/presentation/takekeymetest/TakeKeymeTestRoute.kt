@@ -15,6 +15,7 @@ object TakeKeymeTestDestination : KeymeNavigationDestination {
 }
 
 fun NavGraphBuilder.takeKeymeTestGraph(
+    navigateToKeymeTestResult: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     composable(
@@ -25,13 +26,18 @@ fun NavGraphBuilder.takeKeymeTestGraph(
             },
         ),
     ) {
-        TakeKeymeTestRoute(onBackClick = onBackClick, onCloseClick = { onBackClick() })
+        TakeKeymeTestRoute(
+            navigateToKeymeTestResult = navigateToKeymeTestResult,
+            onBackClick = onBackClick,
+            onCloseClick = { onBackClick() },
+        )
     }
 }
 
 @Composable
 fun TakeKeymeTestRoute(
     takeKeymeTestViewModel: TakeKeymeTestViewModel = hiltViewModel(),
+    navigateToKeymeTestResult: () -> Unit,
     onBackClick: () -> Unit,
     onCloseClick: () -> Unit,
 ) {
@@ -40,7 +46,9 @@ fun TakeKeymeTestRoute(
     if (loadTestUrl.isNotEmpty()) {
         TakeKeymeTestScreen(
             loadTestUrl = loadTestUrl,
-            onTestSolved = { },
+            onTestSolved = {
+                navigateToKeymeTestResult()
+            },
             onBackClick = { },
             onCloseClick = { },
         )

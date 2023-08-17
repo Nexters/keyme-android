@@ -18,6 +18,7 @@ import com.keyme.presentation.dailykeymetest.DailyKeymeTestDestination
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 import com.keyme.presentation.onboarding.OnboardingDestination
 import com.keyme.presentation.onboarding.OnboardingViewModel
+import com.keyme.presentation.takekeymetest.TakeKeymeTestDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -44,16 +45,8 @@ class KeymeAppState(
 
     val startDestination = OnboardingDestination
 
-    var isOnBoarding by mutableStateOf(false)
-
-    init {
-        coroutineScope.launch {
-            onboardingViewModel.userAuthState.collectLatest {
-                isOnBoarding = it?.accessToken == null
-//                isOnBoarding = it?.onboardingTestResultId == null
-            }
-        }
-    }
+    val showBottomBar: Boolean
+        @Composable get() = currentDestination?.route.showBottomBar()
 
     fun navigate(destination: KeymeNavigationDestination) {
         if (destination is TopLevelDestination) {
@@ -81,5 +74,12 @@ class KeymeAppState(
 
     fun onBackClick() {
         navController.popBackStack()
+    }
+
+    private fun String?.showBottomBar(): Boolean {
+        if (this == OnboardingDestination.route) return false
+        if (this == TakeKeymeTestDestination.route) return false
+
+        return true
     }
 }

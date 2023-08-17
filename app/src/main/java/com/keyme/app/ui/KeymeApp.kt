@@ -38,7 +38,7 @@ fun KeymeApp() {
     KeymeTheme {
         Scaffold(
             bottomBar = {
-                if (appState.currentDestination.isOnBoarding().not()) {
+                if (appState.showBottomBar) {
                     KeymeBottomBar(
                         currentDestination = appState.currentDestination,
                         onNavigateToDestination = appState::navigate,

@@ -18,7 +18,7 @@ import timber.log.Timber
 @Composable
 fun TakeKeymeTestScreen(
     loadTestUrl: String,
-    onTestSolved: (String) -> Unit,
+    onTestSolved: (Int) -> Unit,
     onBackClick: () -> Unit,
     onCloseClick: () -> Unit,
 ) {
@@ -43,14 +43,10 @@ fun TakeKeymeTestScreen(
                 settings.javaScriptEnabled = true
                 it.addJavascriptInterface(
                     TakeKeymeTestInterface(
-                        onSolved = {
-
-                        },
-                        onClose = {
-
-                        },
+                        onSolved = onTestSolved,
+                        onClose = onCloseClick,
                     ),
-                    "KeymeAndroid",
+                    "keymeAndroid",
                 )
                 settings.domStorageEnabled = true
                 settings.setSupportZoom(false)
@@ -60,13 +56,13 @@ fun TakeKeymeTestScreen(
 }
 
 private class TakeKeymeTestInterface(
-    private val onSolved: (String) -> Unit,
+    private val onSolved: (Int) -> Unit,
     private val onClose: () -> Unit,
 ) {
     @JavascriptInterface
-    fun onTestSolved(resultCode: String) {
-        Timber.d("onTestSolved(resultCode: $resultCode)")
-        onSolved(resultCode)
+    fun onTestSolved(testResultId: Int) {
+        Timber.d("onTestSolved(testResultId: $testResultId)")
+        onSolved(testResultId)
     }
 
     @JavascriptInterface

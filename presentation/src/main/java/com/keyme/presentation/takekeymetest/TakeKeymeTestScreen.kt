@@ -5,6 +5,7 @@ import android.net.Uri
 import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,6 +24,10 @@ fun TakeKeymeTestScreen(
 ) {
     val state = rememberWebViewState(url = loadTestUrl)
     val navigator = rememberWebViewNavigator()
+
+    BackHandler {
+        // do nothing
+    }
 
     WebView(
         modifier = Modifier.fillMaxSize(),

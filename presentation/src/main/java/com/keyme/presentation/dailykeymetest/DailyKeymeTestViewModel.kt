@@ -44,11 +44,10 @@ class DailyKeymeTestViewModel @Inject constructor(
         _myCharacterState.value = getMyCharacterUseCase.invoke()
 
         dailyKeymeTestState
-            .map { it.testId }
-            .filter { it != 0 }
+            .filter { it.testResultId != 0 }
             .distinctUntilChanged()
             .onEach {
-                apiCall(apiRequest = { getKeymeTestStatisticUseCase(it) }) { statistic ->
+                apiCall(apiRequest = { getKeymeTestStatisticUseCase(it.testId) }) { statistic ->
                     _dailyKeymeTestStatisticState.value = statistic
                 }
             }.launchIn(baseViewModelScope)

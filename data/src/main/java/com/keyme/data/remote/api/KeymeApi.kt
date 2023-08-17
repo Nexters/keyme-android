@@ -1,9 +1,9 @@
 package com.keyme.data.remote.api
 
 import com.keyme.domain.entity.request.SignInRequest
-import com.keyme.domain.entity.response.DailyTestResponse
 import com.keyme.domain.entity.request.UpdateMemberRequest
 import com.keyme.domain.entity.request.VerifyNicknameRequest
+import com.keyme.domain.entity.response.DailyTestResponse
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.MemberStatisticsResponse
 import com.keyme.domain.entity.response.OnBoardingTestResponse

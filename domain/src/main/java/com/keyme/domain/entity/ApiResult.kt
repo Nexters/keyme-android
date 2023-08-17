@@ -1,7 +1,5 @@
 package com.keyme.domain.entity
 
-import com.keyme.domain.entity.response.WithoutDataResponse
-
 sealed interface ApiResult<T> {
     data class Success<T>(val data: T) : ApiResult<T>
 
@@ -45,7 +43,7 @@ inline fun <T : Any> apiResult(call: () -> BaseResponse<T>): ApiResult<T> {
 }
 
 @Suppress("UNCHECKED_CAST")
-inline fun <T : Any> apiResultWithoutData(call: () -> WithoutDataResponse): ApiResult<T> {
+inline fun <T : Any> apiResultWithoutData(call: () -> BaseResponseWithoutData): ApiResult<T> {
     return runCatching {
         val response = call()
         if (response.code == "200") {

@@ -14,11 +14,9 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import com.keyme.app.navigation.TopLevelDestination
 import com.keyme.app.navigation.keymeTopLevelDestinations
-import com.keyme.presentation.alarm.ui.AlarmDestination
-import com.keyme.presentation.alarm.ui.alarmGraph
+import com.keyme.presentation.dailykeymetest.DailyKeymeTestDestination
+import com.keyme.presentation.dailykeymetest.dailyKeymeTestGraph
 import com.keyme.presentation.designsystem.theme.KeymeTheme
-import com.keyme.presentation.feed.ui.FeedDestination
-import com.keyme.presentation.feed.ui.feedGraph
 import com.keyme.presentation.keymetest.KeymeTestDestination
 import com.keyme.presentation.keymetest.keymeTestGraph
 import com.keyme.presentation.myprofile.ui.KeymeQuestionResultDestination
@@ -26,6 +24,8 @@ import com.keyme.presentation.myprofile.ui.keymeQuestionResultGraph
 import com.keyme.presentation.myprofile.ui.myProfileGraph
 import com.keyme.presentation.onboarding.OnboardingDestination
 import com.keyme.presentation.onboarding.onboardingGraph
+import com.keyme.presentation.takekeymetest.TakeKeymeTestDestination
+import com.keyme.presentation.takekeymetest.takeKeymeTestGraph
 
 @Composable
 fun KeymeApp() {
@@ -34,7 +34,7 @@ fun KeymeApp() {
     KeymeTheme {
         Scaffold(
             bottomBar = {
-                if (appState.currentDestination.isOnBoarding().not()) {
+                if (appState.showBottomBar) {
                     KeymeBottomBar(
                         currentDestination = appState.currentDestination,
                         onNavigateToDestination = appState::navigate,
@@ -51,18 +51,26 @@ fun KeymeApp() {
             ) {
                 onboardingGraph(
                     navigateToOnboardingTest = { appState.navigate(KeymeTestDestination) },
-                    navigateToMyDaily = { appState.navigate(FeedDestination) },
-                )
-                keymeTestGraph(
-                    onBackClick = appState::onBackClick,
-                    navigateToMyDaily = { appState.navigate(FeedDestination) },
-                )
-                feedGraph(
-                    navigateToAlarm = { appState.navigate(AlarmDestination) },
-                    nestedGraphs = {
-                        alarmGraph(onBackClick = appState::onBackClick)
+                    navigateToMyDaily = {
+                        appState.onBackClick()
+                        appState.navigate(DailyKeymeTestDestination)
                     },
                 )
+                // NOTE: 문제 풀이 화면인지? 확실하지 않아서 문제 풀이 화면 - takeKeymeTest 로 구현함
+                // 확인 후 제거 필요
+                keymeTestGraph(
+                    onBackClick = appState::onBackClick,
+                    navigateToMyDaily = { appState.navigate(DailyKeymeTestDestination) },
+                )
+                dailyKeymeTestGraph(
+                    navigateToTakeKeymeTest = { appState.navigate(TakeKeymeTestDestination, it) },
+                    nestedGraphs = {
+                        takeKeymeTestGraph(
+                            onBackClick = appState::onBackClick,
+                        )
+                    },
+                )
+
                 myProfileGraph(
                     navigateToQuestionResult = { question ->
                         appState.navigate(

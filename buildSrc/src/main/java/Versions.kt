@@ -53,6 +53,9 @@ object Versions {
     const val paging = "3.1.1"
     const val paging_compose = "3.2.0"
 
+    // Accompanist - compose version 과 엮여 있어서 https://github.com/google/accompanist 확인 필요
+    const val accompanist = "0.30.1"
+
     // Test
     const val JUNIT = "4.13.2"
 

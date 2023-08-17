@@ -27,7 +27,7 @@ class KeymeQuestionResultViewModel @Inject constructor(
     private val getQuestionSolvedScoreListUseCase: GetQuestionSolvedScoreListUseCase,
     private val getMyCharacterUseCase: GetMyCharacterUseCase,
 ) : BaseViewModel() {
-    private val questionId: String? = savedStateHandle[KeymeQuestionResultDestination.Argument.questionIdName]
+    private val questionId: String? = savedStateHandle[KeymeQuestionResultDestination.questionIdArg]
 
     private val _statisticsState = MutableStateFlow(QuestionStatistic.EMPTY)
     val statisticsState = _statisticsState.asStateFlow()

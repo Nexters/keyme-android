@@ -7,5 +7,5 @@ class GetQuestionSolvedScoreListUseCase @Inject constructor(
     private val questionRepository: QuestionRepository,
 ) {
     operator fun invoke(questionId: String) =
-        questionRepository.getSolvedScoreList(questionId = questionId, ownerId = 1)
+        questionRepository.getSolvedScoreList(questionId = questionId, ownerId = 2)
 }

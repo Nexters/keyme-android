@@ -1,14 +1,17 @@
 package com.keyme.data.remote.api
 
 import com.keyme.domain.entity.request.SignInRequest
+import com.keyme.domain.entity.response.DailyTestResponse
 import com.keyme.domain.entity.request.UpdateMemberRequest
 import com.keyme.domain.entity.request.VerifyNicknameRequest
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.MemberStatisticsResponse
+import com.keyme.domain.entity.response.OnBoardingTestResponse
 import com.keyme.domain.entity.response.QuestionSolvedScoreListResponse
 import com.keyme.domain.entity.response.QuestionSolvedScoreResponse
 import com.keyme.domain.entity.response.QuestionStatisticsResponse
 import com.keyme.domain.entity.response.SignInResponse
+import com.keyme.domain.entity.response.TestStatisticResponse
 import com.keyme.domain.entity.response.UpdateMemberResponse
 import com.keyme.domain.entity.response.UploadProfileImageResponse
 import com.keyme.domain.entity.response.VerifyNicknameResponse
@@ -45,11 +48,6 @@ interface KeymeApi {
         @Body updateMemberRequest: UpdateMemberRequest,
     ): UpdateMemberResponse
 
-//    @GET("tests/{id}/statistics")
-//    suspend fun getKeymeTestResultStatistics(
-//        @Path("id") questionId: String,
-//    ): KeymeTestResultStatisticsResponse
-
     @GET("members/{memberId}/statistics")
     suspend fun getMemberStatistics(
         @Path("memberId") memberId: String,
@@ -75,4 +73,15 @@ interface KeymeApi {
         @Query("limit") limit: Int = 20,
         @Query("ownerId") ownerId: Int,
     ): QuestionSolvedScoreListResponse
+
+    @GET("tests/onboarding")
+    suspend fun getOnBoardingTest(): OnBoardingTestResponse
+
+    @GET("tests/daily")
+    suspend fun getDailyTest(): DailyTestResponse
+
+    @GET("tests/{id}/statistics")
+    suspend fun getTestStatistic(
+        @Path("id") testId: Int,
+    ): TestStatisticResponse
 }

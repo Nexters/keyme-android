@@ -8,7 +8,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TakeKeymeTestViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-): BaseViewModel() {
+) : BaseViewModel() {
     private val testId = savedStateHandle[TakeKeymeTestDestination.testIdArg] ?: 0
-    val keymeTestUrl = "https://keyme-frontend.vercel.app/test/${testId}"
+    val keymeTestUrl = "https://keyme-frontend.vercel.app/test/$testId"
 }

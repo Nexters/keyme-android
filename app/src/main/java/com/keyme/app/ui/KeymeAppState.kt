@@ -3,7 +3,6 @@ package com.keyme.app.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -14,15 +13,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.keyme.app.navigation.TopLevelDestination
-import com.keyme.presentation.dailykeymetest.DailyKeymeTestDestination
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 import com.keyme.presentation.onboarding.OnboardingDestination
 import com.keyme.presentation.onboarding.OnboardingViewModel
 import com.keyme.presentation.takekeymetest.TakeKeymeTestDestination
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun rememberKeymeAppState(

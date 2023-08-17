@@ -9,8 +9,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.keyme.domain.entity.response.Category
-import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.myprofile.KeymeQuestionResultViewModel
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 

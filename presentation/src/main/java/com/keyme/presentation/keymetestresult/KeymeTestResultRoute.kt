@@ -12,7 +12,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.keyme.presentation.navigation.KeymeNavigationDestination
-import com.keyme.presentation.takekeymetest.TakeKeymeTestDestination
 import com.keyme.presentation.utils.clickableRippleEffect
 
 object KeymeTestResultDestination : KeymeNavigationDestination {
@@ -45,7 +44,8 @@ fun KeymeTestResultRoute(
             modifier = Modifier.clickableRippleEffect {
                 onCloseClick()
             },
-            imageVector = Icons.Outlined.Close, contentDescription = null,
+            imageVector = Icons.Outlined.Close,
+            contentDescription = null,
         )
     }
 }

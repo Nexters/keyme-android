@@ -8,7 +8,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.keyme.presentation.navigation.KeymeNavigationDestination
-import com.keyme.presentation.takekeymetest.TakeKeymeTestRoute
 
 object DailyKeymeTestDestination : KeymeNavigationDestination {
     override val route = "daily_keyme_test_route"

@@ -72,7 +72,7 @@ fun KeymeApp() {
                         takeKeymeTestGraph(
                             navigateToKeymeTestResult = {
                                 appState.onBackClick()
-                                appState.navigate(KeymeTestResultDestination)
+                                appState.navigate(KeymeTestResultDestination, it)
                             },
                             onBackClick = appState::onBackClick,
                         )

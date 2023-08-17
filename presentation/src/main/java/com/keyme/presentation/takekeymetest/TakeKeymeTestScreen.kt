@@ -6,13 +6,19 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
+import com.keyme.presentation.designsystem.theme.keyme_black
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
@@ -29,6 +35,8 @@ fun TakeKeymeTestScreen(
         // do nothing
     }
 
+    val coroutineScope = rememberCoroutineScope()
+
     WebView(
         modifier = Modifier.fillMaxSize(),
         state = state,
@@ -37,14 +45,23 @@ fun TakeKeymeTestScreen(
         navigator = navigator,
         onCreated = {
             it.apply {
+                setBackgroundColor(keyme_black.toArgb())
                 setNetworkAvailable(true)
                 settings.loadWithOverviewMode = true
                 settings.useWideViewPort = true
                 settings.javaScriptEnabled = true
                 it.addJavascriptInterface(
                     TakeKeymeTestInterface(
-                        onSolved = onTestSolved,
-                        onClose = onCloseClick,
+                        onSolved = {
+                            coroutineScope.launch {
+                                onTestSolved(it)
+                            }
+                        },
+                        onClose = {
+                            coroutineScope.launch {
+                                onCloseClick()
+                            }
+                        },
                     ),
                     "keymeAndroid",
                 )

@@ -22,6 +22,7 @@ import com.keyme.presentation.takekeymetest.TakeKeymeTestDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun rememberKeymeAppState(
@@ -77,8 +78,9 @@ class KeymeAppState(
     }
 
     private fun String?.showBottomBar(): Boolean {
-        if (this == OnboardingDestination.route) return false
-        if (this == TakeKeymeTestDestination.route) return false
+        if (this == null) return false
+        if (this.contains(OnboardingDestination.route)) return false
+        if (this.contains(TakeKeymeTestDestination.route)) return false
 
         return true
     }

@@ -1,6 +1,7 @@
 package com.keyme.presentation.takekeymetest
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -28,13 +29,27 @@ fun NavGraphBuilder.takeKeymeTestGraph(
             },
         ),
     ) {
-        TakeKeymeTestRoute(onBackClick)
+        TakeKeymeTestRoute(onBackClick = onBackClick, onCloseClick = { })
     }
 }
 
 @Composable
 fun TakeKeymeTestRoute(
+    takeKeymeTestViewModel: TakeKeymeTestViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
+    onCloseClick: () -> Unit,
 ) {
+//    val loadTestUrl = takeKeymeTestViewModel.keymeTestUrl
+    val loadTestUrl = "https://keyme-frontend.vercel.app/test/5"
 
+    if (loadTestUrl.isNotEmpty()) {
+        TakeKeymeTestScreen(
+            loadTestUrl = loadTestUrl,
+            onTestSolved = { },
+            onBackClick = { },
+            onCloseClick = { },
+        )
+    } else {
+        onCloseClick()
+    }
 }

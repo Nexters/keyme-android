@@ -1,7 +1,12 @@
 package com.keyme.presentation.onboarding
 
+import com.keyme.domain.entity.onFailure
+import com.keyme.domain.entity.onSuccess
+import com.keyme.domain.usecase.InsertPushTokenUseCase
+import com.keyme.domain.usecase.SetPushTokenSavedStateUseCase
 import com.keyme.domain.usecase.SignInUseCase
 import com.keyme.presentation.BaseViewModel
+import com.keyme.presentation.utils.FcmUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,6 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase,
+    private val setPushTokenSavedStateUseCase: SetPushTokenSavedStateUseCase,
+    private val insertPushTokenUseCase: InsertPushTokenUseCase,
 ) : BaseViewModel() {
 
     private val _localOnboardingState = MutableStateFlow(OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal)
@@ -36,6 +43,11 @@ class OnboardingViewModel @Inject constructor(
 //                    else -> OnboardingStepsEnum.MY_DAILY
 //                }.ordinal,
             )
+            FcmUtil.getToken()?.let { token ->
+                insertPushTokenUseCase.invoke(token)
+                    .onSuccess { setPushTokenSavedStateUseCase.invoke(true) }
+                    .onFailure { setPushTokenSavedStateUseCase.invoke(false) }
+            }
         }
     }
 }

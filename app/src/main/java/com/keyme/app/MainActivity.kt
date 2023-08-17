@@ -12,6 +12,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.keyme.app.ui.KeymeApp
+import com.keyme.domain.entity.onSuccess
+import com.keyme.domain.usecase.GetPushTokenSavedStateUseCase
+import com.keyme.domain.usecase.InsertPushTokenUseCase
+import com.keyme.domain.usecase.SetPushTokenSavedStateUseCase
 import com.keyme.presentation.UiEvent
 import com.keyme.presentation.UiEventManager
 import com.keyme.presentation.utils.FcmUtil
@@ -27,6 +31,15 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var uiEventManager: UiEventManager
 
+    @Inject
+    lateinit var insertPushTokenUseCase: InsertPushTokenUseCase
+
+    @Inject
+    lateinit var getPushTokenSavedStateUseCase: GetPushTokenSavedStateUseCase
+
+    @Inject
+    lateinit var setPushTokenSavedStateUseCase: SetPushTokenSavedStateUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -35,6 +48,7 @@ class MainActivity : ComponentActivity() {
 
         handleUiEvent()
         askNotificationPermission()
+        checkUnsavedPushTokenExistence()
 
         lifecycleScope.launch {
             Timber.d("Fcm Token: ${FcmUtil.getToken()}")
@@ -75,6 +89,19 @@ class MainActivity : ComponentActivity() {
             } else {
                 // Directly ask for the permission
                 requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
+    private fun checkUnsavedPushTokenExistence() {
+        // TODO: Return if there is no access token in room database.
+        val isPushTokenSaved = getPushTokenSavedStateUseCase.invoke()
+        if (!isPushTokenSaved) {
+            lifecycleScope.launch {
+                FcmUtil.getToken()?.let {
+                    insertPushTokenUseCase.invoke(it)
+                        .onSuccess { setPushTokenSavedStateUseCase.invoke(true) }
+                }
             }
         }
     }

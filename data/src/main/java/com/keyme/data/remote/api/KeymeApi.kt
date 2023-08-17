@@ -1,6 +1,8 @@
 package com.keyme.data.remote.api
 
+import com.keyme.domain.entity.request.InsertPushTokenRequest
 import com.keyme.domain.entity.request.SignInRequest
+import com.keyme.domain.entity.response.InsertPushTokenResponse
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.MemberStatisticsResponse
 import com.keyme.domain.entity.response.QuestionStatisticsResponse
@@ -24,6 +26,11 @@ interface KeymeApi {
     suspend fun getKeymeTestResultStatistics(
         @Path("id") questionId: String,
     ): KeymeTestResultStatisticsResponse
+
+    @GET("members/devices")
+    suspend fun insertPushToken(
+        @Body insertPushTokenRequest: InsertPushTokenRequest,
+    ): InsertPushTokenResponse
 
     @GET("members/{memberId}/statistics")
     suspend fun getMemberStatistics(

@@ -2,7 +2,13 @@ package com.keyme.data.remote.repositoryimpl
 
 import com.keyme.data.remote.datasource.SignInDataSource
 import com.keyme.domain.entity.response.SignInResponse
+import com.keyme.domain.entity.response.UpdateMemberResponse
+import com.keyme.domain.entity.response.UploadProfileImageResponse
+import com.keyme.domain.entity.response.VerifyNicknameResponse
 import com.keyme.domain.repository.SignInRepository
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
 class SignInRepositoryImpl @Inject constructor(
@@ -14,6 +20,37 @@ class SignInRepositoryImpl @Inject constructor(
     ): SignInResponse {
         return signInDataSource.signInWithKakao(
             token = token,
+        )
+    }
+
+    override suspend fun verifyNickname(
+        nickname: String,
+    ): VerifyNicknameResponse {
+        return signInDataSource.verifyNickname(
+            nickname = nickname,
+        )
+    }
+
+    override suspend fun uploadProfileImage(
+        imageString: String,
+    ): UploadProfileImageResponse {
+        val imageRequestBody = imageString.toRequestBody("image/*".toMediaTypeOrNull())
+        val multipartImage = MultipartBody.Part.createFormData("image", "image.jpg", imageRequestBody)
+
+        return signInDataSource.uploadProfileImage(
+            multipartImage = multipartImage,
+        )
+    }
+
+    override suspend fun updateMember(
+        nickname: String,
+        profileImage: String,
+        profileThumbnail: String
+    ): UpdateMemberResponse {
+        return signInDataSource.updateMember(
+            nickname = nickname,
+            profileImage = profileImage,
+            profileThumbnail = profileThumbnail
         )
     }
 }

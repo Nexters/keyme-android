@@ -1,6 +1,14 @@
 package com.keyme.presentation.onboarding.nickname
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import android.util.Base64
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,8 +27,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,72 +37,136 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import com.keyme.domain.entity.response.VerifyNickname
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextButton
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.black_alpha_60
-import com.keyme.presentation.designsystem.theme.gray400
+import com.keyme.presentation.designsystem.theme.black_alpha_80
+import com.keyme.presentation.designsystem.theme.white_alpha_40
 import com.keyme.presentation.designsystem.theme.gray500
+import com.keyme.presentation.designsystem.theme.gray600
 import com.keyme.presentation.designsystem.theme.keyme_white
+import com.keyme.presentation.designsystem.theme.white_alpha_30
+import com.keyme.presentation.onboarding.OnboardingViewModel
 
 @Composable
 fun NicknameScreen(
+    viewModel: OnboardingViewModel,
     onBackClick: () -> Unit,
-    onClickNextButton: () -> Unit,
 ) {
-    val contentHorizontalPadding = 16
+    val context = LocalContext.current
+    val contentResolver = context.contentResolver
+
+    var nickname by remember { mutableStateOf("") }
+    var selectedImage by remember { mutableStateOf<Uri?>(null) }
+    val verifyNicknameState by viewModel.verifyNicknameState.collectAsState()
+    val uploadProfileImageState by viewModel.uploadProfileImageState.collectAsState()
+
+    val galleryLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent(),
+    ) { uri -> uri?.let { selectedImage = uri } }
+
+    LaunchedEffect(key1 = uploadProfileImageState) {
+        uploadProfileImageState?.let {
+            viewModel.updateMember(
+                nickname = nickname,
+                originalUrl = it.originalUrl,
+                thumbnailUrl = it.thumbnailUrl,
+            )
+        }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(black_alpha_60),
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        NicknameToolbar(onBackClick)
-
-        Spacer(modifier = Modifier.size(20.dp))
-        ProfileImage()
-
-        Spacer(modifier = Modifier.size(54.dp))
-        NicknameInputInfo(contentHorizontalPadding)
-
-        Spacer(modifier = Modifier.size(10.dp))
-        NicknameTextField(contentHorizontalPadding)
-
-        Spacer(modifier = Modifier.size(12.dp))
-        NicknameInputResult(
-            result = true,
-            contentHorizontalPadding = contentHorizontalPadding,
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-        KeymeTextButton(
-            text = "다음",
-            onClick = onClickNextButton,
+        SignUpToolbar(onBackClick)
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
+                .weight(1f)
                 .padding(horizontal = 16.dp),
-            enabled = true,
-        )
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(modifier = Modifier.size(20.dp))
+            ProfileImage(
+                selectedImage = selectedImage,
+                onClickImage = { galleryLauncher.launch("image/*") },
+            )
 
-        Spacer(modifier = Modifier.size(54.dp))
+            Spacer(modifier = Modifier.size(54.dp))
+            NicknameInputInfo(nickname = nickname)
+
+            Spacer(modifier = Modifier.size(10.dp))
+            NicknameTextField(
+                nickname = nickname,
+                onValueChange = {
+                    nickname = it
+                    viewModel.verifyNickname(it)
+                },
+            )
+
+            Spacer(modifier = Modifier.size(12.dp))
+            if (nickname.isNotBlank() && verifyNicknameState != null) {
+                NicknameVerifyResult(result = verifyNicknameState!!)
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+            KeymeTextButton(
+                text = "다음",
+                onClick = {
+                    if (nickname.isBlank() || verifyNicknameState?.valid != true) {
+                        Toast.makeText(context, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
+
+                    } else if (selectedImage == null) {
+                        Toast.makeText(context, "프로필 사진을 선택해주세요", Toast.LENGTH_SHORT).show()
+
+                    } else run {
+                        val inputStream = contentResolver.openInputStream(selectedImage!!)
+                        val imageBytes = inputStream?.readBytes()
+
+                        val imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT)
+                        inputStream?.close()
+
+                        imageBytes?.let {
+                            viewModel.uploadProfileImage(imageString)
+                        }?.run {
+                            Toast.makeText(context, "프로필 사진을 불러올 수 없습니다", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(horizontal = 16.dp),
+                enabled = true,
+            )
+
+            Spacer(modifier = Modifier.size(54.dp))
+        }
     }
 }
 
 @Composable
-fun NicknameToolbar(
+fun SignUpToolbar(
     onBackClick: () -> Unit,
 ) {
     Box(
@@ -125,33 +198,55 @@ fun NicknameToolbar(
 
 @Composable
 fun ProfileImage(
-//    imageUri: Uri,
+    selectedImage: Uri?,
+    onClickImage: () -> Unit,
 ) {
     Box(
         modifier = Modifier
-            .size(160.dp)
-            .background(
-                color = Color.DarkGray,
-                shape = CircleShape,
-            )
-            .border(
-                width = 1.dp,
-                color = Color.Gray,
-                shape = CircleShape,
-            ),
+            .wrapContentSize()
+            .clickable { onClickImage.invoke() },
+        contentAlignment = Alignment.BottomEnd,
     ) {
-        // TODO: Set image.
+        AsyncImage(
+            model = selectedImage,
+            contentDescription = null,
+            modifier = Modifier
+                .size(160.dp)
+                .background(
+                    color = Color.DarkGray,
+                    shape = CircleShape,
+                )
+                .border(
+                    width = 1.dp,
+                    color = white_alpha_30,
+                    shape = CircleShape,
+                )
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop,
+        )
+        Box(
+            modifier = Modifier
+                .size(50.dp)
+                .background(
+                    color = gray600,
+                    shape = CircleShape,
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.icon_gallery),
+                contentDescription = null,
+            )
+        }
     }
 }
 
 @Composable
 fun NicknameInputInfo(
-    contentHorizontalPadding: Int,
+    nickname: String,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = contentHorizontalPadding.dp),
+        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         KeymeText(
@@ -162,7 +257,7 @@ fun NicknameInputInfo(
         )
         Spacer(modifier = Modifier.size(4.dp))
         KeymeText(
-            text = "(0/6)",
+            text = "(${nickname.length}/6)",
             keymeTextType = KeymeTextType.CAPTION_1,
             modifier = Modifier.wrapContentSize(),
             color = gray500,
@@ -180,120 +275,103 @@ fun NicknameInputInfo(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun NicknameTextField(
-    contentHorizontalPadding: Int,
-    onChangedTextFieldFocus: (Boolean) -> Unit = {},
+    nickname: String,
+    onValueChange: (String) -> Unit,
 ) {
-    var value by remember {
-        mutableStateOf("")
-    }
-
+    var isFocused by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    BasicTextField(
-        value = value,
-        onValueChange = { value = it },
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(horizontal = contentHorizontalPadding.dp)
-            .onFocusChanged {
-                onChangedTextFieldFocus.invoke(it.hasFocus)
+            .background(
+                color = black_alpha_80,
+                shape = RoundedCornerShape(4.dp),
+            )
+            .border(
+                border = BorderStroke(1.dp, white_alpha_30),
+                shape = RoundedCornerShape(4.dp),
+            )
+            .padding(
+                horizontal = 10.dp,
+                vertical = 14.dp,
+            ),
+        contentAlignment = Alignment.CenterStart,
+    ) {
+        BasicTextField(
+            modifier = Modifier
+                .onFocusChanged { focusState ->
+                    isFocused = focusState.hasFocus
+                },
+            value = nickname,
+            onValueChange = {
+                if (it.length <= 6) {
+                    onValueChange.invoke(it)
+                }
             },
-        textStyle = LocalTextStyle.current.copy(
-            color = Color.Red,
-            fontSize = KeymeTextType.BODY_3_SEMIBOLD.size.sp,
-            fontWeight = FontWeight(KeymeTextType.BODY_3_SEMIBOLD.weight),
-            fontFamily = KeymeTextType.BODY_3_SEMIBOLD.fontFamily,
-        ),
-//        TextStyle(
-//            color = Color.Red,
-//            fontSize = KeymeTextType.BODY_3_SEMIBOLD.size.sp,
-//            fontWeight = FontWeight(KeymeTextType.BODY_3_SEMIBOLD.weight),
-//            fontFamily = KeymeTextType.BODY_3_SEMIBOLD.fontFamily
-//        ),
-        keyboardActions = KeyboardActions(
-            onDone = { keyboardController?.hide() },
-        ),
-        singleLine = true,
-        decorationBox = {
-            Box(
-                modifier = Modifier
-                    .background(
-                        color = Color.Black,
-                        shape = RoundedCornerShape(size = 4.dp),
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = Color.DarkGray,
-                        shape = RoundedCornerShape(size = 4.dp),
-                    )
-                    .padding(
-                        horizontal = 10.dp,
-                        vertical = 14.dp,
-                    ),
-                contentAlignment = Alignment.CenterStart,
-            ) {
-                if (value.isEmpty()) {
+            textStyle = TextStyle(
+                color = keyme_white,
+                fontSize = KeymeTextType.BODY_3_SEMIBOLD.size.sp,
+                fontWeight = FontWeight(KeymeTextType.BODY_3_SEMIBOLD.weight),
+                fontFamily = KeymeTextType.BODY_3_SEMIBOLD.fontFamily,
+            ),
+            cursorBrush = SolidColor(keyme_white),
+            decorationBox = { innerTextField ->
+                if (nickname.isEmpty()) {
                     KeymeText(
                         text = "닉네임을 입력해주세요",
                         keymeTextType = KeymeTextType.BODY_3_SEMIBOLD,
-                        modifier = Modifier.wrapContentSize(),
-                        color = gray400,
-                    )
-                } else {
-                    KeymeText(
-                        text = value,
-                        keymeTextType = KeymeTextType.BODY_3_SEMIBOLD,
-                        modifier = Modifier.wrapContentSize(),
-                        color = keyme_white,
+                        modifier = Modifier.fillMaxWidth(),
+                        color = white_alpha_40,
                     )
                 }
-            }
-//            innerTextField()
-        },
-        cursorBrush = Brush.verticalGradient(colors = listOf(keyme_white, keyme_white)),
-    )
+                innerTextField()
+            },
+            singleLine = true,
+            keyboardActions = KeyboardActions(
+                onDone = { keyboardController?.hide() },
+            ),
+        )
+    }
 }
 
 @SuppressLint("SupportAnnotationUsage")
 @Composable
-fun NicknameInputResult(
-    result: Boolean?,
-    contentHorizontalPadding: Int,
+fun NicknameVerifyResult(
+    result: VerifyNickname,
 ) {
-//    @DrawableRes val inputStatePainter = when (result) {
-//        true -> R.drawable.icon_circle_passed
-//        false -> R.drawable.icon_circle_failed
-//        else -> null
-//    }
-//    @StringRes val inputStateInfo = when (result) {
-//        true -> R.drawable.icon_circle_passed
-//        false -> R.drawable.icon_circle_failed
-//        else -> null
-//    }
-//
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .wrapContentHeight()
-//            .padding(horizontal = contentHorizontalPadding.dp),
-//    ) {
-//        inputStatePainter?.let {
-//            Icon(
-//                painter = painterResource(id = it),
-//                contentDescription = null,
-//            modifier = Modifier.wrapContentSize(),
-//                contentScale = ContentScale.Crop,
-//            )
-//        }
-//    }
+    @DrawableRes val inputStatePainter = when (result.valid) {
+        true -> R.drawable.icon_circle_passed
+        else -> R.drawable.icon_circle_failed
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Image(
+            painter = painterResource(id = inputStatePainter),
+            contentDescription = null,
+            modifier = Modifier.wrapContentSize(),
+        )
+        Spacer(modifier = Modifier.size(4.dp))
+        KeymeText(
+            text = result.description,
+            keymeTextType = KeymeTextType.CAPTION_1,
+        )
+    }
 }
 
 @Composable
 @Preview(showBackground = true)
-fun NicknameScreenPreview() {
+fun NicknameScreenPreview(
+    viewModel: OnboardingViewModel = hiltViewModel(),
+) {
     NicknameScreen(
+        viewModel = viewModel,
         onBackClick = {},
-        onClickNextButton = {},
     )
 }

@@ -1,15 +1,24 @@
 package com.keyme.data.remote.api
 
 import com.keyme.domain.entity.request.SignInRequest
+import com.keyme.domain.entity.request.UpdateMemberRequest
+import com.keyme.domain.entity.request.VerifyNicknameRequest
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.MemberStatisticsResponse
 import com.keyme.domain.entity.response.QuestionSolvedScoreListResponse
 import com.keyme.domain.entity.response.QuestionSolvedScoreResponse
 import com.keyme.domain.entity.response.QuestionStatisticsResponse
 import com.keyme.domain.entity.response.SignInResponse
+import com.keyme.domain.entity.response.UpdateMemberResponse
+import com.keyme.domain.entity.response.UploadProfileImageResponse
+import com.keyme.domain.entity.response.VerifyNicknameResponse
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -19,6 +28,22 @@ interface KeymeApi {
     suspend fun signInWithKakao(
         @Body signInRequest: SignInRequest,
     ): SignInResponse
+
+    @POST("/members/verify-nickname")
+    suspend fun verifyNickname(
+        @Body verifyNicknameRequest: VerifyNicknameRequest,
+    ): VerifyNicknameResponse
+
+    @Multipart
+    @POST("/images")
+    suspend fun uploadProfileImage(
+        @Part multipartImage: MultipartBody.Part,
+    ): UploadProfileImageResponse
+
+    @PATCH("/members")
+    suspend fun updateMember(
+        @Body updateMemberRequest: UpdateMemberRequest,
+    ): UpdateMemberResponse
 
 //    @GET("tests/{id}/statistics")
 //    suspend fun getKeymeTestResultStatistics(

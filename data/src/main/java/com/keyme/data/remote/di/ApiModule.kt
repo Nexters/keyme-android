@@ -10,6 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -46,15 +47,10 @@ class ApiModule {
         builder.addInterceptor { chain ->
             val origin = chain.request()
             val requestBuilder = origin.newBuilder()
-                .header("Content-Type", "application/json;charset=UTF-8")
                 .method(origin.method, origin.body)
+                .setAuthorizationHeader(getUserAuthUseCase)
+                .setContentTypeHeader()
 
-            if (!origin.url.toString().contains("/auth/login")) {
-                val token = runBlocking {
-                    getUserAuthUseCase.getUserAuth().first()?.accessToken
-                }
-                requestBuilder.header("Authorization", "Bearer $token")
-            }
             chain.proceed(requestBuilder.build())
         }
 
@@ -67,5 +63,24 @@ class ApiModule {
         }
 
         return builder.build()
+    }
+
+    private fun Request.Builder.setAuthorizationHeader(
+        getUserAuthUseCase: GetUserAuthUseCase
+    ): Request.Builder {
+        val token = runBlocking {
+            getUserAuthUseCase.getUserAuth().first()?.accessToken
+        }
+        return if (!this.toString().contains("/auth/login")) {
+            this.header("Authorization", "Bearer $token")
+        } else this
+    }
+
+    private fun Request.Builder.setContentTypeHeader(): Request.Builder {
+        return if (this.toString().contains("/images")) {
+            this.header("Content-Type", "multipart/form-data;charset=UTF-8")
+        } else {
+            this.header("Content-Type", "application/json;charset=UTF-8")
+        }
     }
 }

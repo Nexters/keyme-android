@@ -12,6 +12,7 @@ import Dependencies.setLottieDependencies
 import Dependencies.setPagingDependencies
 import Dependencies.setTestDependencies
 import Dependencies.setViewModelDependencies
+import Dependencies.setWebViewDependencies
 
 
 plugins {
@@ -62,6 +63,7 @@ dependencies {
     setLottieDependencies()
     setImageDependencies()
     setFirebaseDependencies()
+    setWebViewDependencies()
 
     setHiltDependencies()
     setPagingDependencies()

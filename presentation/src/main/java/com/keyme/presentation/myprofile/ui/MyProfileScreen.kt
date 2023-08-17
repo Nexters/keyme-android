@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.MemberStatistics
-import com.keyme.domain.entity.response.Question
+import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
@@ -47,7 +47,7 @@ fun MyProfileScreen(
     myCharacter: Member,
     mySimilarStatistics: MemberStatistics,
     myDifferentStatistics: MemberStatistics,
-    onQuestionClick: (Question) -> Unit,
+    onQuestionClick: (QuestionStatistic) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         val pagerState = rememberPagerState(initialPage = 0)
@@ -67,6 +67,7 @@ fun MyProfileScreen(
         HorizontalPager(
             pageCount = myProfileTabs.size,
             state = pagerState,
+            userScrollEnabled = false,
         ) {
             when (myProfileTabs[it]) {
                 MyProfileTab.Similar -> KeymeMemberStatisticsScreen(

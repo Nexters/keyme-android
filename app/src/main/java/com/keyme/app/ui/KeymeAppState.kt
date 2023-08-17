@@ -3,7 +3,6 @@ package com.keyme.app.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -16,11 +15,9 @@ import androidx.navigation.compose.rememberNavController
 import com.keyme.app.navigation.TopLevelDestination
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 import com.keyme.presentation.onboarding.OnboardingDestination
-import com.keyme.presentation.onboarding.OnboardingStepsEnum
 import com.keyme.presentation.onboarding.OnboardingViewModel
+import com.keyme.presentation.takekeymetest.TakeKeymeTestDestination
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @Composable
 fun rememberKeymeAppState(
@@ -44,15 +41,8 @@ class KeymeAppState(
 
     val startDestination = OnboardingDestination
 
-    var isSignIn by mutableStateOf(false)
-
-    init {
-        coroutineScope.launch {
-            onboardingViewModel.localOnboardingState.collectLatest {
-                isSignIn = it == OnboardingStepsEnum.MY_DAILY.ordinal
-            }
-        }
-    }
+    val showBottomBar: Boolean
+        @Composable get() = currentDestination?.route.showBottomBar()
 
     fun navigate(destination: KeymeNavigationDestination) {
         if (destination is TopLevelDestination) {
@@ -80,5 +70,13 @@ class KeymeAppState(
 
     fun onBackClick() {
         navController.popBackStack()
+    }
+
+    private fun String?.showBottomBar(): Boolean {
+        if (this == null) return false
+        if (this.contains(OnboardingDestination.route)) return false
+        if (this.contains(TakeKeymeTestDestination.route)) return false
+
+        return true
     }
 }

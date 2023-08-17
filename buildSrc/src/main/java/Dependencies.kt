@@ -74,6 +74,9 @@ object Dependencies {
     private val firebase_bom = "com.google.firebase:firebase-bom:32.2.2"
     private val firebase_messaging = "com.google.firebase:firebase-messaging-ktx"
 
+    // webview
+    private val webView = "com.google.accompanist:accompanist-webview:${Versions.accompanist}"
+
     // Test
     private val junit = "junit:junit:${Versions.JUNIT}"
 
@@ -128,6 +131,10 @@ object Dependencies {
         implementation(lottieCompose)
     }
 
+    fun DependencyHandler.setWebViewDependencies() {
+        implementation(webView)
+    }
+
     fun DependencyHandler.setImageDependencies() {
         implementation(glide)
         implementation(coil)
@@ -170,8 +177,12 @@ object Dependencies {
 
     fun DependencyHandler.setPagingDependencies() {
         implementation(paging_compose)
-        implementation(paging_compose)
+        implementation(paging_common)
         implementation(paging_runtime)
+    }
+
+    fun DependencyHandler.setPagingDependenciesForDomain() {
+        implementation(paging_common)
     }
 
     fun DependencyHandler.setAndroidTestDependencies() {

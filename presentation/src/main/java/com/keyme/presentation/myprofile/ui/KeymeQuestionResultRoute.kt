@@ -8,25 +8,21 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.keyme.domain.entity.response.keymetest.Category
-import com.keyme.domain.entity.response.keymetest.QuestionsStatistic
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.keyme.presentation.myprofile.KeymeQuestionResultViewModel
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
 object KeymeQuestionResultDestination : KeymeNavigationDestination {
+    const val questionIdArg = "questionId"
     override val route: String = "keyme_test_result_detail_route"
     override val destination: String = "keyme_test_result_detail_destination"
-
-    object Argument {
-        val questionIdName: String = "questionId"
-    }
 }
 
 fun NavGraphBuilder.keymeQuestionResultGraph(onBackClick: () -> Unit) {
     composable(
-        route = "${KeymeQuestionResultDestination.route}/{${KeymeQuestionResultDestination.Argument.questionIdName}}",
+        route = "${KeymeQuestionResultDestination.route}/{${KeymeQuestionResultDestination.questionIdArg}}",
         arguments = listOf(
-            navArgument(KeymeQuestionResultDestination.Argument.questionIdName) {
+            navArgument(KeymeQuestionResultDestination.questionIdArg) {
                 type = NavType.StringType
             },
         ),
@@ -41,19 +37,15 @@ fun KeymeQuestionResultRoute(
     onBackClick: () -> Unit,
 ) {
     val statisticsState by keymeQuestionResultViewModel.statisticsState.collectAsStateWithLifecycle()
+    val myScore by keymeQuestionResultViewModel.myScoreState.collectAsStateWithLifecycle()
+    val myCharacter by keymeQuestionResultViewModel.myCharacterState.collectAsStateWithLifecycle()
+    val solvedScorePagingItem = keymeQuestionResultViewModel.solvedScorePagingFlow.collectAsLazyPagingItems()
 
     KeymeQuestionResultScreen(
-        statistics = QuestionsStatistic(
-            averageScore = 0,
-            category = Category(
-                color = "",
-                imageUrl = "",
-                name = "",
-            ),
-            description = "",
-            keyword = "",
-            questionId = 0,
-        ),
+        myCharacter = myCharacter,
+        myScore = myScore,
+        statistics = statisticsState,
+        solvedScorePagingItem = solvedScorePagingItem,
         onBackClick = onBackClick,
     )
 }

@@ -1,13 +1,13 @@
 package com.keyme.presentation.onboarding
 
+import androidx.lifecycle.viewModelScope
 import com.keyme.domain.entity.onFailure
 import com.keyme.domain.entity.onSuccess
-import com.keyme.domain.usecase.InsertPushTokenUseCase
-import com.keyme.domain.usecase.SetPushTokenSavedStateUseCase
-import androidx.lifecycle.viewModelScope
 import com.keyme.domain.entity.room.UserAuth
 import com.keyme.domain.usecase.GetUserAuthUseCase
+import com.keyme.domain.usecase.InsertPushTokenUseCase
 import com.keyme.domain.usecase.InsertUserAuthUseCase
+import com.keyme.domain.usecase.SetPushTokenSavedStateUseCase
 import com.keyme.domain.usecase.SignInUseCase
 import com.keyme.presentation.BaseViewModel
 import com.keyme.presentation.utils.FcmUtil
@@ -61,8 +61,12 @@ class OnboardingViewModel @Inject constructor(
             )
             FcmUtil.getToken()?.let { token ->
                 insertPushTokenUseCase.invoke(token)
-                    .onSuccess { setPushTokenSavedStateUseCase.invoke(true) }
-                    .onFailure { setPushTokenSavedStateUseCase.invoke(false) }
+                    .onSuccess {
+                        setPushTokenSavedStateUseCase.invoke(true)
+                    }
+                    .onFailure {
+                        setPushTokenSavedStateUseCase.invoke(false)
+                    }
             }
         }
     }

@@ -2,7 +2,6 @@ package com.keyme.data.remote.api
 
 import com.keyme.domain.entity.request.InsertPushTokenRequest
 import com.keyme.domain.entity.request.SignInRequest
-import com.keyme.domain.entity.response.InsertPushTokenResponse
 import com.keyme.domain.entity.response.DailyTestResponse
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.MemberStatisticsResponse
@@ -12,6 +11,7 @@ import com.keyme.domain.entity.response.QuestionSolvedScoreResponse
 import com.keyme.domain.entity.response.QuestionStatisticsResponse
 import com.keyme.domain.entity.response.SignInResponse
 import com.keyme.domain.entity.response.TestStatisticResponse
+import com.keyme.domain.entity.response.WithoutDataResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -25,15 +25,10 @@ interface KeymeApi {
         @Body signInRequest: SignInRequest,
     ): SignInResponse
 
-    @GET("tests/{id}/statistics")
-    suspend fun getKeymeTestResultStatistics(
-        @Path("id") questionId: String,
-    ): KeymeTestResultStatisticsResponse
-
-    @GET("members/devices")
+    @POST("members/devices")
     suspend fun insertPushToken(
         @Body insertPushTokenRequest: InsertPushTokenRequest,
-    ): InsertPushTokenResponse
+    ): WithoutDataResponse
 
     @GET("members/{memberId}/statistics")
     suspend fun getMemberStatistics(

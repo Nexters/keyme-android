@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.keyme.app.ui.KeymeApp
 import com.keyme.domain.entity.onSuccess
 import com.keyme.domain.usecase.GetPushTokenSavedStateUseCase
+import com.keyme.domain.usecase.GetUserAuthUseCase
 import com.keyme.domain.usecase.InsertPushTokenUseCase
 import com.keyme.domain.usecase.SetPushTokenSavedStateUseCase
 import com.keyme.presentation.UiEvent
@@ -21,12 +22,16 @@ import com.keyme.presentation.UiEventManager
 import com.keyme.presentation.utils.FcmUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var getUserAuthUseCase: GetUserAuthUseCase
 
     @Inject
     lateinit var uiEventManager: UiEventManager
@@ -94,13 +99,14 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun checkUnsavedPushTokenExistence() {
-        // TODO: Return if there is no access token in room database.
-        val isPushTokenSaved = getPushTokenSavedStateUseCase.invoke()
-        if (!isPushTokenSaved) {
-            lifecycleScope.launch {
-                FcmUtil.getToken()?.let {
-                    insertPushTokenUseCase.invoke(it)
-                        .onSuccess { setPushTokenSavedStateUseCase.invoke(true) }
+        lifecycleScope.launch {
+            if (!getUserAuthUseCase.getUserAuth().first()?.accessToken.isNullOrBlank()) {
+                val isPushTokenSaved = getPushTokenSavedStateUseCase.invoke()
+                if (!isPushTokenSaved) {
+                    FcmUtil.getToken()?.let {
+                        insertPushTokenUseCase.invoke(it)
+                            .onSuccess { setPushTokenSavedStateUseCase.invoke(true) }
+                    }
                 }
             }
         }

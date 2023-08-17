@@ -1,5 +1,7 @@
 package com.keyme.domain.entity
 
+import com.keyme.domain.entity.response.WithoutDataResponse
+
 sealed interface ApiResult<T> {
     data class Success<T>(val data: T) : ApiResult<T>
 
@@ -34,6 +36,20 @@ inline fun <T : Any> apiResult(call: () -> BaseResponse<T>): ApiResult<T> {
         val response = call()
         if (response.code == "200") {
             ApiResult.Success(response.data)
+        } else {
+            ApiResult.ApiError(response.code, response.message)
+        }
+    }.getOrElse {
+        ApiResult.NetworkError(it)
+    } as ApiResult<T>
+}
+
+@Suppress("UNCHECKED_CAST")
+inline fun <T : Any> apiResultWithoutData(call: () -> WithoutDataResponse): ApiResult<T> {
+    return runCatching {
+        val response = call()
+        if (response.code == "200") {
+            ApiResult.Success(Unit)
         } else {
             ApiResult.ApiError(response.code, response.message)
         }

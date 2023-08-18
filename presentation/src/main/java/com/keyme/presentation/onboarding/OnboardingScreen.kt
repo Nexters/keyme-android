@@ -8,6 +8,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -27,7 +28,6 @@ import com.keyme.presentation.onboarding.guide.Guide03Screen
 import com.keyme.presentation.onboarding.guide.Guide04Screen
 import com.keyme.presentation.onboarding.nickname.NicknameScreen
 import com.keyme.presentation.onboarding.signin.SignInScreen
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Composable
@@ -50,6 +50,7 @@ fun OnboardingScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_signin_background))
+    val localOnboardingState by viewModel.userAuthState.collectAsState()
 
     val pagerState = rememberPagerState(initialPage = 0)
     val onboardingSteps = listOf(
@@ -61,19 +62,17 @@ fun OnboardingScreen(
         OnboardingStepsEnum.GUIDE_04,
     )
 
-    LaunchedEffect(viewModel) {
+    LaunchedEffect(localOnboardingState) {
 //        TODO: 토큰만 있는 상태에서 메인으로 넘기기 위해 주석처리
-//        viewModel.userAuthState.collectLatest {
+        localOnboardingState.let {
 //            when {
 //                it?.accessToken == null -> pagerState.scrollToPage(OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal)
 //                it.nickname == null -> pagerState.scrollToPage(OnboardingStepsEnum.NICKNAME.ordinal)
 //                it.onboardingTestResultId == null -> pagerState.scrollToPage(OnboardingStepsEnum.GUIDE_01.ordinal)
 //                else -> navigateToMyDaily.invoke()
 //            }
-//        }
-//        TODO: 토큰만 있는 상태에서 메인으로 넘기는 부분
-        viewModel.userAuthState.collectLatest {
-            if (it?.accessToken != null) pagerState.scrollToPage(OnboardingStepsEnum.GUIDE_01.ordinal)
+//            TODO: 토큰만 있는 상태에서 메인으로 넘기는 부분
+            if (it?.accessToken != null) navigateToMyDaily.invoke()
         }
     }
 
@@ -113,14 +112,10 @@ fun OnboardingScreen(
                     signInWithKeyme = viewModel::signInWithKeyme,
                 )
                 OnboardingStepsEnum.NICKNAME -> NicknameScreen(
+                    viewModel = viewModel,
                     onBackClick = {
                         coroutineScope.launch {
                             pagerState.scrollToPage(pagerState.currentPage - 1)
-                        }
-                    },
-                    onClickNextButton = {
-                        coroutineScope.launch {
-                            pagerState.scrollToPage(pagerState.currentPage + 1)
                         }
                     },
                 )

@@ -12,11 +12,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.keyme.app.ui.KeymeApp
+import com.keyme.domain.entity.onSuccess
+import com.keyme.domain.usecase.GetPushTokenSavedStateUseCase
+import com.keyme.domain.usecase.GetUserAuthUseCase
+import com.keyme.domain.usecase.InsertPushTokenUseCase
+import com.keyme.domain.usecase.SetPushTokenSavedStateUseCase
 import com.keyme.presentation.UiEvent
 import com.keyme.presentation.UiEventManager
 import com.keyme.presentation.utils.FcmUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -25,7 +31,19 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
+    lateinit var getUserAuthUseCase: GetUserAuthUseCase
+
+    @Inject
     lateinit var uiEventManager: UiEventManager
+
+    @Inject
+    lateinit var insertPushTokenUseCase: InsertPushTokenUseCase
+
+    @Inject
+    lateinit var getPushTokenSavedStateUseCase: GetPushTokenSavedStateUseCase
+
+    @Inject
+    lateinit var setPushTokenSavedStateUseCase: SetPushTokenSavedStateUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +53,7 @@ class MainActivity : ComponentActivity() {
 
         handleUiEvent()
         askNotificationPermission()
+        checkUnsavedPushTokenExistence()
 
         lifecycleScope.launch {
             Timber.d("Fcm Token: ${FcmUtil.getToken()}")
@@ -75,6 +94,20 @@ class MainActivity : ComponentActivity() {
             } else {
                 // Directly ask for the permission
                 requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
+    private fun checkUnsavedPushTokenExistence() {
+        lifecycleScope.launch {
+            if (!getUserAuthUseCase.getUserAuth().first()?.accessToken.isNullOrBlank()) {
+                val isPushTokenSaved = getPushTokenSavedStateUseCase.invoke()
+                if (!isPushTokenSaved) {
+                    FcmUtil.getToken()?.let {
+                        insertPushTokenUseCase.invoke(it)
+                            .onSuccess { setPushTokenSavedStateUseCase.invoke(true) }
+                    }
+                }
             }
         }
     }

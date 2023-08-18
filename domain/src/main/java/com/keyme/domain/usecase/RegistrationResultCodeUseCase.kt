@@ -7,6 +7,8 @@ import javax.inject.Inject
 class RegistrationResultCodeUseCase @Inject constructor(
     private val keymeTestRepository: KeymeTestRepository,
 ) {
-    suspend operator fun invoke(resultCode: String) =
-        apiResult { keymeTestRepository.registrationTestResult(resultCode) }
+    suspend operator fun invoke(resultCode: String): Boolean {
+        val response = keymeTestRepository.registrationTestResult(resultCode)
+        return response.code == "200"
+    }
 }

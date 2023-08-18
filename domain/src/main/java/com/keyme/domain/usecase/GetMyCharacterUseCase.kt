@@ -4,6 +4,7 @@ import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.member.toMember
 import com.keyme.domain.repository.UserAuthRepository
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -17,5 +18,6 @@ class GetMyCharacterUseCase @Inject constructor(
         .onStart { Member.EMPTY }
         .filterNotNull()
         .map { it.toMember() }
+        .filter { it != Member.EMPTY }
         .distinctUntilChanged()
 }

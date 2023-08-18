@@ -47,19 +47,15 @@ class TakeKeymeTestViewModel @Inject constructor(
             .filter { it.isRegister() }
             .distinctUntilChanged()
             .onEach {
-                registrationResult(it.resultCode)
+                if (registrationResultCodeUseCase(it.resultCode)) {
+                    getTestResult(it.testResultId)
+                }
             }.launchIn(baseViewModelScope)
     }
 
     fun updateTestResult(result: TestRegisterResponse) {
         baseViewModelScope.launch {
             _testRegisterResponseState.value = result
-        }
-    }
-
-    private fun registrationResult(resultCode: String) {
-        apiCall(apiRequest = { registrationResultCodeUseCase(resultCode) }) {
-            getTestResult(_testRegisterResponseState.value.testResultId)
         }
     }
 

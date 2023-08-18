@@ -17,6 +17,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
@@ -47,7 +48,7 @@ class KeymeQuestionResultViewModel @Inject constructor(
     val myScoreState = _myScoreState.asStateFlow()
 
     val solvedScorePagingFlow = questionId?.let {
-        myCharacterState.flatMapLatest {
+        myCharacterState.filter { it != Member.EMPTY }.flatMapLatest {
             getQuestionSolvedScoreListUseCase(questionId, it.id).flow.cachedIn(baseViewModelScope)
         }
     } ?: flowOf(PagingData.empty())

@@ -1,5 +1,7 @@
 package com.keyme.domain.entity.member
 
+import com.keyme.domain.entity.room.UserAuth
+
 data class Member(
     val friendCode: String = "",
     val id: Int = 0,
@@ -11,3 +13,11 @@ data class Member(
         val EMPTY = Member(friendCode = "", id = 0, nickname = "", profileImage = "", profileThumbnail = "")
     }
 }
+
+fun UserAuth.toMember() = Member(
+    friendCode = friendCode ?: "",
+    id = id,
+    nickname = nickname ?: "",
+    profileImage = profileImage ?: "",
+    profileThumbnail = profileThumbnail ?: "",
+)

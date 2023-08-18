@@ -70,16 +70,13 @@ fun OnboardingScreen(
     )
 
     LaunchedEffect(localOnboardingState) {
-//        TODO: 토큰만 있는 상태에서 메인으로 넘기기 위해 주석처리
         localOnboardingState.let {
-//            when {
-//                it?.accessToken == null -> pagerState.scrollToPage(OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal)
-//                it.nickname == null -> pagerState.scrollToPage(OnboardingStepsEnum.NICKNAME.ordinal)
-//                it.onboardingTestResultId == null -> pagerState.scrollToPage(OnboardingStepsEnum.GUIDE_01.ordinal)
-//                else -> navigateToMyDaily.invoke()
-//            }
-//            TODO: 토큰만 있는 상태에서 메인으로 넘기는 부분
-            if (it?.accessToken != null) navigateToMyDaily.invoke()
+            when {
+                it?.accessToken == null -> pagerState.scrollToPage(OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal)
+                it.nickname == null -> pagerState.scrollToPage(OnboardingStepsEnum.NICKNAME.ordinal)
+                it.onboardingTestResultId == null -> pagerState.scrollToPage(OnboardingStepsEnum.GUIDE_01.ordinal)
+                else -> navigateToMyDaily.invoke()
+            }
         }
     }
 

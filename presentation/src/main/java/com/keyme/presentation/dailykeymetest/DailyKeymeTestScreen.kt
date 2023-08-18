@@ -60,7 +60,7 @@ fun DailyKeymeTestScreen(
     onDailyKeymeTestClick: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        if (dailyKeymeTest.testResultId != 0 && dailyKeymeTestStatistic != null) {
+        if (dailyKeymeTestStatistic != null) {
             DailyKeymeTestStatisticScreen(myCharacter, dailyKeymeTestStatistic)
         } else {
             DailKeymeTestScreen(myCharacter, dailyKeymeTest, onDailyKeymeTestClick)

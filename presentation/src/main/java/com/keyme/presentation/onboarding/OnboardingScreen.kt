@@ -12,7 +12,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -36,8 +35,6 @@ import com.keyme.presentation.onboarding.guide.Guide04Screen
 import com.keyme.presentation.onboarding.nickname.NicknameScreen
 import com.keyme.presentation.onboarding.signin.SignInScreen
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 @Composable
@@ -71,7 +68,7 @@ fun OnboardingScreen(
         OnboardingStepsEnum.GUIDE_04,
     )
 
-    LaunchedEffect(key1 = Unit){
+    LaunchedEffect(key1 = Unit) {
         viewModel.userAuthState
             .collectLatest {
                 when {

@@ -68,7 +68,6 @@ import com.keyme.presentation.designsystem.theme.white_alpha_40
 import com.keyme.presentation.onboarding.OnboardingViewModel
 import com.keyme.presentation.onboarding.fadingAnimateFloatAsState
 
-
 @Composable
 fun NicknameScreen(
     isVisible: Boolean,

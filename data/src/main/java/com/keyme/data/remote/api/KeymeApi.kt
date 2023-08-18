@@ -65,7 +65,7 @@ interface KeymeApi {
 
     @GET("tests/result/{resultId}")
     suspend fun getTestResult(
-        @Path("resultId") resultId: String
+        @Path("resultId") resultId: Int
     ): TestResultResponse
 
     @POST("tests/result/register")

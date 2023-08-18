@@ -16,5 +16,5 @@ interface KeymeTestRepository {
 
     suspend fun registrationTestResult(resultCode: String): EmptyResponse
 
-    suspend fun getTestResult(testResultId: String): TestResultResponse
+    suspend fun getTestResult(testResultId: Int): TestResultResponse
 }

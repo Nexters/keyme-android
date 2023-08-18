@@ -53,7 +53,7 @@ fun TakeKeymeTestRoute(
             TakeKeymeTestScreen(
                 loadTestUrl = loadTestUrl,
                 onTestSolved = {
-                    takeKeymeTestViewModel.registrationResult("")
+                    takeKeymeTestViewModel.updateTestResult(it)
                 },
                 onBackClick = onBackClick,
                 onCloseClick = onCloseClick,

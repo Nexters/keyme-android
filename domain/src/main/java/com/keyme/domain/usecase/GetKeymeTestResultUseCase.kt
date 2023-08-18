@@ -7,6 +7,6 @@ import javax.inject.Inject
 class GetKeymeTestResultUseCase @Inject constructor(
     private val keymeTestRepository: KeymeTestRepository,
 ) {
-    suspend operator fun invoke(testResultId: String) =
+    suspend operator fun invoke(testResultId: Int) =
         apiResult { keymeTestRepository.getTestResult(testResultId) }
 }

@@ -29,7 +29,7 @@ class KeymeTestRepositoryImpl @Inject constructor(
         return keymeApi.registrationTestResult(RegistrationRequest(resultCode))
     }
 
-    override suspend fun getTestResult(testResultId: String): TestResultResponse {
+    override suspend fun getTestResult(testResultId: Int): TestResultResponse {
         return keymeApi.getTestResult(resultId = testResultId)
     }
 }

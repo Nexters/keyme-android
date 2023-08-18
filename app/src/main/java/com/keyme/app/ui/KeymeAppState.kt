@@ -74,7 +74,7 @@ class KeymeAppState(
 
     private fun String?.showBottomBar(): Boolean {
         if (this == null) return false
-        if (this.contains(OnboardingDestination.route)) return false
+        if (this.contains(OnboardingDestination.destination)) return false
         if (this.contains(TakeKeymeTestDestination.route)) return false
 
         return true

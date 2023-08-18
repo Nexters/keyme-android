@@ -68,7 +68,10 @@ private fun StatisticList(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_member),
                 contentDescription = "",
@@ -82,7 +85,12 @@ private fun StatisticList(
             )
         }
 
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
             items(dailyKeymeTestStatistic.questionsStatistics) {
                 QuestionStatisticItem(myCharacter = myCharacter, statistic = it)
             }
@@ -121,7 +129,7 @@ private fun QuestionStatisticItem(myCharacter: Member, statistic: QuestionStatis
 
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             KeymeText(
-                text = "${myCharacter.nickname}님의 ${statistic.category.name} 정도는?",
+                text = "${myCharacter.nickname}님의 ${statistic.keyword} 정도는?",
                 keymeTextType = KeymeTextType.BODY_3_SEMIBOLD,
                 color = Color.White,
             )

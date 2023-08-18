@@ -2,10 +2,8 @@ package com.keyme.presentation.takekeymetest
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -44,22 +42,24 @@ fun TakeKeymeTestRoute(
     onCloseClick: () -> Unit,
 ) {
     val loadTestUrl = takeKeymeTestViewModel.keymeTestUrl
-    var testResultId by remember { mutableStateOf(0) }
-    val isTestSolved = testResultId != 0
+    val keymeTestResult by takeKeymeTestViewModel.keymeTestResultState.collectAsStateWithLifecycle()
+    val myCharacter by takeKeymeTestViewModel.myCharacterState.collectAsStateWithLifecycle()
 
     if (loadTestUrl.isNotEmpty()) {
-        if (isTestSolved.not()) {
+        if (keymeTestResult == null) {
             TakeKeymeTestScreen(
                 loadTestUrl = loadTestUrl,
                 onTestSolved = {
-                    testResultId = it
+                    takeKeymeTestViewModel.updateTestResult(it)
                 },
                 onBackClick = onBackClick,
                 onCloseClick = onCloseClick,
             )
         } else {
             KeymeTestResultScreen(
-                onCloseClick = {},
+                myCharacter = myCharacter,
+                testResult = keymeTestResult,
+                onCloseClick = onCloseClick,
             )
         }
     } else {

@@ -8,7 +8,7 @@ import com.keyme.domain.entity.response.QuestionStatisticsResponse
 interface QuestionRepository {
     suspend fun getSolvedScore(questionId: String, ownerId: String): QuestionSolvedScoreResponse
 
-    suspend fun getStatistics(questionId: String): QuestionStatisticsResponse
+    suspend fun getStatistics(questionId: String, ownerId: String): QuestionStatisticsResponse
 
     fun getSolvedScoreList(
         questionId: String,

@@ -15,6 +15,8 @@ import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
+import com.google.gson.Gson
+import com.keyme.domain.entity.response.TestRegisterResponse
 import com.keyme.presentation.designsystem.theme.keyme_black
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -22,10 +24,12 @@ import timber.log.Timber
 @Composable
 fun TakeKeymeTestScreen(
     loadTestUrl: String,
-    onTestSolved: (Int) -> Unit,
+    onTestSolved: (TestRegisterResponse) -> Unit,
     onBackClick: () -> Unit,
     onCloseClick: () -> Unit,
 ) {
+    Timber.d("loadTestUrl: $loadTestUrl")
+
     val state = rememberWebViewState(url = loadTestUrl)
     val navigator = rememberWebViewNavigator()
 
@@ -48,6 +52,7 @@ fun TakeKeymeTestScreen(
                 settings.loadWithOverviewMode = true
                 settings.useWideViewPort = true
                 settings.javaScriptEnabled = true
+                settings.userAgentString = "keyme"
                 it.addJavascriptInterface(
                     TakeKeymeTestInterface(
                         onSolved = {
@@ -71,13 +76,18 @@ fun TakeKeymeTestScreen(
 }
 
 private class TakeKeymeTestInterface(
-    private val onSolved: (Int) -> Unit,
+    private val onSolved: (TestRegisterResponse) -> Unit,
     private val onClose: () -> Unit,
 ) {
     @JavascriptInterface
-    fun onTestSolved(testResultId: Int) {
-        Timber.d("onTestSolved(testResultId: $testResultId)")
-        onSolved(testResultId)
+    fun onTestSolved(result: String) {
+        Timber.d("onTestSolved(result: $result)")
+
+        val testResult = kotlin.runCatching {
+            Gson().fromJson(result, TestRegisterResponse::class.java)
+        }.getOrNull()
+
+        testResult?.let { onSolved(testResult) }
     }
 
     @JavascriptInterface

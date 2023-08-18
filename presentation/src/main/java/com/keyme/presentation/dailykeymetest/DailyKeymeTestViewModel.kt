@@ -9,12 +9,13 @@ import com.keyme.domain.usecase.GetMyCharacterUseCase
 import com.keyme.presentation.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,8 +25,11 @@ class DailyKeymeTestViewModel @Inject constructor(
     private val getKeymeTestStatisticUseCase: GetKeymeTestStatisticUseCase,
 ) : BaseViewModel() {
 
-    private val _myCharacterState = MutableStateFlow(Member.EMPTY)
-    val myCharacterState = _myCharacterState.asStateFlow()
+    val myCharacterState = getMyCharacterUseCase().stateIn(
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = Member.EMPTY,
+        scope = baseViewModelScope,
+    )
 
     private val _dailyKeymeTestState = MutableStateFlow(Test.EMPTY)
     val dailyKeymeTestState = _dailyKeymeTestState.asStateFlow()
@@ -41,14 +45,12 @@ class DailyKeymeTestViewModel @Inject constructor(
         apiCall(apiRequest = { getDailyKeymeTestUseCase() }) {
             _dailyKeymeTestState.value = it
         }
-        _myCharacterState.value = getMyCharacterUseCase.invoke()
 
         dailyKeymeTestState
-            .map { it.testId }
-            .filter { it != 0 }
+            .filter { it.testResultId != 0 }
             .distinctUntilChanged()
             .onEach {
-                apiCall(apiRequest = { getKeymeTestStatisticUseCase(it) }) { statistic ->
+                apiCall(apiRequest = { getKeymeTestStatisticUseCase(it.testId) }) { statistic ->
                     _dailyKeymeTestStatisticState.value = statistic
                 }
             }.launchIn(baseViewModelScope)

@@ -48,7 +48,7 @@ fun ColumnScope.KeymeQuestionSolvedScoreList(
 ) {
     KeymeQuestionScoreListContainer {
         KeymeQuestionInfo(
-            title = "${myCharacter.nickname}님의 ${statistic.keyword}정도는?",
+            title = "${myCharacter.nickname}님의 ${statistic.keyword} 정도는?",
             solvedCount = solvedScorePagingItem.itemCount,
         )
 

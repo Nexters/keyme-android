@@ -77,6 +77,9 @@ object Dependencies {
     // webview
     private val webView = "com.google.accompanist:accompanist-webview:${Versions.accompanist}"
 
+    // pager
+    private const val pager_indicators = "com.google.accompanist:accompanist-pager-indicators:${Versions.accompanist}"
+
     // Test
     private val junit = "junit:junit:${Versions.JUNIT}"
 
@@ -133,6 +136,10 @@ object Dependencies {
 
     fun DependencyHandler.setWebViewDependencies() {
         implementation(webView)
+    }
+
+    fun DependencyHandler.setPagerDependencies() {
+        implementation(pager_indicators)
     }
 
     fun DependencyHandler.setImageDependencies() {

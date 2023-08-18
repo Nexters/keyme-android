@@ -2,10 +2,12 @@ package com.keyme.data.remote.api
 
 import com.keyme.domain.entity.BaseResponseWithoutData
 import com.keyme.domain.entity.request.InsertPushTokenRequest
+import com.keyme.domain.entity.request.RegistrationRequest
 import com.keyme.domain.entity.request.SignInRequest
 import com.keyme.domain.entity.request.UpdateMemberRequest
 import com.keyme.domain.entity.request.VerifyNicknameRequest
 import com.keyme.domain.entity.response.DailyTestResponse
+import com.keyme.domain.entity.response.EmptyResponse
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.MemberStatisticsResponse
 import com.keyme.domain.entity.response.OnBoardingTestResponse
@@ -13,6 +15,7 @@ import com.keyme.domain.entity.response.QuestionSolvedScoreListResponse
 import com.keyme.domain.entity.response.QuestionSolvedScoreResponse
 import com.keyme.domain.entity.response.QuestionStatisticsResponse
 import com.keyme.domain.entity.response.SignInResponse
+import com.keyme.domain.entity.response.TestResultResponse
 import com.keyme.domain.entity.response.TestStatisticResponse
 import com.keyme.domain.entity.response.UpdateMemberResponse
 import com.keyme.domain.entity.response.UploadProfileImageResponse
@@ -91,4 +94,14 @@ interface KeymeApi {
     suspend fun getTestStatistic(
         @Path("id") testId: Int,
     ): TestStatisticResponse
+
+    @GET("tests/result/{resultId}")
+    suspend fun getTestResult(
+        @Path("resultId") resultId: Int,
+    ): TestResultResponse
+
+    @POST("tests/result/register")
+    suspend fun registrationTestResult(
+        @Body registrationRequest: RegistrationRequest,
+    ): EmptyResponse
 }

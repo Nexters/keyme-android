@@ -27,7 +27,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
@@ -66,16 +66,18 @@ import com.keyme.presentation.designsystem.theme.white_alpha_15
 import com.keyme.presentation.designsystem.theme.white_alpha_30
 import com.keyme.presentation.designsystem.theme.white_alpha_40
 import com.keyme.presentation.onboarding.OnboardingViewModel
-import com.keyme.presentation.utils.ImageUploadUtil
+import com.keyme.presentation.onboarding.fadingAnimateFloatAsState
 
 
 @Composable
 fun NicknameScreen(
-    viewModel: OnboardingViewModel,
+    isVisible: Boolean,
     onBackClick: () -> Unit,
+    viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
     var nickname by remember { mutableStateOf("") }
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
+
     val verifyNicknameState by viewModel.verifyNicknameState.collectAsState()
     val uploadProfileImageState by viewModel.uploadProfileImageState.collectAsState()
 
@@ -86,7 +88,8 @@ fun NicknameScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(black_alpha_60),
+            .background(black_alpha_60)
+            .alpha(fadingAnimateFloatAsState(isAnimationFinished = isVisible).value),
     ) {
         SignUpToolbar(onBackClick)
         Column(
@@ -373,7 +376,7 @@ fun NextButton(
             if (nickname.isBlank() || !isNicknameValidated) {
                 Toast.makeText(context, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
             }
-                // todo 프로필 사진 선택
+            // todo 프로필 사진 선택
 //            else if (selectedImage == null) {
 //                Toast.makeText(context, "프로필 사진을 선택해주세요", Toast.LENGTH_SHORT).show()
 //            }
@@ -396,11 +399,9 @@ fun NextButton(
 
 @Composable
 @Preview(showBackground = true)
-fun NicknameScreenPreview(
-    viewModel: OnboardingViewModel = hiltViewModel(),
-) {
+fun NicknameScreenPreview() {
     NicknameScreen(
-        viewModel = viewModel,
+        isVisible = true,
         onBackClick = {},
     )
 }

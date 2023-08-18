@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,10 +26,13 @@ import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.keyme_black
+import com.keyme.presentation.designsystem.theme.keyme_white
 import com.keyme.presentation.onboarding.OnboardingViewModel
+import com.keyme.presentation.onboarding.fadingAnimateFloatAsState
 
 @Composable
 fun Guide04Screen(
+    isVisible: Boolean,
     viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToOnboardingKeymeTest: (testId: Int) -> Unit,
 ) {
@@ -66,7 +70,9 @@ fun Guide04Screen(
                 .padding(
                     start = 18.dp,
                     top = 74.dp,
-                ),
+                )
+                .alpha(fadingAnimateFloatAsState(isAnimationFinished = isVisible).value),
+            color = keyme_white,
         )
     }
 }
@@ -75,6 +81,7 @@ fun Guide04Screen(
 @Preview(showBackground = true)
 fun Guide04ScreenPreview() {
     Guide04Screen(
+        isVisible = true,
         navigateToOnboardingKeymeTest = {},
     )
 }

@@ -16,20 +16,24 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.keyme.presentation.R
-import com.keyme.presentation.designsystem.theme.black_alpha_60
+import com.keyme.presentation.onboarding.colorAnimateFloatAsState
 
 @Composable
 fun Guide03Screen(
+    isVisible: Boolean,
     onClickNextButton: () -> Unit,
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_guide_03))
     val progress by animateLottieCompositionAsState(composition)
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(black_alpha_60),
+        modifier = Modifier.fillMaxSize(),
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colorAnimateFloatAsState(isVisible = isVisible).value),
+        )
         LottieAnimation(
             composition = composition,
             modifier = Modifier
@@ -46,6 +50,7 @@ fun Guide03Screen(
 @Preview(showBackground = true)
 fun Guide03ScreenPreview() {
     Guide03Screen(
+        isVisible = true,
         onClickNextButton = {},
     )
 }

@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
@@ -67,14 +68,17 @@ import com.keyme.presentation.designsystem.theme.white_alpha_15
 import com.keyme.presentation.designsystem.theme.white_alpha_30
 import com.keyme.presentation.designsystem.theme.white_alpha_40
 import com.keyme.presentation.onboarding.OnboardingViewModel
+import com.keyme.presentation.onboarding.fadingAnimateFloatAsState
 
 @Composable
 fun NicknameScreen(
-    viewModel: OnboardingViewModel,
+    isVisible: Boolean,
     onBackClick: () -> Unit,
+    viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
     var nickname by remember { mutableStateOf("") }
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
+
     val verifyNicknameState by viewModel.verifyNicknameState.collectAsState()
     val uploadProfileImageState by viewModel.uploadProfileImageState.collectAsState()
 
@@ -95,7 +99,8 @@ fun NicknameScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(black_alpha_60),
+            .background(black_alpha_60)
+            .alpha(fadingAnimateFloatAsState(isAnimationFinished = isVisible).value),
     ) {
         SignUpToolbar(onBackClick)
         Column(
@@ -399,11 +404,9 @@ fun NextButton(
 
 @Composable
 @Preview(showBackground = true)
-fun NicknameScreenPreview(
-    viewModel: OnboardingViewModel = hiltViewModel(),
-) {
+fun NicknameScreenPreview() {
     NicknameScreen(
-        viewModel = viewModel,
+        isVisible = true,
         onBackClick = {},
     )
 }

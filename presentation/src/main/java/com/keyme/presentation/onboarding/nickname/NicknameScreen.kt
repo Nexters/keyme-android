@@ -2,7 +2,6 @@ package com.keyme.presentation.onboarding.nickname
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.util.Base64
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -67,6 +66,8 @@ import com.keyme.presentation.designsystem.theme.white_alpha_15
 import com.keyme.presentation.designsystem.theme.white_alpha_30
 import com.keyme.presentation.designsystem.theme.white_alpha_40
 import com.keyme.presentation.onboarding.OnboardingViewModel
+import com.keyme.presentation.utils.ImageUploadUtil
+
 
 @Composable
 fun NicknameScreen(
@@ -369,7 +370,6 @@ fun NextButton(
     uploadProfileImage: (String) -> Unit,
 ) {
     val context = LocalContext.current
-    val contentResolver = context.contentResolver
 
     KeymeTextButton(
         text = "다음",
@@ -379,12 +379,8 @@ fun NextButton(
             } else if (selectedImage == null) {
                 Toast.makeText(context, "프로필 사진을 선택해주세요", Toast.LENGTH_SHORT).show()
             } else {
-                run {
-                    val inputStream = contentResolver.openInputStream(selectedImage)
-                    val imageBytes = inputStream?.readBytes()
-                    val imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT)
-                    inputStream?.close()
-
+                val imageString = ImageUploadUtil.getProfileImageString(context, selectedImage)
+                imageString?.let {
                     uploadProfileImage.invoke(imageString)
                 }
             }

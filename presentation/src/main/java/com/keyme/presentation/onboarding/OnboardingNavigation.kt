@@ -13,6 +13,7 @@ object OnboardingDestination : KeymeNavigationDestination {
 fun NavGraphBuilder.onboardingGraph(
     navigateToOnboardingKeymeTest: (testId: Int) -> Unit,
     navigateToMyDaily: () -> Unit,
+    nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     navigation(
         route = OnboardingDestination.route,
@@ -24,5 +25,6 @@ fun NavGraphBuilder.onboardingGraph(
                 navigateToMyDaily = navigateToMyDaily,
             )
         }
+        nestedGraphs()
     }
 }

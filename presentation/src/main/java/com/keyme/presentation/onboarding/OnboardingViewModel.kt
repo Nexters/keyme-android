@@ -1,16 +1,21 @@
 package com.keyme.presentation.onboarding
 
 import androidx.lifecycle.viewModelScope
+import com.keyme.domain.entity.onFailure
+import com.keyme.domain.entity.onSuccess
 import com.keyme.domain.entity.response.UploadProfileImage
 import com.keyme.domain.entity.response.VerifyNickname
 import com.keyme.domain.entity.room.UserAuth
 import com.keyme.domain.usecase.GetUserAuthUseCase
+import com.keyme.domain.usecase.InsertPushTokenUseCase
 import com.keyme.domain.usecase.InsertUserAuthUseCase
+import com.keyme.domain.usecase.SetPushTokenSavedStateUseCase
 import com.keyme.domain.usecase.SignInUseCase
 import com.keyme.domain.usecase.UpdateMemberUseCase
 import com.keyme.domain.usecase.UploadProfileImageUseCase
 import com.keyme.domain.usecase.VerifyNicknameUseCase
 import com.keyme.presentation.BaseViewModel
+import com.keyme.presentation.utils.FcmUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,8 +30,10 @@ import javax.inject.Inject
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     getUserAuthUseCase: GetUserAuthUseCase,
-    private val insertUserAuthUseCase: InsertUserAuthUseCase,
     private val signInUseCase: SignInUseCase,
+    private val insertUserAuthUseCase: InsertUserAuthUseCase,
+    private val insertPushTokenUseCase: InsertPushTokenUseCase,
+    private val setPushTokenSavedStateUseCase: SetPushTokenSavedStateUseCase,
     private val verifyNicknameUseCase: VerifyNicknameUseCase,
     private val uploadProfileImageUseCase: UploadProfileImageUseCase,
     private val updateMemberUseCase: UpdateMemberUseCase,
@@ -113,6 +120,15 @@ class OnboardingViewModel @Inject constructor(
                     accessToken = userAuthState.value?.accessToken ?: "",
                 ),
             )
+            FcmUtil.getToken()?.let { token ->
+                insertPushTokenUseCase.invoke(token)
+                    .onSuccess {
+                        setPushTokenSavedStateUseCase.invoke(true)
+                    }
+                    .onFailure {
+                        setPushTokenSavedStateUseCase.invoke(false)
+                    }
+            }
         }
     }
 }

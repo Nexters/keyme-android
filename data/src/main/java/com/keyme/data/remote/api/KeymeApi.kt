@@ -1,5 +1,7 @@
 package com.keyme.data.remote.api
 
+import com.keyme.domain.entity.BaseResponseWithoutData
+import com.keyme.domain.entity.request.InsertPushTokenRequest
 import com.keyme.domain.entity.request.SignInRequest
 import com.keyme.domain.entity.request.UpdateMemberRequest
 import com.keyme.domain.entity.request.VerifyNicknameRequest
@@ -31,6 +33,11 @@ interface KeymeApi {
     suspend fun signInWithKakao(
         @Body signInRequest: SignInRequest,
     ): SignInResponse
+
+    @POST("members/devices")
+    suspend fun insertPushToken(
+        @Body insertPushTokenRequest: InsertPushTokenRequest,
+    ): BaseResponseWithoutData
 
     @POST("/members/verify-nickname")
     suspend fun verifyNickname(

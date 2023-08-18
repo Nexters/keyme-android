@@ -1,7 +1,11 @@
 package com.keyme.data.remote.api
 
+import com.keyme.domain.entity.BaseResponseWithoutData
+import com.keyme.domain.entity.request.InsertPushTokenRequest
 import com.keyme.domain.entity.request.RegistrationRequest
 import com.keyme.domain.entity.request.SignInRequest
+import com.keyme.domain.entity.request.UpdateMemberRequest
+import com.keyme.domain.entity.request.VerifyNicknameRequest
 import com.keyme.domain.entity.response.DailyTestResponse
 import com.keyme.domain.entity.response.EmptyResponse
 import com.keyme.domain.entity.response.MemberStatistics
@@ -13,9 +17,16 @@ import com.keyme.domain.entity.response.QuestionStatisticsResponse
 import com.keyme.domain.entity.response.SignInResponse
 import com.keyme.domain.entity.response.TestResultResponse
 import com.keyme.domain.entity.response.TestStatisticResponse
+import com.keyme.domain.entity.response.UpdateMemberResponse
+import com.keyme.domain.entity.response.UploadProfileImageResponse
+import com.keyme.domain.entity.response.VerifyNicknameResponse
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -25,6 +36,27 @@ interface KeymeApi {
     suspend fun signInWithKakao(
         @Body signInRequest: SignInRequest,
     ): SignInResponse
+
+    @POST("members/devices")
+    suspend fun insertPushToken(
+        @Body insertPushTokenRequest: InsertPushTokenRequest,
+    ): BaseResponseWithoutData
+
+    @POST("/members/verify-nickname")
+    suspend fun verifyNickname(
+        @Body verifyNicknameRequest: VerifyNicknameRequest,
+    ): VerifyNicknameResponse
+
+    @Multipart
+    @POST("/images")
+    suspend fun uploadProfileImage(
+        @Part multipartImage: MultipartBody.Part,
+    ): UploadProfileImageResponse
+
+    @PATCH("/members")
+    suspend fun updateMember(
+        @Body updateMemberRequest: UpdateMemberRequest,
+    ): UpdateMemberResponse
 
     @GET("members/{memberId}/statistics")
     suspend fun getMemberStatistics(
@@ -65,11 +97,11 @@ interface KeymeApi {
 
     @GET("tests/result/{resultId}")
     suspend fun getTestResult(
-        @Path("resultId") resultId: Int
+        @Path("resultId") resultId: Int,
     ): TestResultResponse
 
     @POST("tests/result/register")
     suspend fun registrationTestResult(
-        @Body registrationRequest: RegistrationRequest
+        @Body registrationRequest: RegistrationRequest,
     ): EmptyResponse
 }

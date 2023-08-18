@@ -7,7 +7,9 @@ import com.keyme.domain.usecase.GetMyStatisticsUseCase
 import com.keyme.presentation.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,16 +23,14 @@ class MyProfileViewModel @Inject constructor(
     private val _myDifferentStatisticsState = MutableStateFlow(MemberStatistics())
     val myDifferentStatisticsState = _myDifferentStatisticsState.asStateFlow()
 
-    private val _myCharacterState = MutableStateFlow(Member.EMPTY)
-    val myCharacterState = _myCharacterState.asStateFlow()
+    val myCharacterState = getMyCharacterUseCase().stateIn(
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = Member.EMPTY,
+        scope = baseViewModelScope,
+    )
 
     init {
         loadMyStatistics()
-        loadMyCharacter()
-    }
-
-    private fun loadMyCharacter() {
-        _myCharacterState.value = getMyCharacterUseCase()
     }
 
     private fun loadMyStatistics() {

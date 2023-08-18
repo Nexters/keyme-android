@@ -13,12 +13,17 @@ import com.keyme.domain.usecase.GetQuestionStatisticsUseCase
 import com.keyme.presentation.BaseViewModel
 import com.keyme.presentation.myprofile.ui.KeymeQuestionResultDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class KeymeQuestionResultViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -32,14 +37,19 @@ class KeymeQuestionResultViewModel @Inject constructor(
     private val _statisticsState = MutableStateFlow(QuestionStatistic.EMPTY)
     val statisticsState = _statisticsState.asStateFlow()
 
-    private val _myCharacterState = MutableStateFlow(Member.EMPTY)
-    val myCharacterState = _myCharacterState.asStateFlow()
+    val myCharacterState = getMyCharacterUseCase().stateIn(
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = Member.EMPTY,
+        scope = baseViewModelScope,
+    )
 
     private val _myScoreState = MutableStateFlow<QuestionSolvedScore?>(null)
     val myScoreState = _myScoreState.asStateFlow()
 
     val solvedScorePagingFlow = questionId?.let {
-        getQuestionSolvedScoreListUseCase(questionId).flow.cachedIn(baseViewModelScope)
+        myCharacterState.flatMapLatest {
+            getQuestionSolvedScoreListUseCase(questionId, it.id).flow.cachedIn(baseViewModelScope)
+        }
     } ?: flowOf(PagingData.empty())
 
     init {
@@ -55,7 +65,6 @@ class KeymeQuestionResultViewModel @Inject constructor(
             apiCall(apiRequest = { getMySolvedScoreUseCase.invoke(questionId) }) {
                 _myScoreState.value = it
             }
-            _myCharacterState.value = getMyCharacterUseCase.invoke()
         }
     }
 }

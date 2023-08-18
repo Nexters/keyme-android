@@ -17,8 +17,8 @@ class QuestionRepositoryImpl @Inject constructor(
         return keymeApi.getQuestionSolvedScore(questionId, ownerId)
     }
 
-    override suspend fun getStatistics(questionId: String): QuestionStatisticsResponse {
-        return keymeApi.getQuestionStatistics(id = questionId, ownerId = 2)
+    override suspend fun getStatistics(questionId: String, ownerId: String): QuestionStatisticsResponse {
+        return keymeApi.getQuestionStatistics(id = questionId, ownerId = ownerId.toInt())
     }
 
     override fun getSolvedScoreList(

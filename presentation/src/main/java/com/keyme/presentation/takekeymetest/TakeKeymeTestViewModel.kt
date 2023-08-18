@@ -12,11 +12,13 @@ import com.keyme.domain.usecase.RegistrationResultCodeUseCase
 import com.keyme.presentation.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,8 +32,11 @@ class TakeKeymeTestViewModel @Inject constructor(
     private val testId = savedStateHandle[TakeKeymeTestDestination.testIdArg] ?: 0
     val keymeTestUrl = "https://keyme-frontend.vercel.app/test/$testId"
 
-    private val _myCharacterState = MutableStateFlow(Member.EMPTY)
-    val myCharacterState = _myCharacterState.asStateFlow()
+    val myCharacterState = getMyCharacterUseCase().stateIn(
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = Member.EMPTY,
+        scope = baseViewModelScope,
+    )
 
     private val _keymeTestResultState = MutableStateFlow<TestResult?>(null)
     val keymeTestResultState = _keymeTestResultState.asStateFlow()
@@ -39,8 +44,6 @@ class TakeKeymeTestViewModel @Inject constructor(
     private val _testRegisterResponseState = MutableStateFlow(TestRegisterResponse.EMPTY)
 
     init {
-        _myCharacterState.value = getMyCharacterUseCase()
-
         _testRegisterResponseState
             .filter { it.isRegister() }
             .distinctUntilChanged()

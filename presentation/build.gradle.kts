@@ -9,6 +9,7 @@ import Dependencies.setKakaoSignInDependencies
 import Dependencies.setKotlinStdLibDependencies
 import Dependencies.setLoggerDependencies
 import Dependencies.setLottieDependencies
+import Dependencies.setPagerDependencies
 import Dependencies.setPagingDependencies
 import Dependencies.setTestDependencies
 import Dependencies.setViewModelDependencies
@@ -64,6 +65,7 @@ dependencies {
     setImageDependencies()
     setFirebaseDependencies()
     setWebViewDependencies()
+    setPagerDependencies()
 
     setHiltDependencies()
     setPagingDependencies()

@@ -44,12 +44,11 @@ fun TakeKeymeTestRoute(
     onCloseClick: () -> Unit,
 ) {
     val loadTestUrl = takeKeymeTestViewModel.keymeTestUrl
-    var testResultId by remember { mutableStateOf(0) }
-    val isTestSolved = testResultId != 0
     val keymeTestResult by takeKeymeTestViewModel.keymeTestResultState.collectAsStateWithLifecycle()
+    val myCharacter by takeKeymeTestViewModel.myCharacterState.collectAsStateWithLifecycle()
 
     if (loadTestUrl.isNotEmpty()) {
-        if (isTestSolved.not()) {
+        if (keymeTestResult == null) {
             TakeKeymeTestScreen(
                 loadTestUrl = loadTestUrl,
                 onTestSolved = {
@@ -59,8 +58,11 @@ fun TakeKeymeTestRoute(
                 onCloseClick = onCloseClick,
             )
         } else {
-            KeymeTestResultScreen {
-            }
+            KeymeTestResultScreen(
+                myCharacter = myCharacter,
+                testResult = keymeTestResult,
+                onCloseClick = onCloseClick
+            )
         }
     } else {
         onBackClick()

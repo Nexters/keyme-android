@@ -1,11 +1,13 @@
 package com.keyme.presentation.takekeymetest
 
 import androidx.lifecycle.SavedStateHandle
+import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.TestRegisterResponse
 import com.keyme.domain.entity.response.TestResult
 import com.keyme.domain.entity.response.isRegister
 import com.keyme.domain.usecase.GetKeymeTestResultUseCase
 import com.keyme.domain.usecase.GetMyCharacterUseCase
+import com.keyme.domain.usecase.GetMyMemberTokenUseCase
 import com.keyme.domain.usecase.RegistrationResultCodeUseCase
 import com.keyme.presentation.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,13 +23,15 @@ import javax.inject.Inject
 @HiltViewModel
 class TakeKeymeTestViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val myCharacterUseCase: GetMyCharacterUseCase,
+    private val getMyCharacterUseCase: GetMyCharacterUseCase,
     private val registrationResultCodeUseCase: RegistrationResultCodeUseCase,
     private val getKeymeTestResultUseCase: GetKeymeTestResultUseCase,
 ) : BaseViewModel() {
     private val testId = savedStateHandle[TakeKeymeTestDestination.testIdArg] ?: 0
-    val keymeTestUrl =
-        "https://keyme-frontend.vercel.app/test/$testId?nickname=${myCharacterUseCase().nickname}"
+    val keymeTestUrl = "https://keyme-frontend.vercel.app/test/$testId"
+
+    private val _myCharacterState = MutableStateFlow(Member.EMPTY)
+    val myCharacterState = _myCharacterState.asStateFlow()
 
     private val _keymeTestResultState = MutableStateFlow<TestResult?>(null)
     val keymeTestResultState = _keymeTestResultState.asStateFlow()
@@ -35,6 +39,8 @@ class TakeKeymeTestViewModel @Inject constructor(
     private val _testRegisterResponseState = MutableStateFlow(TestRegisterResponse.EMPTY)
 
     init {
+        _myCharacterState.value = getMyCharacterUseCase()
+
         _testRegisterResponseState
             .filter { it.isRegister() }
             .distinctUntilChanged()

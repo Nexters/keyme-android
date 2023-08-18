@@ -80,14 +80,14 @@ private class TakeKeymeTestInterface(
     private val onClose: () -> Unit,
 ) {
     @JavascriptInterface
-    fun onTestSolved(result: String) {
+    fun onTestSolved(result: Any?) {
         Timber.d("onTestSolved(result: $result)")
 
-        val testResult = kotlin.runCatching {
-            Gson().fromJson(result, TestRegisterResponse::class.java)
-        }.getOrNull()
+//        val testResult = kotlin.runCatching {
+//            Gson().fromJson(result, TestRegisterResponse::class.java)
+//        }.getOrNull()
 
-        testResult?.let { onSolved(testResult) }
+//        testResult?.let { onSolved(testResult) }
     }
 
     @JavascriptInterface

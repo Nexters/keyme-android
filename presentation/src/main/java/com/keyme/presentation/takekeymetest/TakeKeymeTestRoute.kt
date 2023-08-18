@@ -32,7 +32,7 @@ fun NavGraphBuilder.takeKeymeTestGraph(
         TakeKeymeTestRoute(
             onBackClick = onBackClick,
             onCloseClick = { onBackClick() },
-            onTestSolved = { onTestSolved() }
+            onTestSolved = { onTestSolved() },
         )
     }
 }

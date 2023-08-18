@@ -19,6 +19,7 @@ object TakeKeymeTestDestination : KeymeNavigationDestination {
 
 fun NavGraphBuilder.takeKeymeTestGraph(
     onBackClick: () -> Unit,
+    onTestSolved: () -> Unit,
 ) {
     composable(
         route = "${TakeKeymeTestDestination.route}/{${TakeKeymeTestDestination.testIdArg}}",
@@ -31,6 +32,7 @@ fun NavGraphBuilder.takeKeymeTestGraph(
         TakeKeymeTestRoute(
             onBackClick = onBackClick,
             onCloseClick = { onBackClick() },
+            onTestSolved = { onTestSolved() },
         )
     }
 }
@@ -39,6 +41,7 @@ fun NavGraphBuilder.takeKeymeTestGraph(
 fun TakeKeymeTestRoute(
     takeKeymeTestViewModel: TakeKeymeTestViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
+    onTestSolved: () -> Unit,
     onCloseClick: () -> Unit,
 ) {
     val loadTestUrl = takeKeymeTestViewModel.keymeTestUrl
@@ -59,7 +62,9 @@ fun TakeKeymeTestRoute(
             KeymeTestResultScreen(
                 myCharacter = myCharacter,
                 testResult = keymeTestResult,
-                onCloseClick = onCloseClick,
+                onCloseClick = {
+                    onTestSolved()
+                },
             )
         }
     } else {

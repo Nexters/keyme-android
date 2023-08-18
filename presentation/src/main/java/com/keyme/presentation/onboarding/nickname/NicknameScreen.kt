@@ -2,7 +2,6 @@ package com.keyme.presentation.onboarding.nickname
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.util.Base64
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,7 +27,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -86,16 +84,6 @@ fun NicknameScreen(
         ActivityResultContracts.GetContent(),
     ) { uri -> uri?.let { selectedImage = uri } }
 
-    LaunchedEffect(key1 = uploadProfileImageState) {
-        uploadProfileImageState?.let {
-            viewModel.updateMember(
-                nickname = nickname,
-                originalUrl = it.originalUrl,
-                thumbnailUrl = it.thumbnailUrl,
-            )
-        }
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -140,7 +128,13 @@ fun NicknameScreen(
                 nickname = nickname,
                 isNicknameValidated = verifyNicknameState?.valid ?: false,
                 selectedImage = selectedImage,
-                uploadProfileImage = viewModel::uploadProfileImage,
+                uploadProfileImage = {
+                    viewModel.updateMember(
+                        nickname = nickname,
+                        originalUrl = "",
+                        thumbnailUrl = "",
+                    )
+                },
             )
 
             Spacer(modifier = Modifier.size(54.dp))
@@ -374,24 +368,24 @@ fun NextButton(
     uploadProfileImage: (String) -> Unit,
 ) {
     val context = LocalContext.current
-    val contentResolver = context.contentResolver
 
     KeymeTextButton(
         text = "다음",
         onClick = {
             if (nickname.isBlank() || !isNicknameValidated) {
                 Toast.makeText(context, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
-            } else if (selectedImage == null) {
-                Toast.makeText(context, "프로필 사진을 선택해주세요", Toast.LENGTH_SHORT).show()
-            } else {
-                run {
-                    val inputStream = contentResolver.openInputStream(selectedImage)
-                    val imageBytes = inputStream?.readBytes()
-                    val imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT)
-                    inputStream?.close()
-
-                    uploadProfileImage.invoke(imageString)
-                }
+            }
+            // todo 프로필 사진 선택
+//            else if (selectedImage == null) {
+//                Toast.makeText(context, "프로필 사진을 선택해주세요", Toast.LENGTH_SHORT).show()
+//            }
+            else {
+                // todo 프로필 사진 선택
+//                val imageString = ImageUploadUtil.getProfileImageString(context, selectedImage)
+//                imageString?.let {
+//                    uploadProfileImage.invoke(imageString)
+//                }
+                uploadProfileImage("")
             }
         },
         modifier = Modifier

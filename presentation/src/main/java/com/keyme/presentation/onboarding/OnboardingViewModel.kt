@@ -3,9 +3,9 @@ package com.keyme.presentation.onboarding
 import androidx.lifecycle.viewModelScope
 import com.keyme.domain.entity.onFailure
 import com.keyme.domain.entity.onSuccess
+import com.keyme.domain.entity.response.Test
 import com.keyme.domain.entity.response.UploadProfileImage
 import com.keyme.domain.entity.response.VerifyNickname
-import com.keyme.domain.entity.response.Test
 import com.keyme.domain.entity.room.UserAuth
 import com.keyme.domain.usecase.GetOnboardingKeymeTestUseCase
 import com.keyme.domain.usecase.GetUserAuthUseCase

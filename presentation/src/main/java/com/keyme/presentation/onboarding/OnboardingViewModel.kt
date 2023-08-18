@@ -1,7 +1,9 @@
 package com.keyme.presentation.onboarding
 
 import androidx.lifecycle.viewModelScope
+import com.keyme.domain.entity.response.Test
 import com.keyme.domain.entity.room.UserAuth
+import com.keyme.domain.usecase.GetOnboardingKeymeTestUseCase
 import com.keyme.domain.usecase.GetUserAuthUseCase
 import com.keyme.domain.usecase.InsertUserAuthUseCase
 import com.keyme.domain.usecase.SignInUseCase
@@ -20,12 +22,16 @@ class OnboardingViewModel @Inject constructor(
     getUserAuthUseCase: GetUserAuthUseCase,
     private val insertUserAuthUseCase: InsertUserAuthUseCase,
     private val signInUseCase: SignInUseCase,
+    private val getOnboardingKeymeTestUseCase: GetOnboardingKeymeTestUseCase,
 ) : BaseViewModel() {
 
     val userAuthState: StateFlow<UserAuth?> = getUserAuthUseCase.getUserAuth().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private val _remoteOnboardingState = MutableStateFlow(OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal)
     val remoteOnboardingState: StateFlow<Int> = _remoteOnboardingState.asStateFlow()
+
+    private val _onboardingKeymeTestState = MutableStateFlow<Test?>(null)
+    val onboardingKeymeTestState: StateFlow<Test?> = _onboardingKeymeTestState.asStateFlow()
 
     fun signInWithKeyme(
         token: String,
@@ -52,6 +58,12 @@ class OnboardingViewModel @Inject constructor(
 //                    else -> OnboardingStepsEnum.MY_DAILY
 //                }.ordinal,
             )
+        }
+    }
+
+    fun getOnboardingKeymeTest() {
+        apiCall(apiRequest = { getOnboardingKeymeTestUseCase.invoke() }) {
+            _onboardingKeymeTestState.emit(it)
         }
     }
 }

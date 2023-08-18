@@ -1,4 +1,4 @@
-package com.keyme.presentation.takekeymetest
+package com.keyme.presentation.keymetestresult
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

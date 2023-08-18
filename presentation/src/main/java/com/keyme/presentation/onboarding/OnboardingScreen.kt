@@ -32,11 +32,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingRoute(
-    navigateToOnboardingTest: () -> Unit,
+    navigateToOnboardingKeymeTest: (testId: Int) -> Unit,
     navigateToMyDaily: () -> Unit,
 ) {
     OnboardingScreen(
-        navigateToOnboardingTest = navigateToOnboardingTest,
+        navigateToOnboardingKeymeTest = navigateToOnboardingKeymeTest,
         navigateToMyDaily = navigateToMyDaily,
     )
 }
@@ -45,7 +45,7 @@ fun OnboardingRoute(
 @Composable
 fun OnboardingScreen(
     viewModel: OnboardingViewModel = hiltViewModel(),
-    navigateToOnboardingTest: () -> Unit,
+    navigateToOnboardingKeymeTest: (testId: Int) -> Unit,
     navigateToMyDaily: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -73,7 +73,7 @@ fun OnboardingScreen(
 //        }
 //        TODO: 토큰만 있는 상태에서 메인으로 넘기는 부분
         viewModel.userAuthState.collectLatest {
-            if (it?.accessToken != null) navigateToMyDaily.invoke()
+            if (it?.accessToken != null) pagerState.scrollToPage(OnboardingStepsEnum.GUIDE_01.ordinal)
         }
     }
 
@@ -125,6 +125,7 @@ fun OnboardingScreen(
                     },
                 )
                 OnboardingStepsEnum.GUIDE_01 -> Guide01Screen(
+                    getOnboardingKeymeTestId = viewModel::getOnboardingKeymeTest,
                     onClickNextButton = {
                         coroutineScope.launch {
                             pagerState.scrollToPage(pagerState.currentPage + 1)
@@ -146,7 +147,7 @@ fun OnboardingScreen(
                     },
                 )
                 OnboardingStepsEnum.GUIDE_04 -> Guide04Screen(
-                    onClickNextButton = navigateToOnboardingTest,
+                    navigateToOnboardingKeymeTest = navigateToOnboardingKeymeTest,
                 )
                 OnboardingStepsEnum.MY_DAILY -> navigateToMyDaily.invoke()
             }

@@ -48,7 +48,7 @@ fun KeymeApp() {
                     .padding(innerPadding),
             ) {
                 onboardingGraph(
-                    navigateToOnboardingTest = { appState.navigate(TakeKeymeTestDestination) },
+                    navigateToOnboardingKeymeTest = { appState.navigate(TakeKeymeTestDestination, it) },
                     navigateToMyDaily = {
                         appState.onBackClick()
                         appState.navigate(DailyKeymeTestDestination)

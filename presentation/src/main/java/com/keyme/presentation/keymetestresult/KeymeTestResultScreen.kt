@@ -93,6 +93,7 @@ private fun KeymeTestResultPager(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
+            state = pagerState,
             pageCount = testResult.results.count(),
             contentPadding = PaddingValues(horizontal = 32.dp),
             pageSpacing = 16.dp,

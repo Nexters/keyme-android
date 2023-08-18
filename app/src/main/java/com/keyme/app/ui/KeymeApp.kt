@@ -17,8 +17,6 @@ import com.keyme.app.navigation.keymeTopLevelDestinations
 import com.keyme.presentation.dailykeymetest.DailyKeymeTestDestination
 import com.keyme.presentation.dailykeymetest.dailyKeymeTestGraph
 import com.keyme.presentation.designsystem.theme.KeymeTheme
-import com.keyme.presentation.keymetest.KeymeTestDestination
-import com.keyme.presentation.keymetest.keymeTestGraph
 import com.keyme.presentation.myprofile.ui.KeymeQuestionResultDestination
 import com.keyme.presentation.myprofile.ui.keymeQuestionResultGraph
 import com.keyme.presentation.myprofile.ui.myProfileGraph
@@ -50,17 +48,11 @@ fun KeymeApp() {
                     .padding(innerPadding),
             ) {
                 onboardingGraph(
-                    navigateToOnboardingTest = { appState.navigate(KeymeTestDestination) },
+                    navigateToOnboardingKeymeTest = { appState.navigate(TakeKeymeTestDestination, it) },
                     navigateToMyDaily = {
                         appState.onBackClick()
                         appState.navigate(DailyKeymeTestDestination)
                     },
-                )
-                // NOTE: 문제 풀이 화면인지? 확실하지 않아서 문제 풀이 화면 - takeKeymeTest 로 구현함
-                // 확인 후 제거 필요
-                keymeTestGraph(
-                    onBackClick = appState::onBackClick,
-                    navigateToMyDaily = { appState.navigate(DailyKeymeTestDestination) },
                 )
                 dailyKeymeTestGraph(
                     navigateToTakeKeymeTest = { appState.navigate(TakeKeymeTestDestination, it) },

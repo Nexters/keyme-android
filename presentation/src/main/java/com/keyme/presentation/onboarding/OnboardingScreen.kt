@@ -32,11 +32,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingRoute(
-    navigateToOnboardingTest: () -> Unit,
+    navigateToOnboardingKeymeTest: (testId: Int) -> Unit,
     navigateToMyDaily: () -> Unit,
 ) {
     OnboardingScreen(
-        navigateToOnboardingTest = navigateToOnboardingTest,
+        navigateToOnboardingKeymeTest = navigateToOnboardingKeymeTest,
         navigateToMyDaily = navigateToMyDaily,
     )
 }
@@ -45,7 +45,7 @@ fun OnboardingRoute(
 @Composable
 fun OnboardingScreen(
     viewModel: OnboardingViewModel = hiltViewModel(),
-    navigateToOnboardingTest: () -> Unit,
+    navigateToOnboardingKeymeTest: (testId: Int) -> Unit,
     navigateToMyDaily: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -120,6 +120,7 @@ fun OnboardingScreen(
                     },
                 )
                 OnboardingStepsEnum.GUIDE_01 -> Guide01Screen(
+                    getOnboardingKeymeTestId = viewModel::getOnboardingKeymeTest,
                     onClickNextButton = {
                         coroutineScope.launch {
                             pagerState.scrollToPage(pagerState.currentPage + 1)
@@ -141,7 +142,7 @@ fun OnboardingScreen(
                     },
                 )
                 OnboardingStepsEnum.GUIDE_04 -> Guide04Screen(
-                    onClickNextButton = navigateToOnboardingTest,
+                    navigateToOnboardingKeymeTest = navigateToOnboardingKeymeTest,
                 )
                 OnboardingStepsEnum.MY_DAILY -> navigateToMyDaily.invoke()
             }

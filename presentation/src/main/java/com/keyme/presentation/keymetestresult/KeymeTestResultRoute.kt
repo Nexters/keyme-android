@@ -1,4 +1,4 @@
-package com.keyme.presentation.takekeymetest
+package com.keyme.presentation.keymetestresult
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -10,27 +10,28 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.keyme.presentation.keymetestresult.KeymeTestResultScreen
 import com.keyme.presentation.navigation.KeymeNavigationDestination
+import com.keyme.presentation.takekeymetest.TakeKeymeTestScreen
+import com.keyme.presentation.takekeymetest.TakeKeymeTestViewModel
 
-object TakeKeymeTestDestination : KeymeNavigationDestination {
+object KeymeTestResultDestination : KeymeNavigationDestination {
     const val testIdArg = "testId"
-    override val route = "take_keyme_test_route"
-    override val destination = "take_keyme_test_destination"
+    override val route = "keyme_test_result_route"
+    override val destination = "keyme_test_result_destination"
 }
 
-fun NavGraphBuilder.takeKeymeTestGraph(
+fun NavGraphBuilder.keymeTestResultGraph(
     onBackClick: () -> Unit,
 ) {
     composable(
-        route = "${TakeKeymeTestDestination.route}/{${TakeKeymeTestDestination.testIdArg}}",
+        route = "${KeymeTestResultDestination.route}/{${KeymeTestResultDestination.testIdArg}}",
         arguments = listOf(
-            navArgument(TakeKeymeTestDestination.testIdArg) {
+            navArgument(KeymeTestResultDestination.testIdArg) {
                 type = NavType.IntType
             },
         ),
     ) {
-        TakeKeymeTestRoute(
+        KeymeTestResultRoute(
             onBackClick = onBackClick,
             onCloseClick = { onBackClick() },
         )
@@ -38,7 +39,7 @@ fun NavGraphBuilder.takeKeymeTestGraph(
 }
 
 @Composable
-fun TakeKeymeTestRoute(
+fun KeymeTestResultRoute(
     takeKeymeTestViewModel: TakeKeymeTestViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onCloseClick: () -> Unit,

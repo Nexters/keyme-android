@@ -3,9 +3,11 @@ package com.keyme.presentation.onboarding
 import androidx.lifecycle.viewModelScope
 import com.keyme.domain.entity.onFailure
 import com.keyme.domain.entity.onSuccess
+import com.keyme.domain.entity.response.Test
 import com.keyme.domain.entity.response.UploadProfileImage
 import com.keyme.domain.entity.response.VerifyNickname
 import com.keyme.domain.entity.room.UserAuth
+import com.keyme.domain.usecase.GetOnboardingKeymeTestUseCase
 import com.keyme.domain.usecase.GetUserAuthUseCase
 import com.keyme.domain.usecase.InsertPushTokenUseCase
 import com.keyme.domain.usecase.InsertUserAuthUseCase
@@ -37,6 +39,7 @@ class OnboardingViewModel @Inject constructor(
     private val verifyNicknameUseCase: VerifyNicknameUseCase,
     private val uploadProfileImageUseCase: UploadProfileImageUseCase,
     private val updateMemberUseCase: UpdateMemberUseCase,
+    private val getOnboardingKeymeTestUseCase: GetOnboardingKeymeTestUseCase,
 ) : BaseViewModel() {
 
     val userAuthState: StateFlow<UserAuth?> =
@@ -52,12 +55,13 @@ class OnboardingViewModel @Inject constructor(
     private val _uploadProfileImageState = MutableStateFlow<UploadProfileImage?>(null)
     val uploadProfileImageState: StateFlow<UploadProfileImage?> = _uploadProfileImageState.asStateFlow()
 
+    private val _onboardingKeymeTestState = MutableStateFlow<Test?>(null)
+    val onboardingKeymeTestState: StateFlow<Test?> = _onboardingKeymeTestState.asStateFlow()
+
     fun signInWithKeyme(
         token: String,
     ) {
-        apiCall(apiRequest = {
-            signInUseCase.invoke(token)
-        },) {
+        apiCall(apiRequest = { signInUseCase.invoke(token) }) {
             Timber.d("$it")
             insertUserAuthUseCase.invoke(
                 UserAuth(
@@ -78,9 +82,7 @@ class OnboardingViewModel @Inject constructor(
     ) {
         verifyNicknameJob?.cancel()
         verifyNicknameJob = viewModelScope.launch {
-            apiCall(apiRequest = {
-                verifyNicknameUseCase.invoke(nickname)
-            },) {
+            apiCall(apiRequest = { verifyNicknameUseCase.invoke(nickname) }) {
                 _verifyNicknameState.emit(it)
             }
         }
@@ -129,6 +131,12 @@ class OnboardingViewModel @Inject constructor(
                         setPushTokenSavedStateUseCase.invoke(false)
                     }
             }
+        }
+    }
+
+    fun getOnboardingKeymeTest() {
+        apiCall(apiRequest = { getOnboardingKeymeTestUseCase.invoke() }) {
+            _onboardingKeymeTestState.emit(it)
         }
     }
 }

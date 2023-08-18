@@ -48,7 +48,7 @@ class ApiModule {
             val origin = chain.request()
             val requestBuilder = origin.newBuilder()
                 .method(origin.method, origin.body)
-                .setAuthorizationHeader(getUserAuthUseCase)
+                .setAuthorizationHeader(origin, getUserAuthUseCase)
                 .setContentTypeHeader()
 
             chain.proceed(requestBuilder.build())
@@ -66,12 +66,13 @@ class ApiModule {
     }
 
     private fun Request.Builder.setAuthorizationHeader(
+        origin: Request,
         getUserAuthUseCase: GetUserAuthUseCase,
     ): Request.Builder {
-        val token = runBlocking {
-            getUserAuthUseCase.getUserAuth().first()?.accessToken
-        }
-        return if (!this.toString().contains("/auth/login")) {
+        return if (!origin.url.toString().contains("/auth/login")) {
+            val token = runBlocking {
+                getUserAuthUseCase.getUserAuth().first()?.accessToken
+            }
             this.header("Authorization", "Bearer $token")
         } else {
             this

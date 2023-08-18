@@ -8,27 +8,33 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.keyme_black
+import com.keyme.presentation.onboarding.OnboardingViewModel
 
 @Composable
 fun Guide04Screen(
-    onClickNextButton: () -> Unit,
+    viewModel: OnboardingViewModel = hiltViewModel(),
+    navigateToOnboardingKeymeTest: (testId: Int) -> Unit,
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_guide_04))
     val progress by animateLottieCompositionAsState(composition)
+    val onboardingKeymeTest = viewModel.onboardingKeymeTestState.collectAsState()
 
     Box(
         modifier = Modifier
@@ -42,9 +48,14 @@ fun Guide04Screen(
                 .wrapContentSize()
                 .align(Alignment.Center)
                 .clickable {
-                    if (progress == 1.0f) onClickNextButton()
+                    if (progress == 1.0f &&
+                        onboardingKeymeTest.value?.testId != null &&
+                        onboardingKeymeTest.value?.testId != 0
+                    ) {
+                        navigateToOnboardingKeymeTest(onboardingKeymeTest.value!!.testId)
+                    }
                 },
-//            iterations = LottieConstants.IterateForever,
+            iterations = LottieConstants.IterateForever,
             contentScale = ContentScale.Crop,
         )
         KeymeText(
@@ -64,6 +75,6 @@ fun Guide04Screen(
 @Preview(showBackground = true)
 fun Guide04ScreenPreview() {
     Guide04Screen(
-        onClickNextButton = {},
+        navigateToOnboardingKeymeTest = {},
     )
 }

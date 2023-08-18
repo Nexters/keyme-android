@@ -27,10 +27,13 @@ import com.keyme.presentation.designsystem.theme.black_alpha_60
 
 @Composable
 fun Guide01Screen(
+    getOnboardingKeymeTestId: () -> Unit,
     onClickNextButton: () -> Unit,
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_guide_01))
     val progress by animateLottieCompositionAsState(composition)
+
+    getOnboardingKeymeTestId.invoke()
 
     Box(
         modifier = Modifier
@@ -76,6 +79,7 @@ fun Guide01Screen(
 @Preview(showBackground = true)
 fun Guide01ScreenPreview() {
     Guide01Screen(
+        getOnboardingKeymeTestId = {},
         onClickNextButton = {},
     )
 }

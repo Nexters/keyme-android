@@ -11,7 +11,7 @@ object OnboardingDestination : KeymeNavigationDestination {
 }
 
 fun NavGraphBuilder.onboardingGraph(
-    navigateToOnboardingTest: () -> Unit,
+    navigateToOnboardingKeymeTest: (testId: Int) -> Unit,
     navigateToMyDaily: () -> Unit,
 ) {
     navigation(
@@ -20,7 +20,7 @@ fun NavGraphBuilder.onboardingGraph(
     ) {
         composable(route = OnboardingDestination.destination) {
             OnboardingRoute(
-                navigateToOnboardingTest = navigateToOnboardingTest,
+                navigateToOnboardingKeymeTest = navigateToOnboardingKeymeTest,
                 navigateToMyDaily = navigateToMyDaily,
             )
         }

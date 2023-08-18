@@ -1,4 +1,4 @@
-package com.keyme.presentation.takekeymetest
+package com.keyme.presentation.keymetestresult
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background

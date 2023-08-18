@@ -28,6 +28,9 @@ import com.keyme.presentation.onboarding.guide.Guide03Screen
 import com.keyme.presentation.onboarding.guide.Guide04Screen
 import com.keyme.presentation.onboarding.nickname.NicknameScreen
 import com.keyme.presentation.onboarding.signin.SignInScreen
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 @Composable
@@ -50,7 +53,6 @@ fun OnboardingScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_signin_background))
-    val localOnboardingState by viewModel.userAuthState.collectAsState()
 
     val pagerState = rememberPagerState(initialPage = 0)
     val onboardingSteps = listOf(
@@ -62,15 +64,16 @@ fun OnboardingScreen(
         OnboardingStepsEnum.GUIDE_04,
     )
 
-    LaunchedEffect(localOnboardingState) {
-        localOnboardingState.let {
-            when {
-                it?.accessToken == null -> pagerState.scrollToPage(OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal)
-                it.nickname == null -> pagerState.scrollToPage(OnboardingStepsEnum.NICKNAME.ordinal)
-                it.onboardingTestResultId == null -> pagerState.scrollToPage(OnboardingStepsEnum.GUIDE_01.ordinal)
-                else -> navigateToMyDaily.invoke()
+    LaunchedEffect(key1 = Unit){
+        viewModel.userAuthState
+            .collectLatest {
+                when {
+                    it?.accessToken == null -> pagerState.scrollToPage(OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal)
+                    it.nickname.isNullOrBlank() -> pagerState.scrollToPage(OnboardingStepsEnum.NICKNAME.ordinal)
+                    it.onboardingTestResultId == null -> pagerState.scrollToPage(OnboardingStepsEnum.GUIDE_01.ordinal)
+                    else -> navigateToMyDaily.invoke()
+                }
             }
-        }
     }
 
     when (pagerState.currentPage) {

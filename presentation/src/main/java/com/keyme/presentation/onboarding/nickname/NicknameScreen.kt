@@ -83,16 +83,6 @@ fun NicknameScreen(
         ActivityResultContracts.GetContent(),
     ) { uri -> uri?.let { selectedImage = uri } }
 
-    LaunchedEffect(key1 = uploadProfileImageState) {
-        uploadProfileImageState?.let {
-            viewModel.updateMember(
-                nickname = nickname,
-                originalUrl = it.originalUrl,
-                thumbnailUrl = it.thumbnailUrl,
-            )
-        }
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -136,7 +126,13 @@ fun NicknameScreen(
                 nickname = nickname,
                 isNicknameValidated = verifyNicknameState?.valid ?: false,
                 selectedImage = selectedImage,
-                uploadProfileImage = viewModel::uploadProfileImage,
+                uploadProfileImage = {
+                    viewModel.updateMember(
+                        nickname = nickname,
+                        originalUrl = "",
+                        thumbnailUrl = "",
+                    )
+                },
             )
 
             Spacer(modifier = Modifier.size(54.dp))
@@ -376,13 +372,18 @@ fun NextButton(
         onClick = {
             if (nickname.isBlank() || !isNicknameValidated) {
                 Toast.makeText(context, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
-            } else if (selectedImage == null) {
-                Toast.makeText(context, "프로필 사진을 선택해주세요", Toast.LENGTH_SHORT).show()
-            } else {
-                val imageString = ImageUploadUtil.getProfileImageString(context, selectedImage)
-                imageString?.let {
-                    uploadProfileImage.invoke(imageString)
-                }
+            }
+                // todo 프로필 사진 선택
+//            else if (selectedImage == null) {
+//                Toast.makeText(context, "프로필 사진을 선택해주세요", Toast.LENGTH_SHORT).show()
+//            }
+            else {
+                // todo 프로필 사진 선택
+//                val imageString = ImageUploadUtil.getProfileImageString(context, selectedImage)
+//                imageString?.let {
+//                    uploadProfileImage.invoke(imageString)
+//                }
+                uploadProfileImage("")
             }
         },
         modifier = Modifier

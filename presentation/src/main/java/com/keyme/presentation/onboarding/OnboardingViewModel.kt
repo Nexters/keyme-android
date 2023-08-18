@@ -103,7 +103,8 @@ class OnboardingViewModel @Inject constructor(
         originalUrl: String,
         thumbnailUrl: String,
     ) {
-        if (uploadProfileImageState.value == null) return
+        // todo 프로필 사진 선택
+//        if (uploadProfileImageState.value == null) return
         apiCall(apiRequest = {
             updateMemberUseCase.invoke(
                 nickname = nickname,

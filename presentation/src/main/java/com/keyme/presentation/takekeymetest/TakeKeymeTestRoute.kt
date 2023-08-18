@@ -8,6 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.keyme.presentation.keymetestresult.KeymeTestResultScreen
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
 object TakeKeymeTestDestination : KeymeNavigationDestination {

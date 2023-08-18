@@ -15,7 +15,6 @@ import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
-import com.google.gson.Gson
 import com.keyme.domain.entity.response.TestRegisterResponse
 import com.keyme.presentation.designsystem.theme.keyme_black
 import kotlinx.coroutines.launch

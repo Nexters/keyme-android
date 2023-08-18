@@ -7,7 +7,6 @@ import com.keyme.domain.entity.response.TestResult
 import com.keyme.domain.entity.response.isRegister
 import com.keyme.domain.usecase.GetKeymeTestResultUseCase
 import com.keyme.domain.usecase.GetMyCharacterUseCase
-import com.keyme.domain.usecase.GetMyMemberTokenUseCase
 import com.keyme.domain.usecase.RegistrationResultCodeUseCase
 import com.keyme.presentation.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

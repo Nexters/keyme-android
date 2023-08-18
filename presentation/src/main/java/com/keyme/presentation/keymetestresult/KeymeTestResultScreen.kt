@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -50,7 +49,6 @@ fun KeymeTestResultScreen(
     onCloseClick: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-
         Icon(
             modifier = Modifier
                 .align(Alignment.TopEnd)
@@ -64,7 +62,6 @@ fun KeymeTestResultScreen(
         )
 
         Column(modifier = Modifier.fillMaxSize()) {
-
             Spacer(modifier = Modifier.height(51.dp))
 
             KeymeText(
@@ -237,7 +234,8 @@ private fun KeymeTestResultScreenPreview() {
                 title = "",
             ),
         ),
-        testId = 0, testResultId = 0,
+        testId = 0,
+        testResultId = 0,
     )
     Box(
         modifier = Modifier

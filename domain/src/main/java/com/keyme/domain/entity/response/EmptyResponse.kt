@@ -2,4 +2,4 @@ package com.keyme.domain.entity.response
 
 import com.keyme.domain.entity.BaseResponse
 
-class EmptyResponse: BaseResponse<Unit>()
+class EmptyResponse : BaseResponse<Unit>()

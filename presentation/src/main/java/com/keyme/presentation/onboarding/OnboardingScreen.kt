@@ -21,6 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -39,53 +40,42 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingRoute(
+    viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToOnboardingKeymeTest: (testId: Int) -> Unit,
     navigateToMyDaily: () -> Unit,
 ) {
+    val onBoardingPageUiState by viewModel.onBoardingPageUiState.collectAsStateWithLifecycle()
+
     OnboardingScreen(
+        onBoardingPageUiState = onBoardingPageUiState,
         navigateToOnboardingKeymeTest = navigateToOnboardingKeymeTest,
         navigateToMyDaily = navigateToMyDaily,
+        signInWithKeyme = viewModel::signInWithKeyme,
+        onPageIndexChanged = viewModel::onPageIndexChange,
     )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen(
-    viewModel: OnboardingViewModel = hiltViewModel(),
+    onBoardingPageUiState: OnBoardingPageUiState,
     navigateToOnboardingKeymeTest: (testId: Int) -> Unit,
     navigateToMyDaily: () -> Unit,
+    signInWithKeyme: (String) -> Unit,
+    onPageIndexChanged: (Int) -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_signin_background))
 
     val pagerState = rememberPagerState(initialPage = 0)
-    val onboardingSteps = listOf(
-        OnboardingStepsEnum.KAKAO_SIGN_IN,
-        OnboardingStepsEnum.NICKNAME,
-        OnboardingStepsEnum.GUIDE_01,
-        OnboardingStepsEnum.GUIDE_02,
-        OnboardingStepsEnum.GUIDE_03,
-        OnboardingStepsEnum.GUIDE_04,
-    )
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.userAuthState
-            .collectLatest {
-                when {
-                    it?.accessToken == null -> pagerState.scrollToPage(OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal)
-                    it.nickname.isNullOrBlank() -> pagerState.scrollToPage(OnboardingStepsEnum.NICKNAME.ordinal)
-                    it.onboardingTestResultId == null -> pagerState.scrollToPage(OnboardingStepsEnum.GUIDE_01.ordinal)
-                    else -> navigateToMyDaily.invoke()
-                }
-            }
+    LaunchedEffect(key1 = onBoardingPageUiState) {
+        pagerState.scrollToPage(onBoardingPageUiState.currentPage.ordinal)
     }
 
     when (pagerState.currentPage) {
         0 -> BackHandler(enabled = true) { /*TODO*/ }
         else -> BackHandler(enabled = true) {
-            coroutineScope.launch {
-                pagerState.scrollToPage(pagerState.currentPage - 1)
-            }
+            onPageIndexChanged(pagerState.currentPage - 1)
         }
     }
 
@@ -107,53 +97,48 @@ fun OnboardingScreen(
         )
 
         HorizontalPager(
-            pageCount = onboardingSteps.size,
+            pageCount = onBoardingPageUiState.pageSize,
             state = pagerState,
             userScrollEnabled = false,
         ) {
             val isVisible = it == pagerState.currentPage
 
-            when (onboardingSteps[it]) {
-                OnboardingStepsEnum.KAKAO_SIGN_IN -> SignInScreen(
-                    signInWithKeyme = viewModel::signInWithKeyme,
-                )
+            when (OnboardingStepsEnum.onboardingSteps[it]) {
+                OnboardingStepsEnum.KAKAO_SIGN_IN -> SignInScreen(signInWithKeyme)
+
                 OnboardingStepsEnum.NICKNAME -> NicknameScreen(
                     isVisible = isVisible,
                     onBackClick = {
-                        coroutineScope.launch {
-                            pagerState.scrollToPage(pagerState.currentPage - 1)
-                        }
+                        onPageIndexChanged(pagerState.currentPage - 1)
                     },
                 )
+
                 OnboardingStepsEnum.GUIDE_01 -> Guide01Screen(
                     isVisible = isVisible,
-                    getOnboardingKeymeTestId = viewModel::getOnboardingKeymeTest,
                     onClickNextButton = {
-                        coroutineScope.launch {
-                            pagerState.scrollToPage(pagerState.currentPage + 1)
-                        }
+                        onPageIndexChanged(pagerState.currentPage + 1)
                     },
                 )
+
                 OnboardingStepsEnum.GUIDE_02 -> Guide02Screen(
                     isVisible = isVisible,
                     onClickNextButton = {
-                        coroutineScope.launch {
-                            pagerState.scrollToPage(pagerState.currentPage + 1)
-                        }
+                        onPageIndexChanged(pagerState.currentPage + 1)
                     },
                 )
+
                 OnboardingStepsEnum.GUIDE_03 -> Guide03Screen(
                     isVisible = isVisible,
                     onClickNextButton = {
-                        coroutineScope.launch {
-                            pagerState.scrollToPage(pagerState.currentPage + 1)
-                        }
+                        onPageIndexChanged(pagerState.currentPage + 1)
                     },
                 )
+
                 OnboardingStepsEnum.GUIDE_04 -> Guide04Screen(
                     isVisible = isVisible,
                     navigateToOnboardingKeymeTest = navigateToOnboardingKeymeTest,
                 )
+
                 OnboardingStepsEnum.MY_DAILY -> navigateToMyDaily.invoke()
             }
         }
@@ -165,6 +150,7 @@ fun fadingAnimateFloatAsState(isAnimationFinished: Boolean): State<Float> {
     return animateFloatAsState(
         targetValue = if (isAnimationFinished) 1f else 0f,
         animationSpec = tween(durationMillis = 500),
+        label = "",
     )
 }
 
@@ -173,6 +159,7 @@ fun colorAnimateFloatAsState(isVisible: Boolean): State<Color> {
     return animateColorAsState(
         targetValue = if (isVisible) keyme_black else black_alpha_60,
         animationSpec = tween(durationMillis = 1000),
+        label = "",
     )
 }
 

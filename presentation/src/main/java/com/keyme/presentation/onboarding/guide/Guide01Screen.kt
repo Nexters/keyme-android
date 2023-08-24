@@ -34,15 +34,12 @@ import com.keyme.presentation.onboarding.fadingAnimateFloatAsState
 @Composable
 fun Guide01Screen(
     isVisible: Boolean,
-    getOnboardingKeymeTestId: () -> Unit,
     onClickNextButton: () -> Unit,
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_guide_01))
     val progress by animateLottieCompositionAsState(composition)
     var isAnimationFinished by remember { mutableStateOf(false) }
     isAnimationFinished = progress == 1.0f
-
-    getOnboardingKeymeTestId.invoke()
 
     Box(
         modifier = Modifier
@@ -92,7 +89,6 @@ fun Guide01Screen(
 fun Guide01ScreenPreview() {
     Guide01Screen(
         isVisible = true,
-        getOnboardingKeymeTestId = {},
         onClickNextButton = {},
     )
 }

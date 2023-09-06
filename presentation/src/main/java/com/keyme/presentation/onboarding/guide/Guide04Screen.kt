@@ -55,7 +55,7 @@ fun Guide04Screen(
                 .align(Alignment.Center)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = null
+                    indication = null,
                 ) {
                     // NOTE : 클릭 enable 까지 너무 오래 기다리는 것 같아서 disable 해둠
 //                    if (progress == 1.0f &&

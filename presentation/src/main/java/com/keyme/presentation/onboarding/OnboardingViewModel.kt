@@ -49,7 +49,6 @@ class OnboardingViewModel @Inject constructor(
     private val userAuthState: StateFlow<UserAuth?> =
         getUserAuthUseCase.getUserAuth().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
-
     private val _onBoardingPageUiState =
         MutableStateFlow(OnBoardingPageUiState(OnboardingStepsEnum.KAKAO_SIGN_IN))
     val onBoardingPageUiState = _onBoardingPageUiState.asStateFlow()

@@ -18,7 +18,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.keyme.app.ui.KeymeApp
 import com.keyme.domain.entity.onSuccess
 import com.keyme.domain.usecase.GetPushTokenSavedStateUseCase
-import com.keyme.domain.usecase.GetUserAuthUseCase
+import com.keyme.domain.usecase.GetMyUserInfoUseCase
 import com.keyme.domain.usecase.InsertPushTokenUseCase
 import com.keyme.domain.usecase.SetPushTokenSavedStateUseCase
 import com.keyme.presentation.UiEvent
@@ -35,7 +35,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var getUserAuthUseCase: GetUserAuthUseCase
+    lateinit var getMyUserInfoUseCase: GetMyUserInfoUseCase
 
     @Inject
     lateinit var uiEventManager: UiEventManager
@@ -126,7 +126,7 @@ class MainActivity : ComponentActivity() {
 
     private fun checkUnsavedPushTokenExistence() {
         lifecycleScope.launch {
-            if (!getUserAuthUseCase.getUserAuth().first()?.accessToken.isNullOrBlank()) {
+            if (!getMyUserInfoUseCase.getUserAuth().first()?.accessToken.isNullOrBlank()) {
                 val isPushTokenSaved = getPushTokenSavedStateUseCase.invoke()
                 if (!isPushTokenSaved) {
                     FcmUtil.getToken()?.let {

@@ -2,14 +2,13 @@ package com.keyme.domain.usecase
 
 import com.keyme.domain.entity.room.User
 import com.keyme.domain.repository.UserRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class InsertUserAuthUseCase @Inject constructor(
+class GetMyUserInfoUseCase @Inject constructor(
     private val userRepository: UserRepository,
 ) {
-    suspend operator fun invoke(
-        user: User,
-    ) {
-        return userRepository.updateUser(user)
+    fun getUserAuth(): Flow<User?> {
+        return userRepository.getUser()
     }
 }

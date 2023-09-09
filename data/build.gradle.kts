@@ -1,6 +1,7 @@
 import Dependencies.setAndroidTestDependencies
 import Dependencies.setCoreKtxDependencies
 import Dependencies.setCoroutinesDependencies
+import Dependencies.setDataStoreDependencies
 import Dependencies.setDatabaseDependencies
 import Dependencies.setHiltDependencies
 import Dependencies.setKotlinStdLibDependencies
@@ -45,6 +46,7 @@ dependencies {
     setNetworkDependencies()
     setDatabaseDependencies()
     setPagingDependencies()
+    setDataStoreDependencies()
 
     setHiltDependencies()
 

@@ -6,9 +6,9 @@ import com.keyme.domain.entity.onSuccess
 import com.keyme.domain.entity.response.Test
 import com.keyme.domain.entity.response.UploadProfileImage
 import com.keyme.domain.entity.response.VerifyNickname
-import com.keyme.domain.entity.room.UserAuth
+import com.keyme.domain.entity.room.User
 import com.keyme.domain.usecase.GetOnboardingKeymeTestUseCase
-import com.keyme.domain.usecase.GetUserAuthUseCase
+import com.keyme.domain.usecase.GetMyUserInfoUseCase
 import com.keyme.domain.usecase.InsertPushTokenUseCase
 import com.keyme.domain.usecase.InsertUserAuthUseCase
 import com.keyme.domain.usecase.SetPushTokenSavedStateUseCase
@@ -35,7 +35,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    getUserAuthUseCase: GetUserAuthUseCase,
+    getMyUserInfoUseCase: GetMyUserInfoUseCase,
     private val signInUseCase: SignInUseCase,
     private val insertUserAuthUseCase: InsertUserAuthUseCase,
     private val insertPushTokenUseCase: InsertPushTokenUseCase,
@@ -46,8 +46,8 @@ class OnboardingViewModel @Inject constructor(
     private val getOnboardingKeymeTestUseCase: GetOnboardingKeymeTestUseCase,
 ) : BaseViewModel() {
 
-    private val userAuthState: StateFlow<UserAuth?> =
-        getUserAuthUseCase.getUserAuth().stateIn(viewModelScope, SharingStarted.Lazily, null)
+    private val userState: StateFlow<User?> =
+        getMyUserInfoUseCase.getUserAuth().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private val _onBoardingPageUiState =
         MutableStateFlow(OnBoardingPageUiState(OnboardingStepsEnum.KAKAO_SIGN_IN))
@@ -67,7 +67,7 @@ class OnboardingViewModel @Inject constructor(
     val onboardingKeymeTestState: StateFlow<Test?> = _onboardingKeymeTestState.asStateFlow()
 
     init {
-        userAuthState.map {
+        userState.map {
             when {
                 it?.accessToken == null -> OnboardingStepsEnum.KAKAO_SIGN_IN
                 it.nickname.isNullOrBlank() -> OnboardingStepsEnum.NICKNAME
@@ -89,7 +89,7 @@ class OnboardingViewModel @Inject constructor(
         apiCall(apiRequest = { signInUseCase.invoke(token) }) {
             Timber.d("$it")
             insertUserAuthUseCase.invoke(
-                UserAuth(
+                User(
                     id = it.memberId,
                     nickname = it.nickname,
                     profileImage = it.profileImage,
@@ -142,14 +142,14 @@ class OnboardingViewModel @Inject constructor(
             },
         ) {
             insertUserAuthUseCase.invoke(
-                UserAuth(
+                User(
                     id = it.id,
                     nickname = it.nickname,
                     profileImage = it.profileImage,
                     profileThumbnail = it.profileThumbnail,
                     friendCode = it.friendCode,
-                    onboardingTestResultId = userAuthState.value?.onboardingTestResultId,
-                    accessToken = userAuthState.value?.accessToken ?: "",
+                    onboardingTestResultId = userState.value?.onboardingTestResultId,
+                    accessToken = userState.value?.accessToken ?: "",
                 ),
             )
             FcmUtil.getToken()?.let { token ->

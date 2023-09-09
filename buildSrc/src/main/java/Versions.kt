@@ -45,6 +45,9 @@ object Versions {
     // Database
     const val ROOM = "2.4.2"
 
+    // DataStore
+    const val DATASTORE = "1.0.0"
+
     // Dependency injection
     const val HILT = "2.44"
     const val JAVA_X_INJECT = "1"

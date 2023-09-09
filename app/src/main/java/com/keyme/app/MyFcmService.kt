@@ -4,7 +4,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.keyme.domain.entity.onFailure
 import com.keyme.domain.entity.onSuccess
-import com.keyme.domain.usecase.GetUserAuthUseCase
+import com.keyme.domain.usecase.GetMyUserInfoUseCase
 import com.keyme.domain.usecase.InsertPushTokenUseCase
 import com.keyme.domain.usecase.SetPushTokenSavedStateUseCase
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class MyFcmService : FirebaseMessagingService() {
 
     @Inject
-    lateinit var getUserAuthUseCase: GetUserAuthUseCase
+    lateinit var getMyUserInfoUseCase: GetMyUserInfoUseCase
 
     @Inject
     lateinit var insertPushTokenUseCase: InsertPushTokenUseCase
@@ -37,7 +37,7 @@ class MyFcmService : FirebaseMessagingService() {
         super.onNewToken(token)
         Timber.d("newToken: $token")
         CoroutineScope(insertPushTokenJob).launch {
-            if (!getUserAuthUseCase.getUserAuth().first()?.accessToken.isNullOrBlank()) {
+            if (!getMyUserInfoUseCase.getUserAuth().first()?.accessToken.isNullOrBlank()) {
                 insertPushTokenUseCase.invoke(token)
                     .onSuccess {
                         setPushTokenSavedStateUseCase.invoke(true)

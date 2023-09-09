@@ -1,6 +1,6 @@
 package com.keyme.domain.entity.member
 
-import com.keyme.domain.entity.room.UserAuth
+import com.keyme.domain.entity.room.User
 
 data class Member(
     val friendCode: String = "",
@@ -14,7 +14,7 @@ data class Member(
     }
 }
 
-fun UserAuth.toMember() = Member(
+fun User.toMember() = Member(
     friendCode = friendCode ?: "",
     id = id,
     nickname = nickname ?: "",

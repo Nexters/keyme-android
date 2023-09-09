@@ -24,6 +24,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -42,8 +46,12 @@ class OnboardingViewModel @Inject constructor(
     private val getOnboardingKeymeTestUseCase: GetOnboardingKeymeTestUseCase,
 ) : BaseViewModel() {
 
-    val userAuthState: StateFlow<UserAuth?> =
+    private val userAuthState: StateFlow<UserAuth?> =
         getUserAuthUseCase.getUserAuth().stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+    private val _onBoardingPageUiState =
+        MutableStateFlow(OnBoardingPageUiState(OnboardingStepsEnum.KAKAO_SIGN_IN))
+    val onBoardingPageUiState = _onBoardingPageUiState.asStateFlow()
 
     private val _remoteOnboardingState = MutableStateFlow(OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal)
     val remoteOnboardingState: StateFlow<Int> = _remoteOnboardingState.asStateFlow()
@@ -57,6 +65,23 @@ class OnboardingViewModel @Inject constructor(
 
     private val _onboardingKeymeTestState = MutableStateFlow<Test?>(null)
     val onboardingKeymeTestState: StateFlow<Test?> = _onboardingKeymeTestState.asStateFlow()
+
+    init {
+        userAuthState.map {
+            when {
+                it?.accessToken == null -> OnboardingStepsEnum.KAKAO_SIGN_IN
+                it.nickname.isNullOrBlank() -> OnboardingStepsEnum.NICKNAME
+                it.onboardingTestResultId == null -> {
+                    getOnboardingKeymeTest()
+                    OnboardingStepsEnum.GUIDE_01
+                }
+
+                else -> null
+            }
+        }.filterNotNull().onEach {
+            _onBoardingPageUiState.value = OnBoardingPageUiState(it)
+        }.launchIn(baseViewModelScope)
+    }
 
     fun signInWithKeyme(
         token: String,
@@ -91,9 +116,11 @@ class OnboardingViewModel @Inject constructor(
     fun uploadProfileImage(
         imageString: String,
     ) {
-        apiCall(apiRequest = {
-            uploadProfileImageUseCase.invoke(imageString = imageString)
-        },) {
+        apiCall(
+            apiRequest = {
+                uploadProfileImageUseCase.invoke(imageString = imageString)
+            },
+        ) {
             _uploadProfileImageState.emit(it)
         }
     }
@@ -105,13 +132,15 @@ class OnboardingViewModel @Inject constructor(
     ) {
         // todo 프로필 사진 선택
 //        if (uploadProfileImageState.value == null) return
-        apiCall(apiRequest = {
-            updateMemberUseCase.invoke(
-                nickname = nickname,
-                profileImage = originalUrl,
-                profileThumbnail = thumbnailUrl,
-            )
-        },) {
+        apiCall(
+            apiRequest = {
+                updateMemberUseCase.invoke(
+                    nickname = nickname,
+                    profileImage = originalUrl,
+                    profileThumbnail = thumbnailUrl,
+                )
+            },
+        ) {
             insertUserAuthUseCase.invoke(
                 UserAuth(
                     id = it.id,
@@ -124,20 +153,26 @@ class OnboardingViewModel @Inject constructor(
                 ),
             )
             FcmUtil.getToken()?.let { token ->
-                insertPushTokenUseCase.invoke(token)
-                    .onSuccess {
-                        setPushTokenSavedStateUseCase.invoke(true)
-                    }
-                    .onFailure {
-                        setPushTokenSavedStateUseCase.invoke(false)
-                    }
+                insertPushTokenUseCase.invoke(token).onSuccess {
+                    setPushTokenSavedStateUseCase.invoke(true)
+                }.onFailure {
+                    setPushTokenSavedStateUseCase.invoke(false)
+                }
             }
         }
     }
 
-    fun getOnboardingKeymeTest() {
+    private fun getOnboardingKeymeTest() {
         apiCall(apiRequest = { getOnboardingKeymeTestUseCase.invoke() }) {
             _onboardingKeymeTestState.emit(it)
         }
     }
+
+    fun onPageIndexChange(index: Int) {
+        _onBoardingPageUiState.value = OnBoardingPageUiState(OnboardingStepsEnum.values()[index])
+    }
+}
+
+data class OnBoardingPageUiState(val currentPage: OnboardingStepsEnum) {
+    val pageSize: Int = OnboardingStepsEnum.values().size
 }

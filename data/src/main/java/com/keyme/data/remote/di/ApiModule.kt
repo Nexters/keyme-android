@@ -71,7 +71,7 @@ class ApiModule {
     ): Request.Builder {
         return if (!origin.url.toString().contains("/auth/login")) {
             val token = runBlocking {
-                getMyUserInfoUseCase.getUserAuth().first()?.accessToken
+                getMyUserInfoUseCase().first()?.accessToken
             }
             this.header("Authorization", "Bearer $token")
         } else {

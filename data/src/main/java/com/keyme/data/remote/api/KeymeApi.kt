@@ -8,6 +8,7 @@ import com.keyme.domain.entity.request.UpdateMemberRequest
 import com.keyme.domain.entity.request.VerifyNicknameRequest
 import com.keyme.domain.entity.response.DailyTestResponse
 import com.keyme.domain.entity.response.EmptyResponse
+import com.keyme.domain.entity.response.MemberResponse
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.MemberStatisticsResponse
 import com.keyme.domain.entity.response.OnBoardingTestResponse
@@ -46,6 +47,11 @@ interface KeymeApi {
     suspend fun verifyNickname(
         @Body verifyNicknameRequest: VerifyNicknameRequest,
     ): VerifyNicknameResponse
+
+    @GET("/members/{memberId}")
+    suspend fun getMember(
+        @Path("memberId") memberId: String,
+    ): MemberResponse
 
     @Multipart
     @POST("/images")

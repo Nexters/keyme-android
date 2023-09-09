@@ -1,18 +1,19 @@
 package com.keyme.presentation.onboarding
 
 import androidx.lifecycle.viewModelScope
+import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.onFailure
 import com.keyme.domain.entity.onSuccess
 import com.keyme.domain.entity.response.Test
 import com.keyme.domain.entity.response.UploadProfileImage
 import com.keyme.domain.entity.response.VerifyNickname
-import com.keyme.domain.entity.room.User
-import com.keyme.domain.usecase.GetOnboardingKeymeTestUseCase
 import com.keyme.domain.usecase.GetMyUserInfoUseCase
+import com.keyme.domain.usecase.GetOnboardingKeymeTestUseCase
 import com.keyme.domain.usecase.InsertPushTokenUseCase
-import com.keyme.domain.usecase.InsertUserAuthUseCase
+import com.keyme.domain.usecase.SetMyMemberInfoUseCase
 import com.keyme.domain.usecase.SetPushTokenSavedStateUseCase
 import com.keyme.domain.usecase.SignInUseCase
+import com.keyme.domain.usecase.SyncMyMemberInfoUseCase
 import com.keyme.domain.usecase.UpdateMemberUseCase
 import com.keyme.domain.usecase.UploadProfileImageUseCase
 import com.keyme.domain.usecase.VerifyNicknameUseCase
@@ -37,17 +38,18 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     getMyUserInfoUseCase: GetMyUserInfoUseCase,
     private val signInUseCase: SignInUseCase,
-    private val insertUserAuthUseCase: InsertUserAuthUseCase,
+    private val setMyMemberInfoUseCase: SetMyMemberInfoUseCase,
     private val insertPushTokenUseCase: InsertPushTokenUseCase,
     private val setPushTokenSavedStateUseCase: SetPushTokenSavedStateUseCase,
     private val verifyNicknameUseCase: VerifyNicknameUseCase,
     private val uploadProfileImageUseCase: UploadProfileImageUseCase,
     private val updateMemberUseCase: UpdateMemberUseCase,
     private val getOnboardingKeymeTestUseCase: GetOnboardingKeymeTestUseCase,
+    private val syncMyMemberInfoUseCase: SyncMyMemberInfoUseCase,
 ) : BaseViewModel() {
 
-    private val userState: StateFlow<User?> =
-        getMyUserInfoUseCase.getUserAuth().stateIn(viewModelScope, SharingStarted.Lazily, null)
+    private val myMemberInfo: StateFlow<Member?> =
+        getMyUserInfoUseCase().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private val _onBoardingPageUiState =
         MutableStateFlow(OnBoardingPageUiState(OnboardingStepsEnum.KAKAO_SIGN_IN))
@@ -67,11 +69,13 @@ class OnboardingViewModel @Inject constructor(
     val onboardingKeymeTestState: StateFlow<Test?> = _onboardingKeymeTestState.asStateFlow()
 
     init {
-        userState.map {
+        syncMyMemberInfo()
+
+        myMemberInfo.map {
             when {
                 it?.accessToken == null -> OnboardingStepsEnum.KAKAO_SIGN_IN
                 it.nickname.isNullOrBlank() -> OnboardingStepsEnum.NICKNAME
-                it.onboardingTestResultId == null -> {
+                it.isOnboardingClear.not() -> {
                     getOnboardingKeymeTest()
                     OnboardingStepsEnum.GUIDE_01
                 }
@@ -83,19 +87,25 @@ class OnboardingViewModel @Inject constructor(
         }.launchIn(baseViewModelScope)
     }
 
+    private fun syncMyMemberInfo() {
+        baseViewModelScope.launch {
+            syncMyMemberInfoUseCase()
+        }
+    }
+
     fun signInWithKeyme(
         token: String,
     ) {
         apiCall(apiRequest = { signInUseCase.invoke(token) }) {
             Timber.d("$it")
-            insertUserAuthUseCase.invoke(
-                User(
-                    id = it.memberId,
+            setMyMemberInfoUseCase.invoke(
+                Member(
+                    id = it.id,
                     nickname = it.nickname,
                     profileImage = it.profileImage,
                     profileThumbnail = it.profileThumbnail,
-                    onboardingTestResultId = it.onboardingTestResultId,
-                    friendCode = it.friendCode,
+                    isOnboardingClear = it.isOnboardingClear,
+                    friendCode = it.friendCode ?: "",
                     accessToken = it.token.accessToken,
                 ),
             )
@@ -141,15 +151,15 @@ class OnboardingViewModel @Inject constructor(
                 )
             },
         ) {
-            insertUserAuthUseCase.invoke(
-                User(
+            setMyMemberInfoUseCase.invoke(
+                Member(
                     id = it.id,
                     nickname = it.nickname,
                     profileImage = it.profileImage,
                     profileThumbnail = it.profileThumbnail,
                     friendCode = it.friendCode,
-                    onboardingTestResultId = userState.value?.onboardingTestResultId,
-                    accessToken = userState.value?.accessToken ?: "",
+                    isOnboardingClear = myMemberInfo.value?.isOnboardingClear ?: false,
+                    accessToken = myMemberInfo.value?.accessToken ?: "",
                 ),
             )
             FcmUtil.getToken()?.let { token ->

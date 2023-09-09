@@ -126,7 +126,7 @@ class MainActivity : ComponentActivity() {
 
     private fun checkUnsavedPushTokenExistence() {
         lifecycleScope.launch {
-            if (!getMyUserInfoUseCase.getUserAuth().first()?.accessToken.isNullOrBlank()) {
+            if (!getMyUserInfoUseCase().first()?.accessToken.isNullOrBlank()) {
                 val isPushTokenSaved = getPushTokenSavedStateUseCase.invoke()
                 if (!isPushTokenSaved) {
                     FcmUtil.getToken()?.let {

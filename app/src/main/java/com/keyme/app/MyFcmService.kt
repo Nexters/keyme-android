@@ -37,7 +37,7 @@ class MyFcmService : FirebaseMessagingService() {
         super.onNewToken(token)
         Timber.d("newToken: $token")
         CoroutineScope(insertPushTokenJob).launch {
-            if (!getMyUserInfoUseCase.getUserAuth().first()?.accessToken.isNullOrBlank()) {
+            if (!getMyUserInfoUseCase().first()?.accessToken.isNullOrBlank()) {
                 insertPushTokenUseCase.invoke(token)
                     .onSuccess {
                         setPushTokenSavedStateUseCase.invoke(true)

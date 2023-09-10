@@ -3,6 +3,7 @@ package com.keyme.app.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -39,7 +40,7 @@ class KeymeAppState(
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
-    val startDestination = OnboardingDestination
+    var startDestination by mutableStateOf<KeymeNavigationDestination>(OnboardingDestination)
 
     val showBottomBar: Boolean
         @Composable get() = currentDestination?.route.showBottomBar()

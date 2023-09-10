@@ -1,7 +1,13 @@
 package com.keyme.presentation.dailykeymetest
 
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -38,12 +44,22 @@ fun DailyKeymeTestRoute(
     val dailyKeymeTest by dailyKeymeTestViewModel.dailyKeymeTestState.collectAsStateWithLifecycle()
     val dailyKeymeTestStatistic by dailyKeymeTestViewModel.dailyKeymeTestStatisticState.collectAsStateWithLifecycle()
 
+    val context = LocalContext.current
+    val clipboardManager = LocalClipboardManager.current
+
     DailyKeymeTestScreen(
         myCharacter = myCharacter,
         dailyKeymeTest = dailyKeymeTest,
         dailyKeymeTestStatistic = dailyKeymeTestStatistic,
         onDailyKeymeTestClick = {
             navigateToTakeKeymeTest(dailyKeymeTest.testId)
+        },
+        onShareClick = {
+            // todo 코드 정리 필요
+            val testLink = "https://keyme-frontend.vercel.app/test/${dailyKeymeTest.testId}"
+            clipboardManager.setText(AnnotatedString(testLink))
+            // todo api level 분기 필요
+//            Toast.makeText(context, "링크 복사 완료", Toast.LENGTH_SHORT).show()
         },
     )
 }

@@ -50,6 +50,8 @@ fun KeymeApp() {
                 onboardingGraph(
                     navigateToOnboardingKeymeTest = { appState.navigate(TakeKeymeTestDestination, it) },
                     navigateToMain = {
+                        // todo 코드 정리 필요
+                        appState.startDestination = keymeTopLevelDestinations[0]
                         navigateToMain(appState)
                     },
                     nestedGraphs = {

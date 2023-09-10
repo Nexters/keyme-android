@@ -6,6 +6,7 @@ import com.keyme.domain.entity.response.TestStatistic
 import com.keyme.domain.usecase.GetDailyKeymeTestUseCase
 import com.keyme.domain.usecase.GetKeymeTestStatisticUseCase
 import com.keyme.domain.usecase.GetMyCharacterUseCase
+import com.keyme.domain.usecase.GetOnboardingKeymeTestUseCase
 import com.keyme.presentation.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +24,7 @@ class DailyKeymeTestViewModel @Inject constructor(
     private val getMyCharacterUseCase: GetMyCharacterUseCase,
     private val getDailyKeymeTestUseCase: GetDailyKeymeTestUseCase,
     private val getKeymeTestStatisticUseCase: GetKeymeTestStatisticUseCase,
+    private val getOnboardingKeymeTestUseCase: GetOnboardingKeymeTestUseCase,
 ) : BaseViewModel() {
 
     val myCharacterState = getMyCharacterUseCase().stateIn(
@@ -42,7 +44,9 @@ class DailyKeymeTestViewModel @Inject constructor(
     }
 
     private fun load() {
-        apiCall(apiRequest = { getDailyKeymeTestUseCase() }) {
+//        apiCall(apiRequest = { getDailyKeymeTestUseCase() }) {
+        // NOTE: 데일리 문제를 제공하는 대신 온보딩 문제를 계속 공유할 수 있게 하는 플로우로 수정 방향 생각중
+        apiCall(apiRequest = { getOnboardingKeymeTestUseCase() }) {
             _dailyKeymeTestState.value = it
         }
 

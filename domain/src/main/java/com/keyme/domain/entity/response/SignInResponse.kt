@@ -11,7 +11,7 @@ data class SignInResult(
     val nickname: String,
     val profileImage: String,
     val profileThumbnail: String,
-    val token: Token
+    val token: Token,
 ) {
     data class Token(
         val accessToken: String,

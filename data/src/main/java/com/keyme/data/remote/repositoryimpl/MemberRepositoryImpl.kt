@@ -14,7 +14,6 @@ class MemberRepositoryImpl @Inject constructor(
         return keymeApi.getMember(memberId.toString())
     }
 
-
     override suspend fun getStatistics(
         memberId: String,
         type: MemberStatistics.StatisticsType,

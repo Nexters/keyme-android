@@ -10,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 class MyMemberInfoRepositoryImpl @Inject constructor(
     private val myMemberInfoDataSource: MyMemberInfoDataSource,
-): MyMemberInfoRepository {
+) : MyMemberInfoRepository {
     override fun getInfo(): Flow<Member?> = myMemberInfoDataSource.myMemberInfoFlow
 
     override suspend fun updateInfo(member: Member) {

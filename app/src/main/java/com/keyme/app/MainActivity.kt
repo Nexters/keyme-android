@@ -17,8 +17,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.keyme.app.ui.KeymeApp
 import com.keyme.domain.entity.onSuccess
-import com.keyme.domain.usecase.GetPushTokenSavedStateUseCase
 import com.keyme.domain.usecase.GetMyUserInfoUseCase
+import com.keyme.domain.usecase.GetPushTokenSavedStateUseCase
 import com.keyme.domain.usecase.InsertPushTokenUseCase
 import com.keyme.domain.usecase.SetPushTokenSavedStateUseCase
 import com.keyme.presentation.UiEvent
@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
                     splashScreenView,
                     View.TRANSLATION_Y,
                     0f,
-                    -splashScreenView.height.toFloat()
+                    -splashScreenView.height.toFloat(),
                 )
                 slideUp.interpolator = AnticipateInterpolator()
                 slideUp.duration = 200L

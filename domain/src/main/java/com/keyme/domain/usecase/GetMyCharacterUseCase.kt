@@ -1,7 +1,6 @@
 package com.keyme.domain.usecase
 
 import com.keyme.domain.entity.member.Member
-import com.keyme.domain.entity.member.toMember
 import com.keyme.domain.repository.MyMemberInfoRepository
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter

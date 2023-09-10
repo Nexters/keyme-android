@@ -49,20 +49,19 @@ fun KeymeApp() {
             ) {
                 onboardingGraph(
                     navigateToOnboardingKeymeTest = { appState.navigate(TakeKeymeTestDestination, it) },
-                    navigateToMyDaily = {
-                        appState.onBackClick()
-                        appState.navigate(DailyKeymeTestDestination)
+                    navigateToMain = {
+                        navigateToMain(appState)
                     },
                     nestedGraphs = {
                         takeKeymeTestGraph(
                             onBackClick = appState::onBackClick,
                             onTestSolved = {
-                                appState.onBackClick()
-                                appState.navigate(DailyKeymeTestDestination)
+                                navigateToMain(appState)
                             },
                         )
                     },
                 )
+
                 dailyKeymeTestGraph(
                     navigateToTakeKeymeTest = { appState.navigate(TakeKeymeTestDestination, it) },
                     nestedGraphs = {
@@ -72,7 +71,6 @@ fun KeymeApp() {
                         )
                     },
                 )
-                // takeKeymeTestGraph -> 문제 풀이, 결과 확인
 
                 myProfileGraph(
                     navigateToQuestionResult = { question ->
@@ -90,8 +88,8 @@ fun KeymeApp() {
     }
 }
 
-private fun NavDestination?.isOnBoarding(): Boolean {
-    return this?.hierarchy?.any { it.route == OnboardingDestination.route } == true
+private fun navigateToMain(appState: KeymeAppState) {
+    appState.navigate(keymeTopLevelDestinations[0])
 }
 
 @Composable

@@ -80,7 +80,7 @@ class OnboardingViewModel @Inject constructor(
                     OnboardingStepsEnum.GUIDE_01
                 }
 
-                else -> null
+                else -> OnboardingStepsEnum.MY_DAILY
             }
         }.filterNotNull().onEach {
             _onBoardingPageUiState.value = OnBoardingPageUiState(it)

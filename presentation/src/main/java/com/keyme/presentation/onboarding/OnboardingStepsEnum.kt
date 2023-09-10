@@ -12,6 +12,7 @@ enum class OnboardingStepsEnum {
             GUIDE_02,
             GUIDE_03,
             GUIDE_04,
+            MY_DAILY,
         )
     }
 }

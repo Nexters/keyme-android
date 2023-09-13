@@ -16,8 +16,8 @@ val keymeTopLevelDestinations = listOf(
     TopLevelDestination(
         route = DailyKeymeTestDestination.route,
         destination = DailyKeymeTestDestination.destination,
-        selectedIconResId = com.keyme.presentation.R.drawable.icon_tab_feed,
-        unselectedIconResId = com.keyme.presentation.R.drawable.icon_tab_feed_unselected,
+        selectedIconResId = com.keyme.presentation.R.drawable.icon_tab_home,
+        unselectedIconResId = com.keyme.presentation.R.drawable.icon_tab_home_unselected,
     ),
     TopLevelDestination(
         route = MyProfileDestination.route,

@@ -1,14 +1,18 @@
 package com.keyme.app.ui
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
@@ -97,7 +101,11 @@ fun KeymeBottomBar(
     currentDestination: NavDestination?,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
 ) {
-    NavigationBar {
+    NavigationBar(
+        modifier = Modifier.border(width = 1.dp, color = Color(0xFF363636)),
+        containerColor = Color(0x80232323),
+        tonalElevation = 4.dp,
+    ) {
         keymeTopLevelDestinations.forEach { destination ->
             val isSelected = currentDestination?.hierarchy?.any { it.route == destination.route } == true
 
@@ -111,6 +119,7 @@ fun KeymeBottomBar(
                         if (isSelected) destination.selectedIconResId else destination.unselectedIconResId
                     Icon(painter = painterResource(id = iconResId), contentDescription = "")
                 },
+                colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent),
             )
         }
     }

@@ -70,22 +70,22 @@ interface KeymeApi {
         @Query("type") type: MemberStatistics.StatisticsType,
     ): MemberStatisticsResponse
 
-    @GET("questions/{id}/statistics")
+    @GET("questions/{id}/result/statistics")
     suspend fun getQuestionStatistics(
         @Path("id") id: String,
         @Query("ownerId") ownerId: Int,
     ): QuestionStatisticsResponse
 
-    @GET("questions/{id}/score")
+    @GET("questions/{id}/result/scores")
     suspend fun getQuestionSolvedScore(
         @Path("id") id: String,
         @Query("ownerId") ownerId: String,
     ): QuestionSolvedScoreResponse
 
-    @GET("questions/{id}/solved-scores")
+    @GET("questions/{id}/result/scores")
     suspend fun getQuestionSolvedScoreList(
-        @Query("cursor") cursor: Int?,
         @Path("id") id: String,
+        @Query("cursor") cursor: Int?,
         @Query("limit") limit: Int = 20,
         @Query("ownerId") ownerId: Int,
     ): QuestionSolvedScoreListResponse

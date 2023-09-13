@@ -69,7 +69,7 @@ fun ColumnScope.KeymeQuestionSolvedScoreList(
                 val item = solvedScorePagingItem[it]
                 item?.let {
                     val timeStamp = kotlin.runCatching { Timestamp.valueOf(item.createAt).time }
-                        .onFailure { exception ->  Timber.e(exception) }
+                        .onFailure { exception -> Timber.e(exception) }
                         .getOrDefault(0L)
                     KeymeQuestionScoreItem(item.score.toString(), timeStamp)
                 }

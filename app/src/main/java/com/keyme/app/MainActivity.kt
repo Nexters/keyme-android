@@ -1,20 +1,24 @@
 package com.keyme.app
 
+import android.animation.ObjectAnimator
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.view.animation.AnticipateInterpolator
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.keyme.app.ui.KeymeApp
 import com.keyme.domain.entity.onSuccess
+import com.keyme.domain.usecase.GetMyUserInfoUseCase
 import com.keyme.domain.usecase.GetPushTokenSavedStateUseCase
-import com.keyme.domain.usecase.GetUserAuthUseCase
 import com.keyme.domain.usecase.InsertPushTokenUseCase
 import com.keyme.domain.usecase.SetPushTokenSavedStateUseCase
 import com.keyme.presentation.UiEvent
@@ -31,7 +35,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var getUserAuthUseCase: GetUserAuthUseCase
+    lateinit var getMyUserInfoUseCase: GetMyUserInfoUseCase
 
     @Inject
     lateinit var uiEventManager: UiEventManager
@@ -47,6 +51,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setSplashScreen()
+
         setContent {
             KeymeApp()
         }
@@ -57,6 +64,25 @@ class MainActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             Timber.d("Fcm Token: ${FcmUtil.getToken()}")
+        }
+    }
+
+    private fun setSplashScreen() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            splashScreen.setOnExitAnimationListener { splashScreenView ->
+                val slideUp = ObjectAnimator.ofFloat(
+                    splashScreenView,
+                    View.TRANSLATION_Y,
+                    0f,
+                    -splashScreenView.height.toFloat(),
+                )
+                slideUp.interpolator = AnticipateInterpolator()
+                slideUp.duration = 200L
+
+                slideUp.doOnEnd { splashScreenView.remove() }
+
+                slideUp.start()
+            }
         }
     }
 
@@ -100,7 +126,7 @@ class MainActivity : ComponentActivity() {
 
     private fun checkUnsavedPushTokenExistence() {
         lifecycleScope.launch {
-            if (!getUserAuthUseCase.getUserAuth().first()?.accessToken.isNullOrBlank()) {
+            if (!getMyUserInfoUseCase().first()?.accessToken.isNullOrBlank()) {
                 val isPushTokenSaved = getPushTokenSavedStateUseCase.invoke()
                 if (!isPushTokenSaved) {
                     FcmUtil.getToken()?.let {

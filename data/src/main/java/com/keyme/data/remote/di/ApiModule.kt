@@ -2,7 +2,7 @@ package com.keyme.data.remote.di
 
 import com.keyme.data.BuildConfig
 import com.keyme.data.remote.api.KeymeApi
-import com.keyme.domain.usecase.GetUserAuthUseCase
+import com.keyme.domain.usecase.GetMyUserInfoUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,23 +24,23 @@ class ApiModule {
     @Provides
     @Singleton
     fun provideKeymeApi(
-        getUserAuthUseCase: GetUserAuthUseCase,
+        getMyUserInfoUseCase: GetMyUserInfoUseCase,
     ): KeymeApi {
-        return getRetrofit(getUserAuthUseCase).create()
+        return getRetrofit(getMyUserInfoUseCase).create()
     }
 
     private fun getRetrofit(
-        getUserAuthUseCase: GetUserAuthUseCase,
+        getMyUserInfoUseCase: GetMyUserInfoUseCase,
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://api.keyme.space")
-            .client(getOkHttpClient(getUserAuthUseCase))
+            .client(getOkHttpClient(getMyUserInfoUseCase))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
     private fun getOkHttpClient(
-        getUserAuthUseCase: GetUserAuthUseCase,
+        getMyUserInfoUseCase: GetMyUserInfoUseCase,
     ): OkHttpClient {
         val builder = OkHttpClient.Builder()
 
@@ -48,7 +48,7 @@ class ApiModule {
             val origin = chain.request()
             val requestBuilder = origin.newBuilder()
                 .method(origin.method, origin.body)
-                .setAuthorizationHeader(origin, getUserAuthUseCase)
+                .setAuthorizationHeader(origin, getMyUserInfoUseCase)
                 .setContentTypeHeader()
 
             chain.proceed(requestBuilder.build())
@@ -67,11 +67,11 @@ class ApiModule {
 
     private fun Request.Builder.setAuthorizationHeader(
         origin: Request,
-        getUserAuthUseCase: GetUserAuthUseCase,
+        getMyUserInfoUseCase: GetMyUserInfoUseCase,
     ): Request.Builder {
         return if (!origin.url.toString().contains("/auth/login")) {
             val token = runBlocking {
-                getUserAuthUseCase.getUserAuth().first()?.accessToken
+                getMyUserInfoUseCase().first()?.accessToken
             }
             this.header("Authorization", "Bearer $token")
         } else {

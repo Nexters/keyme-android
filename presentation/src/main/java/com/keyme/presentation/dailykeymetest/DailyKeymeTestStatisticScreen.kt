@@ -1,6 +1,7 @@
 package com.keyme.presentation.dailykeymetest
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,11 +39,13 @@ import com.keyme.presentation.utils.ColorUtil
 fun DailyKeymeTestStatisticScreen(
     myCharacter: Member,
     dailyKeymeTestStatistic: TestStatistic,
+    onShareClick: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         StatisticTextTitle(myCharacter = myCharacter)
         Spacer(modifier = Modifier.height(96.dp))
-        StatisticList(myCharacter, dailyKeymeTestStatistic)
+        StatisticList(modifier = Modifier.weight(1f), myCharacter, dailyKeymeTestStatistic)
+        ShareToFriendsButton(onClick = onShareClick)
     }
 }
 
@@ -60,11 +63,12 @@ private fun StatisticTextTitle(modifier: Modifier = Modifier, myCharacter: Membe
 
 @Composable
 private fun StatisticList(
+    modifier: Modifier = Modifier,
     myCharacter: Member,
     dailyKeymeTestStatistic: TestStatistic,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
     ) {
@@ -140,5 +144,24 @@ private fun QuestionStatisticItem(myCharacter: Member, statistic: QuestionStatis
                 color = Color(0x80FFFFFF),
             )
         }
+    }
+}
+
+@Composable
+private fun ShareToFriendsButton(onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 25.dp)
+            .fillMaxWidth()
+            .height(60.dp)
+            .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 16.dp))
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center,
+    ) {
+        KeymeText(
+            text = "친구에게 공유하기",
+            keymeTextType = KeymeTextType.BODY_2,
+            color = Color.Black,
+        )
     }
 }

@@ -5,6 +5,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.keyme.data.remote.api.KeymeApi
 import com.keyme.domain.entity.response.QuestionSolvedScore
+import timber.log.Timber
 
 class QuestionSolvedScoreListPagingSource(
     private val keymeApi: KeymeApi,
@@ -40,6 +41,7 @@ class QuestionSolvedScoreListPagingSource(
                 LoadResult.Error(NetworkErrorException(response.message))
             }
         } catch (e: Exception) {
+            Timber.e(e)
             LoadResult.Error(e)
         }
     }

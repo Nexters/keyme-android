@@ -1,6 +1,6 @@
 package com.keyme.domain.entity.room
 
-data class UserAuth(
+data class User(
     val id: Int,
     val nickname: String?,
     val profileImage: String?,

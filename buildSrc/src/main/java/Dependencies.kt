@@ -59,6 +59,9 @@ object Dependencies {
     private val roomCompiler = "androidx.room:room-compiler:${Versions.ROOM}"
     private val roomTesting = "androidx.room:room-testing:${Versions.ROOM}"
 
+    // DataStore
+    private val datastore = "androidx.datastore:datastore-preferences:${Versions.DATASTORE}"
+
     // Dependency injection
     private val hilt = "com.google.dagger:hilt-android:${Versions.HILT}"
     private val hiltCompose = "androidx.hilt:hilt-navigation-compose:1.0.0"
@@ -166,6 +169,10 @@ object Dependencies {
         implementation(room)
         implementation(roomKtx)
         testImplementation(roomTesting)
+    }
+
+    fun DependencyHandler.setDataStoreDependencies() {
+        implementation(datastore)
     }
 
     fun DependencyHandler.setHiltDependencies() {

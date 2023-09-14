@@ -8,6 +8,7 @@ import com.keyme.domain.entity.request.UpdateMemberRequest
 import com.keyme.domain.entity.request.VerifyNicknameRequest
 import com.keyme.domain.entity.response.DailyTestResponse
 import com.keyme.domain.entity.response.EmptyResponse
+import com.keyme.domain.entity.response.MemberResponse
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.MemberStatisticsResponse
 import com.keyme.domain.entity.response.OnBoardingTestResponse
@@ -47,6 +48,11 @@ interface KeymeApi {
         @Body verifyNicknameRequest: VerifyNicknameRequest,
     ): VerifyNicknameResponse
 
+    @GET("/members/{memberId}")
+    suspend fun getMember(
+        @Path("memberId") memberId: String,
+    ): MemberResponse
+
     @Multipart
     @POST("/images")
     suspend fun uploadProfileImage(
@@ -64,22 +70,22 @@ interface KeymeApi {
         @Query("type") type: MemberStatistics.StatisticsType,
     ): MemberStatisticsResponse
 
-    @GET("questions/{id}/statistics")
+    @GET("questions/{id}/result/statistics")
     suspend fun getQuestionStatistics(
         @Path("id") id: String,
         @Query("ownerId") ownerId: Int,
     ): QuestionStatisticsResponse
 
-    @GET("questions/{id}/score")
+    @GET("questions/{id}/result/scores")
     suspend fun getQuestionSolvedScore(
         @Path("id") id: String,
         @Query("ownerId") ownerId: String,
     ): QuestionSolvedScoreResponse
 
-    @GET("questions/{id}/solved-scores")
+    @GET("questions/{id}/result/scores")
     suspend fun getQuestionSolvedScoreList(
-        @Query("cursor") cursor: Int?,
         @Path("id") id: String,
+        @Query("cursor") cursor: Int?,
         @Query("limit") limit: Int = 20,
         @Query("ownerId") ownerId: Int,
     ): QuestionSolvedScoreListResponse

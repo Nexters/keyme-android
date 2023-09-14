@@ -13,9 +13,9 @@ data class QuestionSolvedScoreList(
 data class QuestionSolvedScore(
     val id: Int,
     val createAt: String = "",
-    val score: Float,
+    val score: Int,
 ) {
     companion object {
-        val EMPTY = QuestionSolvedScore(0, "", 0f)
+        val EMPTY = QuestionSolvedScore(0, "", 0)
     }
 }

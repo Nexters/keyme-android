@@ -153,7 +153,7 @@ private fun KeymeQuestionDetailScreenPreview() {
                 questionId = 0,
             ),
             solvedScorePagingItem = flowOf(PagingData.empty<QuestionSolvedScore>()).collectAsLazyPagingItems(),
-            myScore = QuestionSolvedScore(0, "", 4.3f),
+            myScore = QuestionSolvedScore(0, "", 4),
             onBackClick = {},
         )
     }

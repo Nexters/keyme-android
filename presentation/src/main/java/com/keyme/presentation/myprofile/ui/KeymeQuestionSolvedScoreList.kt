@@ -154,11 +154,13 @@ private fun KeymeQuestionScoreItem(
             modifier = Modifier.align(Alignment.Center),
             text = "${score}점",
             keymeTextType = KeymeTextType.BODY_3_REGULAR,
+            color = Color.White,
         )
         KeymeText(
             modifier = Modifier.align(Alignment.CenterEnd),
             text = timeStamp.getUploadTimeString(),
             keymeTextType = KeymeTextType.BODY_3_REGULAR,
+            color = Color(0x4DFFFFFF),
         )
     }
 }

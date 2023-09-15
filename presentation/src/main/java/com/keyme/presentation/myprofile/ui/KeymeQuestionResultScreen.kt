@@ -105,6 +105,7 @@ private fun KeymeQuestionStatisticsInfo(
                 questionStatistic.category.name
             },
             keymeTextType = KeymeTextType.BODY_3_REGULAR,
+            color = Color.White,
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {

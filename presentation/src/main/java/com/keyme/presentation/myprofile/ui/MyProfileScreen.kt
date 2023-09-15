@@ -1,5 +1,6 @@
 package com.keyme.presentation.myprofile.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,17 +13,27 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.boundsInParent
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -32,6 +43,8 @@ import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
+import com.keyme.presentation.designsystem.component.KeymeToolTip
+import com.keyme.presentation.myprofile.MyProfileUiState
 import com.keyme.presentation.utils.clickableRippleEffect
 import kotlinx.coroutines.launch
 
@@ -44,9 +57,12 @@ private val myProfileTabs = listOf(MyProfileTab.Similar, MyProfileTab.Different)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyProfileScreen(
+    myProfileUiState: MyProfileUiState,
     myCharacter: Member,
     mySimilarStatistics: MemberStatistics,
     myDifferentStatistics: MemberStatistics,
+    onInfoClick: () -> Unit,
+    onToolTipCloseClick: () -> Unit,
     onQuestionClick: (QuestionStatistic) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -54,9 +70,15 @@ fun MyProfileScreen(
         val coroutineScope = rememberCoroutineScope()
 
         MyProfileTopContainer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .zIndex(1f),
+            myProfileUiState,
             myCharacter,
             pagerState.currentPage,
             myProfileTabs,
+            onInfoClick = onInfoClick,
+            onToolTipCloseClick = onToolTipCloseClick,
             onTabSelected = {
                 coroutineScope.launch {
                     pagerState.scrollToPage(it)
@@ -85,9 +107,9 @@ fun MyProfileScreen(
 }
 
 @Composable
-private fun MyProfileTitle() {
+private fun MyProfileTitle(modifier: Modifier = Modifier, onInfoClick: () -> Unit) {
     Row(
-        modifier = Modifier.padding(vertical = 10.dp),
+        modifier = modifier.padding(vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
@@ -97,6 +119,7 @@ private fun MyProfileTitle() {
             color = Color(0xFFF8F8F8),
         )
         Icon(
+            modifier = Modifier.clickableRippleEffect(bounded = false) { onInfoClick() },
             painter = painterResource(id = R.drawable.info_circle),
             contentDescription = "",
             tint = Color.White,
@@ -106,37 +129,60 @@ private fun MyProfileTitle() {
 
 @Composable
 private fun MyProfileTopContainer(
+    modifier: Modifier = Modifier,
+    myProfileUiState: MyProfileUiState,
     myCharacter: Member,
     selectedTabIndex: Int,
     myProfileTabs: List<MyProfileTab>,
+    onInfoClick: () -> Unit,
+    onToolTipCloseClick: () -> Unit,
     onTabSelected: (Int) -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .zIndex(1f),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        MyProfileTitle()
+    var toolTipPosition by remember { mutableStateOf(Rect.Zero) }
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        MyProfileTabRow(
-            selectedTabIndex = selectedTabIndex,
-            tabs = myProfileTabs,
-            onTabSelected = onTabSelected,
-        )
-
-        Spacer(modifier = Modifier.height(18.dp))
-
-        KeymeText(
+    Box(modifier) {
+        AnimatedVisibility(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp),
-            text = "친구들이 생각하는\n${myCharacter.nickname}님의 성격은?",
-            keymeTextType = KeymeTextType.HEADING_1,
-            color = Color(0xFFFFFFFF),
-        )
+                .width(250.dp)
+                .offset(
+                    with(LocalDensity.current) { toolTipPosition.bottomLeft.x.toDp() / 4 },
+                    with(LocalDensity.current) { toolTipPosition.bottomLeft.y.toDp() - 5.dp },
+                )
+                .zIndex(1f),
+            visible = myProfileUiState.showToolTip,
+        ) {
+            KeymeToolTip(text = "원의 크기가 클수록 해당 성격이 자신을 나타내는 지표가 됩니다.", onCloseClick = onToolTipCloseClick)
+        }
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            MyProfileTitle(
+                modifier = Modifier.onGloballyPositioned { toolTipPosition = it.boundsInParent() },
+                onInfoClick = onInfoClick,
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            MyProfileTabRow(
+                selectedTabIndex = selectedTabIndex,
+                tabs = myProfileTabs,
+                onTabSelected = onTabSelected,
+            )
+
+            Spacer(modifier = Modifier.height(18.dp))
+
+            KeymeText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp),
+                text = "친구들이 생각하는\n${myCharacter.nickname}님의 성격은?",
+                keymeTextType = KeymeTextType.HEADING_1,
+                color = Color(0xFFFFFFFF),
+            )
+        }
+
     }
 }
 

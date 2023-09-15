@@ -40,6 +40,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.Category
+import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.domain.entity.response.Test
 import com.keyme.domain.entity.response.TestStatistic
 import com.keyme.presentation.designsystem.component.KeymeText
@@ -59,11 +60,17 @@ fun DailyKeymeTestScreen(
     dailyKeymeTestStatistic: TestStatistic? = null,
     onDailyKeymeTestClick: () -> Unit,
     onShareClick: () -> Unit,
+    onQuestionStatisticClick: (QuestionStatistic) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         // NOTE: 데일리 문제를 제공하는 대신 온보딩 문제를 계속 공유할 수 있게 하는 플로우로 수정 방향 생각중
         if (dailyKeymeTestStatistic != null) {
-            DailyKeymeTestStatisticScreen(myCharacter, dailyKeymeTestStatistic, onShareClick)
+            DailyKeymeTestStatisticScreen(
+                myCharacter,
+                dailyKeymeTestStatistic,
+                onShareClick,
+                onQuestionStatisticClick,
+            )
         }
 //        else {
 //            DailKeymeTestScreen(myCharacter, dailyKeymeTest, onDailyKeymeTestClick)

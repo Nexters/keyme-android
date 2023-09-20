@@ -34,17 +34,24 @@ import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.utils.ColorUtil
+import com.keyme.presentation.utils.clickableRippleEffect
 
 @Composable
 fun DailyKeymeTestStatisticScreen(
     myCharacter: Member,
     dailyKeymeTestStatistic: TestStatistic,
     onShareClick: () -> Unit,
+    onQuestionStatisticClick: (QuestionStatistic) -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         StatisticTextTitle(myCharacter = myCharacter)
         Spacer(modifier = Modifier.height(96.dp))
-        StatisticList(modifier = Modifier.weight(1f), myCharacter, dailyKeymeTestStatistic)
+        StatisticList(
+            modifier = Modifier.weight(1f),
+            myCharacter,
+            dailyKeymeTestStatistic,
+            onQuestionStatisticClick,
+        )
         ShareToFriendsButton(onClick = onShareClick)
     }
 }
@@ -66,6 +73,7 @@ private fun StatisticList(
     modifier: Modifier = Modifier,
     myCharacter: Member,
     dailyKeymeTestStatistic: TestStatistic,
+    onClickItem: (QuestionStatistic) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -96,19 +104,28 @@ private fun StatisticList(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             items(dailyKeymeTestStatistic.questionsStatistics) {
-                QuestionStatisticItem(myCharacter = myCharacter, statistic = it)
+                QuestionStatisticItem(
+                    myCharacter = myCharacter,
+                    statistic = it,
+                    onClick = { onClickItem(it) },
+                )
             }
         }
     }
 }
 
 @Composable
-private fun QuestionStatisticItem(myCharacter: Member, statistic: QuestionStatistic) {
+private fun QuestionStatisticItem(
+    myCharacter: Member,
+    statistic: QuestionStatistic,
+    onClick: () -> Unit,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = Color(0x0DFFFFFF), shape = RoundedCornerShape(size = 14.dp))
-            .padding(horizontal = 14.dp, vertical = 20.dp),
+            .padding(horizontal = 14.dp, vertical = 20.dp)
+            .clickableRippleEffect { onClick() },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {

@@ -10,6 +10,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
 object DailyKeymeTestDestination : KeymeNavigationDestination {
@@ -19,6 +20,7 @@ object DailyKeymeTestDestination : KeymeNavigationDestination {
 
 fun NavGraphBuilder.dailyKeymeTestGraph(
     navigateToTakeKeymeTest: (testId: Int) -> Unit,
+    navigateToQuestionResult: (QuestionStatistic) -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     navigation(
@@ -26,7 +28,10 @@ fun NavGraphBuilder.dailyKeymeTestGraph(
         startDestination = DailyKeymeTestDestination.destination,
     ) {
         composable(route = DailyKeymeTestDestination.destination) {
-            DailyKeymeTestRoute(navigateToTakeKeymeTest = navigateToTakeKeymeTest)
+            DailyKeymeTestRoute(
+                navigateToTakeKeymeTest = navigateToTakeKeymeTest,
+                navigateToQuestionResult = navigateToQuestionResult,
+            )
         }
         nestedGraphs()
     }
@@ -36,6 +41,7 @@ fun NavGraphBuilder.dailyKeymeTestGraph(
 fun DailyKeymeTestRoute(
     dailyKeymeTestViewModel: DailyKeymeTestViewModel = hiltViewModel(),
     navigateToTakeKeymeTest: (testId: Int) -> Unit,
+    navigateToQuestionResult: (QuestionStatistic) -> Unit,
 ) {
     val myCharacter by dailyKeymeTestViewModel.myCharacterState.collectAsStateWithLifecycle()
     val dailyKeymeTest by dailyKeymeTestViewModel.dailyKeymeTestState.collectAsStateWithLifecycle()
@@ -58,5 +64,6 @@ fun DailyKeymeTestRoute(
             // todo api level 분기 필요
 //            Toast.makeText(context, "링크 복사 완료", Toast.LENGTH_SHORT).show()
         },
+        onQuestionStatisticClick = navigateToQuestionResult,
     )
 }

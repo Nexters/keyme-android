@@ -68,7 +68,9 @@ fun KeymeApp() {
 
                 dailyKeymeTestGraph(
                     navigateToTakeKeymeTest = { appState.navigate(TakeKeymeTestDestination, it) },
+                    navigateToQuestionResult = { appState.navigate(KeymeQuestionResultDestination, it.questionId) },
                     nestedGraphs = {
+                        keymeQuestionResultGraph(onBackClick = appState::onBackClick)
                         takeKeymeTestGraph(
                             onBackClick = appState::onBackClick,
                             onTestSolved = appState::onBackClick,

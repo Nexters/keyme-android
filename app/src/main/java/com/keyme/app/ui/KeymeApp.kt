@@ -1,14 +1,17 @@
 package com.keyme.app.ui
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -26,6 +29,7 @@ import com.keyme.presentation.myprofile.ui.myProfileGraph
 import com.keyme.presentation.onboarding.onboardingGraph
 import com.keyme.presentation.takekeymetest.TakeKeymeTestDestination
 import com.keyme.presentation.takekeymetest.takeKeymeTestGraph
+import com.keyme.presentation.utils.topBorder
 
 @Composable
 fun KeymeApp() {
@@ -104,25 +108,29 @@ fun KeymeBottomBar(
     onNavigateToDestination: (TopLevelDestination) -> Unit,
 ) {
     NavigationBar(
-        modifier = Modifier.border(width = 1.dp, color = Color(0xFF363636)),
+        modifier = Modifier.topBorder(width = 1.dp, color = Color(0xFF363636)),
         containerColor = Color(0x80232323),
         tonalElevation = 4.dp,
     ) {
         keymeTopLevelDestinations.forEach { destination ->
             val isSelected = currentDestination?.hierarchy?.any { it.route == destination.route } == true
 
-            NavigationBarItem(
-                selected = isSelected,
-                onClick = {
-                    onNavigateToDestination(destination)
-                },
-                icon = {
-                    val iconResId =
-                        if (isSelected) destination.selectedIconResId else destination.unselectedIconResId
-                    Icon(painter = painterResource(id = iconResId), contentDescription = "")
-                },
-                colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent),
-            )
+            val iconResId =
+                if (isSelected) destination.selectedIconResId else destination.unselectedIconResId
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .fillMaxHeight()
+                    .weight(1f)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = { onNavigateToDestination(destination) },
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(painter = painterResource(id = iconResId), contentDescription = "")
+            }
         }
     }
 }

@@ -38,6 +38,7 @@ import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.designsystem.theme.panchang
 import com.keyme.presentation.utils.clickableRippleEffect
 import com.keyme.presentation.utils.textDp
+import com.keyme.presentation.utils.toKeymeScore
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
@@ -113,7 +114,7 @@ private fun KeymeQuestionStatisticsInfo(
                 text = if (showMyScore) {
                     myScore?.score?.toString() ?: "0"
                 } else {
-                    questionStatistic.avgScore.toString()
+                    questionStatistic.avgScore.toKeymeScore().toString()
                 },
                 fontFamily = panchang,
                 fontWeight = FontWeight.ExtraBold,

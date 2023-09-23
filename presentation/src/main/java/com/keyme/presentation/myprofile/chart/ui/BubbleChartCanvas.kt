@@ -23,6 +23,7 @@ import com.keyme.presentation.designsystem.theme.panchang
 import com.keyme.presentation.myprofile.chart.BubbleChartState
 import com.keyme.presentation.myprofile.chart.BubbleItem
 import com.keyme.presentation.utils.textDp
+import com.keyme.presentation.utils.toKeymeScore
 
 @Composable
 fun BubbleChartCanvas(
@@ -65,7 +66,7 @@ fun BubbleChartItem(
             )
 
             Text(
-                text = bubbleItem.statistics.avgScore.toString(),
+                text = bubbleItem.statistics.avgScore.toKeymeScore().toString(),
                 fontFamily = panchang,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 18.textDp(),

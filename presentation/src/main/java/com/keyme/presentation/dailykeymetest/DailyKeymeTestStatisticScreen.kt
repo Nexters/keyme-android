@@ -39,6 +39,7 @@ import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.utils.ColorUtil
 import com.keyme.presentation.utils.clickableRippleEffect
+import com.keyme.presentation.utils.toKeymeScore
 
 private val bottomGradientHeightDp = 125.dp
 
@@ -168,7 +169,7 @@ private fun QuestionStatisticItem(
             )
 
             KeymeText(
-                text = "평균점수 | ${statistic.avgScore}점",
+                text = "평균점수 | ${statistic.avgScore.toKeymeScore()}점",
                 keymeTextType = KeymeTextType.BODY_4,
                 color = Color(0x80FFFFFF),
             )

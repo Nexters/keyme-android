@@ -180,7 +180,6 @@ fun KeymeTestResultItem(
 
         KeymeQuestionStatisticsCircle(
             statistics = item.toStatistic(),
-            myScore = null,
             onPressedUp = { },
             onPressedDown = {},
         )
@@ -193,6 +192,7 @@ fun QuestionResult.toStatistic() = QuestionStatistic(
     keyword = keyword,
     category = category,
     avgScore = score.toFloat(),
+    myScore = 0,
 )
 
 @Preview

@@ -46,7 +46,6 @@ fun KeymeQuestionResultScreen(
     myCharacter: Member,
     statistics: QuestionStatistic,
     solvedScorePagingItem: LazyPagingItems<QuestionSolvedScore>,
-    myScore: QuestionSolvedScore? = null,
     onBackClick: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -63,13 +62,12 @@ fun KeymeQuestionResultScreen(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            var showMyScore by remember(myScore) { mutableStateOf(false) }
+            var showMyScore by remember { mutableStateOf(false) }
 
-            KeymeQuestionStatisticsInfo(statistics, showMyScore, myScore)
+            KeymeQuestionStatisticsInfo(statistics, showMyScore)
 
             KeymeQuestionStatisticsCircle(
                 statistics,
-                myScore,
                 onPressedUp = { showMyScore = true },
                 onPressedDown = { showMyScore = false },
             )
@@ -83,7 +81,6 @@ fun KeymeQuestionResultScreen(
 private fun KeymeQuestionStatisticsInfo(
     questionStatistic: QuestionStatistic,
     showMyScore: Boolean = false,
-    myScore: QuestionSolvedScore?,
 ) {
     Column(
         modifier = Modifier
@@ -101,7 +98,7 @@ private fun KeymeQuestionStatisticsInfo(
                 .background(color = Color(0x33FFFFFF), shape = RoundedCornerShape(size = 16.dp))
                 .padding(start = 10.dp, top = 5.dp, end = 10.dp, bottom = 5.dp),
             text = if (showMyScore) {
-                "내가 준 점수"
+                "나의 점수"
             } else {
                 questionStatistic.category.name
             },
@@ -112,7 +109,7 @@ private fun KeymeQuestionStatisticsInfo(
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 text = if (showMyScore) {
-                    myScore?.score?.toString() ?: "0"
+                    questionStatistic.myScore.toString()
                 } else {
                     questionStatistic.avgScore.toKeymeScore().toString()
                 },
@@ -153,9 +150,9 @@ private fun KeymeQuestionDetailScreenPreview() {
                 title = "",
                 keyword = "",
                 questionId = 0,
+                myScore = 0,
             ),
             solvedScorePagingItem = flowOf(PagingData.empty<QuestionSolvedScore>()).collectAsLazyPagingItems(),
-            myScore = QuestionSolvedScore(0, "", 4),
             onBackClick = {},
         )
     }

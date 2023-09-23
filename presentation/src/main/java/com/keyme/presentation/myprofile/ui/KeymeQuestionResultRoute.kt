@@ -37,13 +37,11 @@ fun KeymeQuestionResultRoute(
     onBackClick: () -> Unit,
 ) {
     val statisticsState by keymeQuestionResultViewModel.statisticsState.collectAsStateWithLifecycle()
-    val myScore by keymeQuestionResultViewModel.myScoreState.collectAsStateWithLifecycle()
     val myCharacter by keymeQuestionResultViewModel.myCharacterState.collectAsStateWithLifecycle()
     val solvedScorePagingItem = keymeQuestionResultViewModel.solvedScorePagingFlow.collectAsLazyPagingItems()
 
     KeymeQuestionResultScreen(
         myCharacter = myCharacter,
-        myScore = myScore,
         statistics = statisticsState,
         solvedScorePagingItem = solvedScorePagingItem,
         onBackClick = onBackClick,

@@ -5,6 +5,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -128,7 +129,7 @@ fun KeymeBottomBar(
     onNavigateToDestination: (TopLevelDestination) -> Unit,
 ) {
     NavigationBar(
-        modifier = Modifier.topBorder(width = 1.dp, color = Color(0xFF363636)),
+        modifier = Modifier.topBorder(width = 1.dp, color = Color(0xFF363636)).height(65.dp),
         containerColor = Color(0x80232323),
         tonalElevation = 4.dp,
     ) {

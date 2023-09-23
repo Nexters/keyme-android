@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.keyme.presentation.KeymeBackgroundAnim
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextButton
@@ -52,11 +53,13 @@ import com.keyme.presentation.designsystem.theme.black_alpha_80
 import com.keyme.presentation.designsystem.theme.keyme_white
 import com.keyme.presentation.designsystem.theme.white_alpha_30
 import com.keyme.presentation.designsystem.theme.white_alpha_40
+import com.keyme.presentation.editprofile.EditProfileUiEvent
 import com.keyme.presentation.editprofile.EditProfileUiState
 import com.keyme.presentation.editprofile.EditProfileViewModel
 import com.keyme.presentation.onboarding.nickname.NicknameInputInfo
 import com.keyme.presentation.onboarding.nickname.ProfileImage
 import com.keyme.presentation.onboarding.nickname.SignUpToolbar
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun EditProfileScreen(
@@ -78,8 +81,20 @@ fun EditProfileScreen(
         }
     }
 
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.editProfileUiEvent.collectLatest {
+            when(it) {
+                is EditProfileUiEvent.UpdateMemberSuccess -> onBackClick()
+            }
+        }
+    }
+
+    KeymeBackgroundAnim()
+
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(black_alpha_80),
     ) {
         SignUpToolbar(onBackClick)
         Column(

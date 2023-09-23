@@ -1,5 +1,6 @@
 package com.keyme.presentation.setting.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -27,9 +28,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.keyme.presentation.KeymeBackgroundAnim
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
+import com.keyme.presentation.designsystem.theme.black_alpha_60
+import com.keyme.presentation.designsystem.theme.black_alpha_80
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.setting.SettingViewModel
 import com.keyme.presentation.utils.clickableRippleEffect
@@ -40,7 +44,13 @@ fun SettingScreen(
     onBackClick: () -> Unit,
     onProfileChangeClick: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    KeymeBackgroundAnim()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(black_alpha_80),
+    ) {
         var showLogOutAlert by remember { mutableStateOf(false) }
         var showWithdrawAlert by remember { mutableStateOf(false) }
 

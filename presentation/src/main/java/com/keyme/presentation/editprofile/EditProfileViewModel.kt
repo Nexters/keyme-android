@@ -13,9 +13,11 @@ import com.keyme.domain.usecase.VerifyNicknameUseCase
 import com.keyme.presentation.BaseViewModel
 import com.keyme.presentation.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
@@ -35,6 +37,9 @@ class EditProfileViewModel @Inject constructor(
 
     private val _editProfileUiState = MutableStateFlow(EditProfileUiState())
     val editProfileUiState = _editProfileUiState.asStateFlow()
+
+    private val _editProfileUiEvent = MutableSharedFlow<EditProfileUiEvent>()
+    val editProfileUiEvent = _editProfileUiEvent.asSharedFlow()
 
     private val myMemberInfo: StateFlow<Member> = getMyUserInfoUseCase()
         .filterNotNull()
@@ -103,8 +108,9 @@ class EditProfileViewModel @Inject constructor(
                     friendCode = it.friendCode ?: "",
                     isOnboardingClear = myMemberInfo.value.isOnboardingClear,
                     accessToken = myMemberInfo.value.accessToken,
-                ),
+                )
             )
+            _editProfileUiEvent.emit(EditProfileUiEvent.UpdateMemberSuccess)
         }
     }
 }
@@ -114,3 +120,7 @@ data class EditProfileUiState(
     val isValidNickname: Boolean = false,
     val verifyDescription: String = "",
 )
+
+sealed interface EditProfileUiEvent {
+    object UpdateMemberSuccess: EditProfileUiEvent
+}

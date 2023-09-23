@@ -33,9 +33,11 @@ import coil.request.ImageRequest
 import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.domain.entity.response.TestStatistic
+import com.keyme.presentation.KeymeBackgroundAnim
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
+import com.keyme.presentation.designsystem.theme.black_alpha_80
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.utils.ColorUtil
 import com.keyme.presentation.utils.clickableRippleEffect
@@ -51,33 +53,41 @@ fun DailyKeymeTestStatisticScreen(
     onQuestionStatisticClick: (QuestionStatistic) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
+        KeymeBackgroundAnim()
+
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+                .background(black_alpha_80)
+                .fillMaxSize(),
         ) {
-            item {
-                StatisticTextTitle()
-            }
-            item {
-                StatisticSolvedCountInfo(dailyKeymeTestStatistic)
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+            ) {
+                item {
+                    StatisticTextTitle()
+                }
+                item {
+                    StatisticSolvedCountInfo(dailyKeymeTestStatistic)
+                }
+
+                statisticList(
+                    myCharacter,
+                    dailyKeymeTestStatistic,
+                    onQuestionStatisticClick,
+                )
+
+                item { Spacer(modifier = Modifier.height(bottomGradientHeightDp)) }
             }
 
-            statisticList(
-                myCharacter,
-                dailyKeymeTestStatistic,
-                onQuestionStatisticClick,
+            ShareToFriendsButton(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .zIndex(1f),
+                onClick = onShareClick,
             )
-
-            item { Spacer(modifier = Modifier.height(bottomGradientHeightDp)) }
         }
-
-        ShareToFriendsButton(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .zIndex(1f),
-            onClick = onShareClick,
-        )
     }
 }
 
@@ -188,7 +198,6 @@ private fun ShareToFriendsButton(modifier: Modifier = Modifier, onClick: () -> U
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(Color.Transparent, keyme_black),
-                    endY = 100f,
                 ),
             ),
         contentAlignment = Alignment.BottomCenter,

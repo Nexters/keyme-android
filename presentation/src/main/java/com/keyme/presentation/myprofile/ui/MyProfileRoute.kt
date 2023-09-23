@@ -18,6 +18,7 @@ object MyProfileDestination : KeymeNavigationDestination {
 
 fun NavGraphBuilder.myProfileGraph(
     navigateToQuestionResult: (QuestionStatistic) -> Unit,
+    navigateToSetting: () -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     navigation(
@@ -25,7 +26,10 @@ fun NavGraphBuilder.myProfileGraph(
         startDestination = MyProfileDestination.destination,
     ) {
         composable(route = MyProfileDestination.destination) {
-            MyProfileRoute(navigateToQuestionResult = navigateToQuestionResult)
+            MyProfileRoute(
+                navigateToQuestionResult = navigateToQuestionResult,
+                navigateToSetting = navigateToSetting,
+            )
         }
         nestedGraphs()
     }
@@ -35,6 +39,7 @@ fun NavGraphBuilder.myProfileGraph(
 fun MyProfileRoute(
     myProfileViewModel: MyProfileViewModel = hiltViewModel(),
     navigateToQuestionResult: (QuestionStatistic) -> Unit,
+    navigateToSetting: () -> Unit,
 ) {
     val myCharacter by myProfileViewModel.myCharacterState.collectAsStateWithLifecycle()
     val myProfileUiState by myProfileViewModel.myProfileUiState.collectAsStateWithLifecycle()
@@ -47,6 +52,7 @@ fun MyProfileRoute(
         mySimilarStatistics = mySimilarStatistics,
         myDifferentStatistics = myDifferentStatistics,
         onInfoClick = myProfileViewModel::showToolTip,
+        onSettingClick = navigateToSetting,
         onToolTipCloseClick = myProfileViewModel::dismissToolTip,
         onQuestionClick = navigateToQuestionResult,
     )

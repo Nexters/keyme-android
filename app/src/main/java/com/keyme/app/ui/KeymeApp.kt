@@ -27,6 +27,8 @@ import com.keyme.presentation.myprofile.ui.KeymeQuestionResultDestination
 import com.keyme.presentation.myprofile.ui.keymeQuestionResultGraph
 import com.keyme.presentation.myprofile.ui.myProfileGraph
 import com.keyme.presentation.onboarding.onboardingGraph
+import com.keyme.presentation.setting.ui.SettingDestination
+import com.keyme.presentation.setting.ui.settingGraph
 import com.keyme.presentation.takekeymetest.TakeKeymeTestDestination
 import com.keyme.presentation.takekeymetest.takeKeymeTestGraph
 import com.keyme.presentation.utils.topBorder
@@ -72,7 +74,12 @@ fun KeymeApp() {
 
                 dailyKeymeTestGraph(
                     navigateToTakeKeymeTest = { appState.navigate(TakeKeymeTestDestination, it) },
-                    navigateToQuestionResult = { appState.navigate(KeymeQuestionResultDestination, it.questionId) },
+                    navigateToQuestionResult = {
+                        appState.navigate(
+                            KeymeQuestionResultDestination,
+                            it.questionId,
+                        )
+                    },
                     nestedGraphs = {
                         keymeQuestionResultGraph(onBackClick = appState::onBackClick)
                         takeKeymeTestGraph(
@@ -89,8 +96,12 @@ fun KeymeApp() {
                             question.questionId,
                         )
                     },
+                    navigateToSetting = {
+                        appState.navigate(SettingDestination)
+                    },
                     nestedGraphs = {
                         keymeQuestionResultGraph(onBackClick = appState::onBackClick)
+                        settingGraph(onBackClick = appState::onBackClick)
                     },
                 )
             }

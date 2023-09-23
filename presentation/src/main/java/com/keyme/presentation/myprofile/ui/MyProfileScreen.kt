@@ -62,6 +62,7 @@ fun MyProfileScreen(
     myDifferentStatistics: MemberStatistics,
     onInfoClick: () -> Unit,
     onToolTipCloseClick: () -> Unit,
+    onSettingClick: () -> Unit,
     onQuestionClick: (QuestionStatistic) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -77,13 +78,13 @@ fun MyProfileScreen(
             pagerState.currentPage,
             myProfileTabs,
             onInfoClick = onInfoClick,
+            onSettingClick = onSettingClick,
             onToolTipCloseClick = onToolTipCloseClick,
             onTabSelected = {
                 coroutineScope.launch {
                     pagerState.scrollToPage(it)
                 }
-            },
-        )
+            },)
 
         HorizontalPager(
             pageCount = myProfileTabs.size,
@@ -106,24 +107,46 @@ fun MyProfileScreen(
 }
 
 @Composable
-private fun MyProfileTitle(modifier: Modifier = Modifier, onInfoClick: () -> Unit) {
-    Row(
-        modifier = modifier.padding(vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+private fun MyProfileTitle(
+    modifier: Modifier = Modifier,
+    onInfoClick: () -> Unit,
+    onSettingClick: () -> Unit,
+) {
+
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp, horizontal = 24.dp),
     ) {
-        KeymeText(
-            text = "마이",
-            keymeTextType = KeymeTextType.BODY_3_SEMIBOLD,
-            color = Color(0xFFF8F8F8),
-        )
+        Row(
+            modifier = Modifier.align(Alignment.Center),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            KeymeText(
+                text = "마이",
+                keymeTextType = KeymeTextType.BODY_3_SEMIBOLD,
+                color = Color(0xFFF8F8F8),
+            )
+            Icon(
+                modifier = Modifier.clickableRippleEffect(bounded = false) { onInfoClick() },
+                painter = painterResource(id = R.drawable.info_circle),
+                contentDescription = "",
+                tint = Color.White,
+            )
+        }
+
         Icon(
-            modifier = Modifier.clickableRippleEffect(bounded = false) { onInfoClick() },
-            painter = painterResource(id = R.drawable.info_circle),
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .clickableRippleEffect(bounded = false) { onSettingClick() },
+            painter = painterResource(id = R.drawable.icon_setting),
             contentDescription = "",
             tint = Color.White,
         )
     }
+
 }
 
 @Composable
@@ -135,6 +158,7 @@ private fun MyProfileTopContainer(
     myProfileTabs: List<MyProfileTab>,
     onInfoClick: () -> Unit,
     onToolTipCloseClick: () -> Unit,
+    onSettingClick: () -> Unit,
     onTabSelected: (Int) -> Unit,
 ) {
     var toolTipPosition by remember { mutableStateOf(Rect.Zero) }
@@ -160,6 +184,7 @@ private fun MyProfileTopContainer(
             MyProfileTitle(
                 modifier = Modifier.onGloballyPositioned { toolTipPosition = it.boundsInParent() },
                 onInfoClick = onInfoClick,
+                onSettingClick = onSettingClick,
             )
 
             Spacer(modifier = Modifier.height(10.dp))

@@ -35,7 +35,7 @@ class QuestionSolvedScoreListPagingSource(
                 LoadResult.Page(
                     data = response.data.results,
                     prevKey = null,
-                    nextKey = response.data.results.last().id,
+                    nextKey = kotlin.runCatching { response.data.results.last().id }.getOrNull(),
                 )
             } else {
                 LoadResult.Error(NetworkErrorException(response.message))

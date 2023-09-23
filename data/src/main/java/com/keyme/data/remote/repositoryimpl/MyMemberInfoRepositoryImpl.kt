@@ -17,7 +17,7 @@ class MyMemberInfoRepositoryImpl @Inject constructor(
         myMemberInfoDataSource.setMyMemberInfo(member)
     }
 
-    override suspend fun clearInfo(member: Member) {
+    override suspend fun clearInfo() {
         myMemberInfoDataSource.clear()
     }
 }

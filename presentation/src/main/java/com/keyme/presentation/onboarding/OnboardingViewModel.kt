@@ -101,7 +101,7 @@ class OnboardingViewModel @Inject constructor(
             setMyMemberInfoUseCase.invoke(
                 Member(
                     id = it.id,
-                    nickname = it.nickname,
+                    nickname = it.nickname ?: "",
                     profileImage = it.profileImage,
                     profileThumbnail = it.profileThumbnail,
                     isOnboardingClear = it.isOnboardingClear,
@@ -157,7 +157,7 @@ class OnboardingViewModel @Inject constructor(
                     nickname = it.nickname,
                     profileImage = it.profileImage,
                     profileThumbnail = it.profileThumbnail,
-                    friendCode = it.friendCode,
+                    friendCode = it.friendCode ?: "",
                     isOnboardingClear = myMemberInfo.value?.isOnboardingClear ?: false,
                     accessToken = myMemberInfo.value?.accessToken ?: "",
                 ),

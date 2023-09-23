@@ -1,6 +1,7 @@
 package com.keyme.data.remote.repositoryimpl
 
 import com.keyme.data.remote.api.KeymeApi
+import com.keyme.domain.entity.response.EmptyResponse
 import com.keyme.domain.entity.response.MemberResponse
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.MemberStatisticsResponse
@@ -19,5 +20,9 @@ class MemberRepositoryImpl @Inject constructor(
         type: MemberStatistics.StatisticsType,
     ): MemberStatisticsResponse {
         return keymeApi.getMemberStatistics(memberId = memberId, type = type)
+    }
+
+    override suspend fun withdraw(): EmptyResponse {
+        return keymeApi.withdraw()
     }
 }

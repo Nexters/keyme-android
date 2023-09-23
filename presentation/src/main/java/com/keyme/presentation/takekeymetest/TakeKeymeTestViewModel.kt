@@ -9,6 +9,7 @@ import com.keyme.domain.usecase.GetKeymeTestResultUseCase
 import com.keyme.domain.usecase.GetMyCharacterUseCase
 import com.keyme.domain.usecase.RegistrationResultCodeUseCase
 import com.keyme.presentation.BaseViewModel
+import com.keyme.presentation.utils.KeymeLinkUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,7 +30,7 @@ class TakeKeymeTestViewModel @Inject constructor(
     private val getKeymeTestResultUseCase: GetKeymeTestResultUseCase,
 ) : BaseViewModel() {
     private val testId = savedStateHandle[TakeKeymeTestDestination.testIdArg] ?: 0
-    val keymeTestUrl = "https://keyme-frontend.vercel.app/test/$testId"
+    val keymeTestUrl = KeymeLinkUtil.getTestLink(testId)
 
     val myCharacterState = getMyCharacterUseCase().stateIn(
         started = SharingStarted.WhileSubscribed(5000L),

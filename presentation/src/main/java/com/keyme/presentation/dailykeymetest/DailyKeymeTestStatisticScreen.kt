@@ -141,7 +141,6 @@ private fun QuestionStatisticItem(
             .background(color = Color(0x0DFFFFFF), shape = RoundedCornerShape(size = 14.dp))
             .padding(horizontal = 14.dp, vertical = 20.dp)
             .clickableRippleEffect { onClick() },
-        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Box(
@@ -161,7 +160,10 @@ private fun QuestionStatisticItem(
             )
         }
 
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Column(
+            modifier = Modifier.align(Alignment.CenterVertically),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
             KeymeText(
                 text = myCharacter.nickname + statistic.title,
                 keymeTextType = KeymeTextType.BODY_3_SEMIBOLD,

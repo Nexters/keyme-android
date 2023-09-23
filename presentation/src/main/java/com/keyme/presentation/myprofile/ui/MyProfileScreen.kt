@@ -1,6 +1,5 @@
 package com.keyme.presentation.myprofile.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -141,7 +140,7 @@ private fun MyProfileTopContainer(
     var toolTipPosition by remember { mutableStateOf(Rect.Zero) }
 
     Box(modifier) {
-        AnimatedVisibility(
+        KeymeToolTip(
             modifier = Modifier
                 .width(250.dp)
                 .offset(
@@ -150,9 +149,9 @@ private fun MyProfileTopContainer(
                 )
                 .zIndex(1f),
             visible = myProfileUiState.showToolTip,
-        ) {
-            KeymeToolTip(text = "원의 크기가 클수록 해당 성격이 자신을 나타내는 지표가 됩니다.", onCloseClick = onToolTipCloseClick)
-        }
+            text = "원의 크기가 클수록 해당 성격이 자신을 나타내는 지표가 됩니다.",
+            onCloseClick = onToolTipCloseClick,
+        )
 
         Column(
             modifier = Modifier.fillMaxWidth(),

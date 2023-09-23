@@ -1,5 +1,8 @@
 package com.keyme.presentation.designsystem.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
@@ -18,35 +21,42 @@ import androidx.compose.ui.unit.dp
 import com.keyme.presentation.R
 
 @Composable
-fun KeymeToolTip(text: String, onCloseClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .paint(
-                painter = painterResource(id = R.drawable.tool_tip_box),
-                sizeToIntrinsics = true,
-                contentScale = ContentScale.FillBounds,
-            )
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = { onCloseClick() },
-            )
-            .padding(top = 20.dp, start = 10.dp, end = 10.dp, bottom = 10.dp),
+fun KeymeToolTip(modifier: Modifier = Modifier, visible: Boolean, text: String, onCloseClick: () -> Unit) {
+    AnimatedVisibility(
+        modifier = modifier,
+        visible = visible,
+        enter = fadeIn(),
+        exit = fadeOut(),
     ) {
-        KeymeText(
-            modifier = Modifier.weight(1f),
-            text = text,
-            keymeTextType = KeymeTextType.TOOLTIP,
-            color = Color(0xFFF6F3F2),
-        )
-        Icon(
+        Row(
             modifier = Modifier
-                .padding(4.dp)
-                .size(12.dp),
-            painter = painterResource(id = R.drawable.icon_close),
-            contentDescription = "",
-            tint = Color.White,
-        )
+                .fillMaxWidth()
+                .paint(
+                    painter = painterResource(id = R.drawable.tool_tip_box),
+                    sizeToIntrinsics = true,
+                    contentScale = ContentScale.FillBounds,
+                )
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = { onCloseClick() },
+                )
+                .padding(top = 20.dp, start = 10.dp, end = 10.dp, bottom = 10.dp),
+        ) {
+            KeymeText(
+                modifier = Modifier.weight(1f),
+                text = text,
+                keymeTextType = KeymeTextType.TOOLTIP,
+                color = Color(0xFFF6F3F2),
+            )
+            Icon(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .size(12.dp),
+                painter = painterResource(id = R.drawable.icon_close),
+                contentDescription = "",
+                tint = Color.White,
+            )
+        }
     }
 }

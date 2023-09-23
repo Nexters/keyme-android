@@ -3,6 +3,7 @@ package com.keyme.presentation.setting.ui
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
 object SettingDestination : KeymeNavigationDestination {
@@ -12,10 +13,19 @@ object SettingDestination : KeymeNavigationDestination {
 
 fun NavGraphBuilder.settingGraph(
     onBackClick: () -> Unit,
+    navigateToEditProfile: () -> Unit,
+    nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
-    composable(route = SettingDestination.route) {
-        SettingRoute(onBackClick, navigateToEditProfile = {})
+    navigation(
+        route = SettingDestination.route,
+        startDestination = SettingDestination.destination,
+    ) {
+        composable(route = SettingDestination.destination) {
+            SettingRoute(onBackClick, navigateToEditProfile = navigateToEditProfile)
+        }
+        nestedGraphs()
     }
+
 }
 
 @Composable

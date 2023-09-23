@@ -23,6 +23,8 @@ import com.keyme.app.navigation.TopLevelDestination
 import com.keyme.app.navigation.keymeTopLevelDestinations
 import com.keyme.presentation.dailykeymetest.dailyKeymeTestGraph
 import com.keyme.presentation.designsystem.theme.KeymeTheme
+import com.keyme.presentation.editprofile.ui.EditProfileDestination
+import com.keyme.presentation.editprofile.ui.editProfileGraph
 import com.keyme.presentation.myprofile.ui.KeymeQuestionResultDestination
 import com.keyme.presentation.myprofile.ui.keymeQuestionResultGraph
 import com.keyme.presentation.myprofile.ui.myProfileGraph
@@ -101,7 +103,14 @@ fun KeymeApp() {
                     },
                     nestedGraphs = {
                         keymeQuestionResultGraph(onBackClick = appState::onBackClick)
-                        settingGraph(onBackClick = appState::onBackClick)
+                        settingGraph(
+                            onBackClick = appState::onBackClick,
+                            navigateToEditProfile = {
+                                appState.navigate(EditProfileDestination)
+                            },
+                        ) {
+                            editProfileGraph(onBackClick = appState::onBackClick)
+                        }
                     },
                 )
             }

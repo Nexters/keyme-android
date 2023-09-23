@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -60,7 +61,6 @@ import com.keyme.presentation.designsystem.theme.black_alpha_60
 import com.keyme.presentation.designsystem.theme.black_alpha_80
 import com.keyme.presentation.designsystem.theme.gray500
 import com.keyme.presentation.designsystem.theme.gray600
-import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.designsystem.theme.keyme_white
 import com.keyme.presentation.designsystem.theme.white_alpha_15
 import com.keyme.presentation.designsystem.theme.white_alpha_30
@@ -278,6 +278,7 @@ fun NicknameTextField(
     ) {
         BasicTextField(
             modifier = Modifier
+                .fillMaxWidth()
                 .onFocusChanged { focusState ->
                     isFocused = focusState.hasFocus
                 },
@@ -352,7 +353,7 @@ fun NicknameInputGuide() {
             .fillMaxWidth()
             .wrapContentHeight()
             .background(
-                color = keyme_black,
+                color = Color(0x0DFFFFFF),
                 shape = RoundedCornerShape(8.dp),
             )
             .padding(all = 16.dp),

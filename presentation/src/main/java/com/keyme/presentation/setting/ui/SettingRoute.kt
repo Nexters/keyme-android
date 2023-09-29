@@ -1,10 +1,12 @@
 package com.keyme.presentation.setting.ui
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.keyme.presentation.navigation.KeymeNavigationDestination
+import com.keyme.presentation.setting.SettingViewModel
 
 object SettingDestination : KeymeNavigationDestination {
     override val route: String = "setting_route"
@@ -21,7 +23,7 @@ fun NavGraphBuilder.settingGraph(
         startDestination = SettingDestination.destination,
     ) {
         composable(route = SettingDestination.destination) {
-            SettingRoute(onBackClick, navigateToEditProfile = navigateToEditProfile)
+            SettingRoute(onBackClick = onBackClick, navigateToEditProfile = navigateToEditProfile)
         }
         nestedGraphs()
     }
@@ -29,9 +31,15 @@ fun NavGraphBuilder.settingGraph(
 }
 
 @Composable
-fun SettingRoute(onBackClick: () -> Unit, navigateToEditProfile: () -> Unit) {
+fun SettingRoute(
+    settingViewModel: SettingViewModel = hiltViewModel(),
+    onBackClick: () -> Unit,
+    navigateToEditProfile: () -> Unit,
+) {
     SettingScreen(
         onBackClick = onBackClick,
         onProfileChangeClick = navigateToEditProfile,
+        onLogOutClick = settingViewModel::logOut,
+        onWithdrawClick = settingViewModel::withdraw
     )
 }

@@ -40,9 +40,10 @@ import com.keyme.presentation.utils.clickableRippleEffect
 
 @Composable
 fun SettingScreen(
-    settingViewModel: SettingViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onProfileChangeClick: () -> Unit,
+    onWithdrawClick: () -> Unit,
+    onLogOutClick: () -> Unit,
 ) {
     KeymeBackgroundAnim()
 
@@ -86,7 +87,7 @@ fun SettingScreen(
                     TextButton(
                         onClick = {
                             showLogOutAlert = false
-                            settingViewModel.logOut()
+                            onLogOutClick()
                         },
                     ) {
                         KeymeText(
@@ -123,7 +124,7 @@ fun SettingScreen(
                     TextButton(
                         onClick = {
                             showWithdrawAlert = false
-                            settingViewModel.withdraw()
+                            onWithdrawClick()
                         },
                     ) {
                         KeymeText(

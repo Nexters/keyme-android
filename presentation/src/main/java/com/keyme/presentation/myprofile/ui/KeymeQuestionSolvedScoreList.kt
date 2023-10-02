@@ -37,6 +37,7 @@ import com.keyme.presentation.designsystem.component.BottomSheetHandle
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.utils.getUploadTimeString
+import com.keyme.presentation.utils.toTimeStamp
 import timber.log.Timber
 import java.sql.Timestamp
 
@@ -71,10 +72,7 @@ fun ColumnScope.KeymeQuestionSolvedScoreList(
             ) {
                 val item = solvedScorePagingItem[it]
                 item?.let {
-                    val timeStamp = kotlin.runCatching { Timestamp.valueOf(item.createAt).time }
-                        .onFailure { exception -> Timber.e(exception) }
-                        .getOrDefault(0L)
-                    KeymeQuestionScoreItem(item.score.toString(), timeStamp)
+                    KeymeQuestionScoreItem(item.score.toString(), item.createdAt.toTimeStamp())
                 }
             }
         }

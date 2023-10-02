@@ -228,17 +228,17 @@ private fun SettingContent(
             color = Color.White,
         )
 
-        Spacer(modifier = Modifier.height(18.dp))
-
-        Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = Color(0x1AFFFFFF))
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        KeymeText(text = "개인 정보", keymeTextType = KeymeTextType.BODY_4, color = Color(0xFF747474))
-
-        Spacer(modifier = Modifier.height(24.dp))
-
         // NOTE: disable, push data 변경 적용 후 기능 enable 해야함
+//        Spacer(modifier = Modifier.height(18.dp))
+
+//        Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = Color(0x1AFFFFFF))
+
+//        Spacer(modifier = Modifier.height(30.dp))
+
+//        KeymeText(text = "개인 정보", keymeTextType = KeymeTextType.BODY_4, color = Color(0xFF747474))
+
+//        Spacer(modifier = Modifier.height(24.dp))
+
 //        Row(
 //            modifier = Modifier
 //                .fillMaxWidth()

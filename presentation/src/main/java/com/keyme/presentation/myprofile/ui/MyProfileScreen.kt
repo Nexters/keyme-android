@@ -127,18 +127,13 @@ private fun MyProfileTitle(
                 keymeTextType = KeymeTextType.BODY_3_SEMIBOLD,
                 color = Color(0xFFF8F8F8),
             )
-            Icon(
-                modifier = Modifier.clickableRippleEffect(bounded = false) { onInfoClick() },
-                painter = painterResource(id = R.drawable.info_circle),
-                contentDescription = "",
-                tint = Color.White,
-            )
         }
 
         Icon(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
-                .clickableRippleEffect(bounded = false) { onSettingClick() },
+                .clickableRippleEffect(bounded = false) { onSettingClick() }
+                .padding(5.dp),
             painter = painterResource(id = R.drawable.icon_setting),
             contentDescription = "",
             tint = Color.White,
@@ -162,18 +157,19 @@ private fun MyProfileTopContainer(
     var toolTipPosition by remember { mutableStateOf(Rect.Zero) }
 
     Box(modifier) {
-        KeymeToolTip(
-            modifier = Modifier
-                .width(250.dp)
-                .offset(
-                    with(LocalDensity.current) { toolTipPosition.bottomLeft.x.toDp() / 4 },
-                    with(LocalDensity.current) { toolTipPosition.bottomLeft.y.toDp() - 5.dp },
-                )
-                .zIndex(1f),
-            visible = myProfileUiState.showToolTip,
-            text = "원의 크기가 클수록 해당 성격이 자신을 나타내는 지표가 됩니다.",
-            onCloseClick = onToolTipCloseClick,
-        )
+        // NOTE: 툴팁 disable
+//        KeymeToolTip(
+//            modifier = Modifier
+//                .width(250.dp)
+//                .offset(
+//                    with(LocalDensity.current) { toolTipPosition.bottomLeft.x.toDp() / 4 },
+//                    with(LocalDensity.current) { toolTipPosition.bottomLeft.y.toDp() - 5.dp },
+//                )
+//                .zIndex(1f),
+//            visible = myProfileUiState.showToolTip,
+//            text = "원의 크기가 클수록 해당 성격이 자신을 나타내는 지표가 됩니다.",
+//            onCloseClick = onToolTipCloseClick,
+//        )
 
         Column(
             modifier = Modifier.fillMaxWidth(),

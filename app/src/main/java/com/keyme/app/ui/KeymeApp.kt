@@ -24,6 +24,8 @@ import com.keyme.app.navigation.TopLevelDestination
 import com.keyme.app.navigation.keymeTopLevelDestinations
 import com.keyme.presentation.dailykeymetest.dailyKeymeTestGraph
 import com.keyme.presentation.designsystem.theme.KeymeTheme
+import com.keyme.presentation.designsystem.theme.keyme_bottom
+import com.keyme.presentation.designsystem.theme.keyme_white
 import com.keyme.presentation.editprofile.ui.EditProfileDestination
 import com.keyme.presentation.editprofile.ui.editProfileGraph
 import com.keyme.presentation.myprofile.ui.KeymeQuestionResultDestination
@@ -129,8 +131,10 @@ fun KeymeBottomBar(
     onNavigateToDestination: (TopLevelDestination) -> Unit,
 ) {
     NavigationBar(
-        modifier = Modifier.topBorder(width = 1.dp, color = Color(0xFF363636)).height(65.dp),
-        containerColor = Color(0x80232323),
+        modifier = Modifier
+            .topBorder(width = 1.dp, color = Color(0xFF363636))
+            .height(65.dp),
+        containerColor = keyme_bottom,
         tonalElevation = 4.dp,
     ) {
         keymeTopLevelDestinations.forEach { destination ->
@@ -150,7 +154,11 @@ fun KeymeBottomBar(
                     ),
                 contentAlignment = Alignment.Center,
             ) {
-                Icon(painter = painterResource(id = iconResId), contentDescription = "")
+                Icon(
+                    painter = painterResource(id = iconResId),
+                    contentDescription = "",
+                    tint = keyme_white,
+                )
             }
         }
     }

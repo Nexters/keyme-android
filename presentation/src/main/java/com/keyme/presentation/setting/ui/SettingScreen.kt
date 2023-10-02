@@ -238,30 +238,31 @@ private fun SettingContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            KeymeText(
-                modifier = Modifier.weight(1f),
-                text = "푸시알림",
-                keymeTextType = KeymeTextType.BODY_2,
-                color = Color.White,
-            )
-
-            Switch(
-                checked = true,
-                onCheckedChange = { },
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = Color.White,
-                    uncheckedThumbColor = Color.White,
-                    checkedTrackColor = Color(0xFF89B5F6),
-                    uncheckedTrackColor = keyme_black,
-                    uncheckedBorderColor = Color(0xFF89B5F6),
-                ),
-            )
-        }
+        // NOTE: disable, push data 변경 적용 후 기능 enable 해야함
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(vertical = 12.dp),
+//            verticalAlignment = Alignment.CenterVertically,
+//        ) {
+//            KeymeText(
+//                modifier = Modifier.weight(1f),
+//                text = "푸시알림",
+//                keymeTextType = KeymeTextType.BODY_2,
+//                color = Color.White,
+//            )
+//
+//            Switch(
+//                checked = true,
+//                onCheckedChange = { },
+//                colors = SwitchDefaults.colors(
+//                    checkedThumbColor = Color.White,
+//                    uncheckedThumbColor = Color.White,
+//                    checkedTrackColor = Color(0xFF89B5F6),
+//                    uncheckedTrackColor = keyme_black,
+//                    uncheckedBorderColor = Color(0xFF89B5F6),
+//                ),
+//            )
+//        }
     }
 }

@@ -181,7 +181,7 @@ fun ProfileImage(
     Box(
         modifier = Modifier
             .wrapContentSize()
-            .clickable { onClickImage.invoke() },
+            .clickableRippleEffect(bounded = false) { onClickImage.invoke() },
         contentAlignment = Alignment.BottomEnd,
     ) {
         AsyncImage(

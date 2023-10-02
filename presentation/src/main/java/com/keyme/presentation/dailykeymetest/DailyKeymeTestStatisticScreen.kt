@@ -34,17 +34,15 @@ import coil.request.ImageRequest
 import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.domain.entity.response.TestStatistic
-import com.keyme.presentation.KeymeBackgroundAnim
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
-import com.keyme.presentation.designsystem.theme.black_alpha_80
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.utils.ColorUtil
 import com.keyme.presentation.utils.clickableRippleEffect
 import com.keyme.presentation.utils.toKeymeScore
 
-private val bottomGradientHeightDp = 125.dp
+private val bottomGradientHeightDp = 100.dp
 
 @Composable
 fun DailyKeymeTestStatisticScreen(
@@ -204,8 +202,9 @@ private fun ShareToFriendsButton(modifier: Modifier = Modifier, onClick: () -> U
     ) {
         Box(
             modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 25.dp)
                 .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 25.dp)
                 .height(60.dp)
                 .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 16.dp))
                 .clickable { onClick() },

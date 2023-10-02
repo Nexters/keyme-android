@@ -22,6 +22,7 @@ import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.panchang
 import com.keyme.presentation.myprofile.chart.BubbleChartState
 import com.keyme.presentation.myprofile.chart.BubbleItem
+import com.keyme.presentation.utils.clickableRippleEffect
 import com.keyme.presentation.utils.textDp
 import com.keyme.presentation.utils.toKeymeScore
 
@@ -44,7 +45,7 @@ fun BubbleChartItem(
     Box(
         modifier = Modifier
             .bubbleChartItem(bubbleItem)
-            .clickable { onClick() },
+            .clickableRippleEffect { onClick() },
         contentAlignment = Alignment.Center,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

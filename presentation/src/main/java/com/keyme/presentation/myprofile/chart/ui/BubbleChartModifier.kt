@@ -38,8 +38,8 @@ fun Modifier.bubbleChart() = composed {
         .graphicsLayer(
             translationX = offset.x,
             translationY = offset.y,
-            scaleX = scale,
-            scaleY = scale,
+//            scaleX = scale,
+//            scaleY = scale,
         )
 }
 

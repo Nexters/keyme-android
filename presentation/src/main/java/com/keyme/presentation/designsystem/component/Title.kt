@@ -28,7 +28,7 @@ fun KeymeTitle(
                 contentDescription = null,
                 modifier = Modifier
                     .padding(12.dp)
-                    .clickableRippleEffect { onBackClick() },
+                    .clickableRippleEffect(bounded = false) { onBackClick() },
                 tint = keyme_white,
             )
         }

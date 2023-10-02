@@ -49,6 +49,7 @@ import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextButton
 import com.keyme.presentation.designsystem.component.KeymeTextType
+import com.keyme.presentation.designsystem.component.KeymeTitle
 import com.keyme.presentation.designsystem.theme.black_alpha_80
 import com.keyme.presentation.designsystem.theme.keyme_white
 import com.keyme.presentation.designsystem.theme.white_alpha_30
@@ -96,7 +97,7 @@ fun EditProfileScreen(
             .fillMaxSize()
             .background(black_alpha_80),
     ) {
-        SignUpToolbar(onBackClick)
+        KeymeTitle(title = "프로필 변경", onBackClick = onBackClick)
         Column(
             modifier = Modifier
                 .fillMaxSize()

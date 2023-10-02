@@ -57,6 +57,7 @@ import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextButton
 import com.keyme.presentation.designsystem.component.KeymeTextType
+import com.keyme.presentation.designsystem.component.KeymeTitle
 import com.keyme.presentation.designsystem.theme.black_alpha_60
 import com.keyme.presentation.designsystem.theme.black_alpha_80
 import com.keyme.presentation.designsystem.theme.gray500
@@ -67,6 +68,7 @@ import com.keyme.presentation.designsystem.theme.white_alpha_30
 import com.keyme.presentation.designsystem.theme.white_alpha_40
 import com.keyme.presentation.onboarding.OnboardingViewModel
 import com.keyme.presentation.onboarding.fadingAnimateFloatAsState
+import com.keyme.presentation.utils.clickableRippleEffect
 
 @Composable
 fun NicknameScreen(
@@ -90,7 +92,7 @@ fun NicknameScreen(
             .background(black_alpha_60)
             .alpha(fadingAnimateFloatAsState(isAnimationFinished = isVisible).value),
     ) {
-        SignUpToolbar(onBackClick)
+        KeymeTitle(title = "회원가입", onBackClick = onBackClick)
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -155,10 +157,8 @@ fun SignUpToolbar(
             painter = painterResource(id = R.drawable.icon_nav_back),
             contentDescription = null,
             modifier = Modifier
-                .wrapContentSize()
-                .padding(start = 12.dp)
-                .padding(vertical = 12.dp)
-                .clickable { onBackClick() },
+                .padding(12.dp)
+                .clickableRippleEffect { onBackClick() },
             tint = keyme_white,
         )
         KeymeText(

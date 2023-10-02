@@ -36,6 +36,7 @@ import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
+import com.keyme.presentation.designsystem.component.KeymeTitle
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.designsystem.theme.panchang
 import com.keyme.presentation.utils.clickableRippleEffect
@@ -51,15 +52,7 @@ fun KeymeQuestionResultScreen(
     onBackClick: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        Icon(
-            modifier = Modifier
-                .padding(top = 20.dp, start = 16.dp)
-                .clickableRippleEffect(bounded = false) { onBackClick() },
-            painter = painterResource(id = R.drawable.icon_nav_back),
-            contentDescription = "",
-            tint = Color.White,
-        )
-
+        KeymeTitle(title = "", onBackClick = onBackClick)
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,

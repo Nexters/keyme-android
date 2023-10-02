@@ -3,7 +3,6 @@ package com.keyme.presentation.myprofile.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,37 +11,24 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.boundsInParent
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.QuestionStatistic
-import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
-import com.keyme.presentation.designsystem.component.KeymeToolTip
+import com.keyme.presentation.designsystem.component.KeymeTitle
 import com.keyme.presentation.myprofile.MyProfileUiState
 import com.keyme.presentation.utils.clickableRippleEffect
 import kotlinx.coroutines.launch
@@ -84,7 +70,8 @@ fun MyProfileScreen(
                 coroutineScope.launch {
                     pagerState.scrollToPage(it)
                 }
-            },)
+            },
+        )
 
         HorizontalPager(
             pageCount = myProfileTabs.size,
@@ -107,42 +94,6 @@ fun MyProfileScreen(
 }
 
 @Composable
-private fun MyProfileTitle(
-    modifier: Modifier = Modifier,
-    onInfoClick: () -> Unit,
-    onSettingClick: () -> Unit,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 10.dp, horizontal = 24.dp),
-    ) {
-        Row(
-            modifier = Modifier.align(Alignment.Center),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            KeymeText(
-                text = "마이",
-                keymeTextType = KeymeTextType.BODY_3_SEMIBOLD,
-                color = Color(0xFFF8F8F8),
-            )
-        }
-
-        Icon(
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .clickableRippleEffect(bounded = false) { onSettingClick() }
-                .padding(5.dp),
-            painter = painterResource(id = R.drawable.icon_setting),
-            contentDescription = "",
-            tint = Color.White,
-        )
-    }
-
-}
-
-@Composable
 private fun MyProfileTopContainer(
     modifier: Modifier = Modifier,
     myProfileUiState: MyProfileUiState,
@@ -154,30 +105,13 @@ private fun MyProfileTopContainer(
     onSettingClick: () -> Unit,
     onTabSelected: (Int) -> Unit,
 ) {
-    var toolTipPosition by remember { mutableStateOf(Rect.Zero) }
-
     Box(modifier) {
-        // NOTE: 툴팁 disable
-//        KeymeToolTip(
-//            modifier = Modifier
-//                .width(250.dp)
-//                .offset(
-//                    with(LocalDensity.current) { toolTipPosition.bottomLeft.x.toDp() / 4 },
-//                    with(LocalDensity.current) { toolTipPosition.bottomLeft.y.toDp() - 5.dp },
-//                )
-//                .zIndex(1f),
-//            visible = myProfileUiState.showToolTip,
-//            text = "원의 크기가 클수록 해당 성격이 자신을 나타내는 지표가 됩니다.",
-//            onCloseClick = onToolTipCloseClick,
-//        )
-
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            MyProfileTitle(
-                modifier = Modifier.onGloballyPositioned { toolTipPosition = it.boundsInParent() },
-                onInfoClick = onInfoClick,
+            KeymeTitle(
+                title = "마이",
                 onSettingClick = onSettingClick,
             )
 

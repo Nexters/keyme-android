@@ -53,41 +53,33 @@ fun DailyKeymeTestStatisticScreen(
     onQuestionStatisticClick: (QuestionStatistic) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        KeymeBackgroundAnim()
-
-        Box(
+        LazyColumn(
             modifier = Modifier
-                .background(black_alpha_80)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-            ) {
-                item {
-                    StatisticTextTitle()
-                }
-                item {
-                    StatisticSolvedCountInfo(dailyKeymeTestStatistic)
-                }
-
-                statisticList(
-                    myCharacter,
-                    dailyKeymeTestStatistic,
-                    onQuestionStatisticClick,
-                )
-
-                item { Spacer(modifier = Modifier.height(bottomGradientHeightDp)) }
+            item {
+                StatisticTextTitle()
+            }
+            item {
+                StatisticSolvedCountInfo(dailyKeymeTestStatistic)
             }
 
-            ShareToFriendsButton(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .zIndex(1f),
-                onClick = onShareClick,
+            statisticList(
+                myCharacter,
+                dailyKeymeTestStatistic,
+                onQuestionStatisticClick,
             )
+
+            item { Spacer(modifier = Modifier.height(bottomGradientHeightDp)) }
         }
+
+        ShareToFriendsButton(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .zIndex(1f),
+            onClick = onShareClick,
+        )
     }
 }
 

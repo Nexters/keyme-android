@@ -1,7 +1,11 @@
 package com.keyme.presentation.dailykeymetest
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -9,6 +13,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.keyme.domain.entity.response.QuestionStatistic
+import com.keyme.presentation.KeymeBackgroundAnim
+import com.keyme.presentation.designsystem.theme.black_alpha_80
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 import com.keyme.presentation.utils.KeymeLinkUtil
 import com.keyme.presentation.utils.startShareActivity
@@ -49,16 +55,23 @@ fun DailyKeymeTestRoute(
 
     val context = LocalContext.current
 
-    DailyKeymeTestScreen(
-        myCharacter = myCharacter,
-        dailyKeymeTest = dailyKeymeTest,
-        dailyKeymeTestStatistic = dailyKeymeTestStatistic,
-        onDailyKeymeTestClick = {
-            navigateToTakeKeymeTest(dailyKeymeTest.testId)
-        },
-        onShareClick = {
-            context.startShareActivity(KeymeLinkUtil.getTestLink(dailyKeymeTest.testId))
-        },
-        onQuestionStatisticClick = navigateToQuestionResult,
-    )
+    KeymeBackgroundAnim()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = black_alpha_80),
+    ) {
+        DailyKeymeTestScreen(
+            myCharacter = myCharacter,
+            dailyKeymeTest = dailyKeymeTest,
+            dailyKeymeTestStatistic = dailyKeymeTestStatistic,
+            onDailyKeymeTestClick = {
+                navigateToTakeKeymeTest(dailyKeymeTest.testId)
+            },
+            onShareClick = {
+                context.startShareActivity(KeymeLinkUtil.getTestLink(dailyKeymeTest.testId))
+            },
+            onQuestionStatisticClick = navigateToQuestionResult,
+        )
+    }
 }

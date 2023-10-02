@@ -1,13 +1,19 @@
 package com.keyme.presentation.myprofile.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.keyme.domain.entity.response.QuestionStatistic
+import com.keyme.presentation.KeymeBackgroundAnim
+import com.keyme.presentation.designsystem.theme.black_alpha_80
 import com.keyme.presentation.myprofile.MyProfileViewModel
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 
@@ -46,14 +52,21 @@ fun MyProfileRoute(
     val mySimilarStatistics by myProfileViewModel.mySimilarStatisticsState.collectAsStateWithLifecycle()
     val myDifferentStatistics by myProfileViewModel.myDifferentStatisticsState.collectAsStateWithLifecycle()
 
-    MyProfileScreen(
-        myProfileUiState = myProfileUiState,
-        myCharacter = myCharacter,
-        mySimilarStatistics = mySimilarStatistics,
-        myDifferentStatistics = myDifferentStatistics,
-        onInfoClick = myProfileViewModel::showToolTip,
-        onSettingClick = navigateToSetting,
-        onToolTipCloseClick = myProfileViewModel::dismissToolTip,
-        onQuestionClick = navigateToQuestionResult,
-    )
+    KeymeBackgroundAnim()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = black_alpha_80),
+    ) {
+        MyProfileScreen(
+            myProfileUiState = myProfileUiState,
+            myCharacter = myCharacter,
+            mySimilarStatistics = mySimilarStatistics,
+            myDifferentStatistics = myDifferentStatistics,
+            onInfoClick = myProfileViewModel::showToolTip,
+            onSettingClick = navigateToSetting,
+            onToolTipCloseClick = myProfileViewModel::dismissToolTip,
+            onQuestionClick = navigateToQuestionResult,
+        )
+    }
 }

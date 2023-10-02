@@ -83,6 +83,9 @@ object Dependencies {
     // pager
     private const val pager_indicators = "com.google.accompanist:accompanist-pager-indicators:${Versions.accompanist}"
 
+    // system_ui_controller
+    private const val system_ui_controller = "com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}"
+
     // Test
     private val junit = "junit:junit:${Versions.JUNIT}"
 
@@ -123,6 +126,7 @@ object Dependencies {
         implementation(composeViewModel)
         implementation(composeNavigation)
         implementation(runtime_compose)
+        implementation(system_ui_controller)
     }
 
     fun DependencyHandler.setViewModelDependencies() {

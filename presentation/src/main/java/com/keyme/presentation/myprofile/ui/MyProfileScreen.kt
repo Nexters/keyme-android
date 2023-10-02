@@ -112,8 +112,6 @@ private fun MyProfileTitle(
     onInfoClick: () -> Unit,
     onSettingClick: () -> Unit,
 ) {
-
-
     Box(
         modifier = modifier
             .fillMaxWidth()

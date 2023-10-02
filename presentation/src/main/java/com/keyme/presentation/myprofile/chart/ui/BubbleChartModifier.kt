@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
+import com.keyme.presentation.designsystem.theme.black_alpha_80
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.myprofile.chart.BubbleItem
 import com.keyme.presentation.utils.ColorUtil
@@ -32,7 +33,6 @@ fun Modifier.bubbleChart() = composed {
 
     Modifier
         .fillMaxSize()
-        .background(color = keyme_black)
         .clipToBounds()
         .transformable(state)
         .graphicsLayer(

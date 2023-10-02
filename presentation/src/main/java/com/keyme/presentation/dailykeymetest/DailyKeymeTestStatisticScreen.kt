@@ -1,5 +1,6 @@
 package com.keyme.presentation.dailykeymetest
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -52,6 +53,7 @@ fun DailyKeymeTestStatisticScreen(
     onShareClick: () -> Unit,
     onQuestionStatisticClick: (QuestionStatistic) -> Unit,
 ) {
+    val context = LocalContext.current
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier
@@ -66,9 +68,15 @@ fun DailyKeymeTestStatisticScreen(
             }
 
             statisticList(
-                myCharacter,
-                dailyKeymeTestStatistic,
-                onQuestionStatisticClick,
+                myCharacter = myCharacter,
+                dailyKeymeTestStatistic = dailyKeymeTestStatistic,
+                onClickItem = {
+                    if (dailyKeymeTestStatistic.solvedCount > 0) {
+                        onQuestionStatisticClick(it)
+                    } else {
+                        Toast.makeText(context, "친구들에게 문제를 공유하세요!", Toast.LENGTH_SHORT).show()
+                    }
+                },
             )
 
             item { Spacer(modifier = Modifier.height(bottomGradientHeightDp)) }

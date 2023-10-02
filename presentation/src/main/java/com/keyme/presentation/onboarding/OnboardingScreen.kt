@@ -69,6 +69,10 @@ fun OnboardingScreen(
         pagerState.scrollToPage(onBoardingPageUiState.currentPage.ordinal)
     }
 
+    LaunchedEffect(key1 = onBoardingPageUiState) {
+        if (onBoardingPageUiState.currentPage == OnboardingStepsEnum.MY_DAILY) navigateToMyDaily()
+    }
+
     when (pagerState.currentPage) {
         0 -> BackHandler(enabled = true) { /*TODO*/ }
         else -> BackHandler(enabled = true) {
@@ -136,7 +140,7 @@ fun OnboardingScreen(
                     navigateToOnboardingKeymeTest = navigateToOnboardingKeymeTest,
                 )
 
-                OnboardingStepsEnum.MY_DAILY -> navigateToMyDaily.invoke()
+                else -> {}
             }
         }
     }

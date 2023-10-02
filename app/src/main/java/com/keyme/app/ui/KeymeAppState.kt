@@ -17,6 +17,7 @@ import com.keyme.app.navigation.TopLevelDestination
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 import com.keyme.presentation.onboarding.OnboardingDestination
 import com.keyme.presentation.takekeymetest.TakeKeymeTestDestination
+import com.keyme.presentation.tutorial.ui.TutorialDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -86,6 +87,7 @@ class KeymeAppState(
         if (this == null) return false
         if (this.contains(OnboardingDestination.destination)) return false
         if (this.contains(TakeKeymeTestDestination.route)) return false
+        if (this.contains(TutorialDestination.route)) return false
 
         return true
     }

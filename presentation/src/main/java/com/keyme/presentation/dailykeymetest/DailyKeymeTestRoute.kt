@@ -16,6 +16,7 @@ import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.KeymeBackgroundAnim
 import com.keyme.presentation.designsystem.theme.black_alpha_80
 import com.keyme.presentation.navigation.KeymeNavigationDestination
+import com.keyme.presentation.tutorial.TutorialViewModel
 import com.keyme.presentation.utils.KeymeLinkUtil
 import com.keyme.presentation.utils.startShareActivity
 
@@ -25,6 +26,7 @@ object DailyKeymeTestDestination : KeymeNavigationDestination {
 }
 
 fun NavGraphBuilder.dailyKeymeTestGraph(
+    navigateToTutorial: () -> Unit,
     navigateToTakeKeymeTest: (testId: Int) -> Unit,
     navigateToQuestionResult: (QuestionStatistic) -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit,
@@ -35,6 +37,7 @@ fun NavGraphBuilder.dailyKeymeTestGraph(
     ) {
         composable(route = DailyKeymeTestDestination.destination) {
             DailyKeymeTestRoute(
+                navigateToTutorial = navigateToTutorial,
                 navigateToTakeKeymeTest = navigateToTakeKeymeTest,
                 navigateToQuestionResult = navigateToQuestionResult,
             )
@@ -46,15 +49,19 @@ fun NavGraphBuilder.dailyKeymeTestGraph(
 @Composable
 fun DailyKeymeTestRoute(
     dailyKeymeTestViewModel: DailyKeymeTestViewModel = hiltViewModel(),
+    tutorialViewModel: TutorialViewModel = hiltViewModel(),
+    navigateToTutorial: () -> Unit,
     navigateToTakeKeymeTest: (testId: Int) -> Unit,
     navigateToQuestionResult: (QuestionStatistic) -> Unit,
 ) {
+    val showTutorial by tutorialViewModel.showTutorial.collectAsStateWithLifecycle()
+    if (showTutorial) navigateToTutorial()
+
     val myCharacter by dailyKeymeTestViewModel.myCharacterState.collectAsStateWithLifecycle()
     val dailyKeymeTest by dailyKeymeTestViewModel.dailyKeymeTestState.collectAsStateWithLifecycle()
     val dailyKeymeTestStatistic by dailyKeymeTestViewModel.dailyKeymeTestStatisticState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
-
     KeymeBackgroundAnim()
     Box(
         modifier = Modifier

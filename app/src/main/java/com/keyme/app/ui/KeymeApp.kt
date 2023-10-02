@@ -36,6 +36,8 @@ import com.keyme.presentation.setting.ui.SettingDestination
 import com.keyme.presentation.setting.ui.settingGraph
 import com.keyme.presentation.takekeymetest.TakeKeymeTestDestination
 import com.keyme.presentation.takekeymetest.takeKeymeTestGraph
+import com.keyme.presentation.tutorial.ui.TutorialDestination
+import com.keyme.presentation.tutorial.ui.tutorialGraph
 import com.keyme.presentation.utils.topBorder
 
 @Composable
@@ -78,6 +80,7 @@ fun KeymeApp() {
                 )
 
                 dailyKeymeTestGraph(
+                    navigateToTutorial = { appState.navigate(TutorialDestination) },
                     navigateToTakeKeymeTest = { appState.navigate(TakeKeymeTestDestination, it) },
                     navigateToQuestionResult = {
                         appState.navigate(
@@ -86,6 +89,7 @@ fun KeymeApp() {
                         )
                     },
                     nestedGraphs = {
+                        tutorialGraph(onBackClick = appState::onBackClick)
                         keymeQuestionResultGraph(onBackClick = appState::onBackClick)
                         takeKeymeTestGraph(
                             onBackClick = appState::onBackClick,

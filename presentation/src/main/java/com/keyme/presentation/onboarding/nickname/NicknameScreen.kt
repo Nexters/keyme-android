@@ -152,7 +152,7 @@ fun SignUpToolbar(
             .wrapContentHeight(),
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.icon_back_arrow),
+            painter = painterResource(id = R.drawable.icon_nav_back),
             contentDescription = null,
             modifier = Modifier
                 .wrapContentSize()

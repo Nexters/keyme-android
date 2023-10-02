@@ -46,16 +46,19 @@ fun ColumnScope.KeymeQuestionSolvedScoreList(
     statistic: QuestionStatistic,
     solvedScorePagingItem: LazyPagingItems<QuestionSolvedScore>,
 ) {
-    KeymeQuestionScoreListContainer {
-        KeymeQuestionInfo(
-            title = "${myCharacter.nickname}님의 ${statistic.keyword} 정도는?",
-            solvedCount = solvedScorePagingItem.itemCount,
-        )
+    KeymeQuestionScoreListContainer(
+        header = {
+            KeymeQuestionInfo(
+                title = "${myCharacter.nickname}님의 ${statistic.keyword} 정도는?",
+                solvedCount = solvedScorePagingItem.itemCount,
+            )
 
-        Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-        Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = Color(0x1AFFFFFF))
-
+            Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = Color(0x1AFFFFFF))
+        },
+    )
+    {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -79,7 +82,10 @@ fun ColumnScope.KeymeQuestionSolvedScoreList(
 }
 
 @Composable
-private fun ColumnScope.KeymeQuestionScoreListContainer(content: @Composable ColumnScope.() -> Unit) {
+private fun ColumnScope.KeymeQuestionScoreListContainer(
+    header: @Composable ColumnScope.() -> Unit,
+    content: @Composable ColumnScope.() -> Unit,
+) {
     var bottomWeightValue by remember { mutableStateOf(1f) }
 
     Column(
@@ -92,15 +98,19 @@ private fun ColumnScope.KeymeQuestionScoreListContainer(content: @Composable Col
             .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
             .weight(bottomWeightValue),
     ) {
-        BottomSheetHandle(
+        Column(
             modifier = Modifier
+                .fillMaxWidth()
                 .pointerInput(Unit) {
                     detectVerticalDragGestures { _, dragAmount ->
                         bottomWeightValue = (bottomWeightValue - dragAmount / 200).coerceIn(1f, 5f)
                         Timber.d("bottomWeightValue: $bottomWeightValue")
                     }
                 },
-        )
+        ) {
+            BottomSheetHandle()
+            header()
+        }
 
         content()
     }

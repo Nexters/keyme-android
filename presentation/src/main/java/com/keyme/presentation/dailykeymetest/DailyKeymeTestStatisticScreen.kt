@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -142,13 +143,15 @@ private fun QuestionStatisticItem(
     statistic: QuestionStatistic,
     onClick: () -> Unit,
 ) {
+    val itemShape = RoundedCornerShape(size = 14.dp)
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
-            .background(color = Color(0x0DFFFFFF), shape = RoundedCornerShape(size = 14.dp))
-            .padding(horizontal = 14.dp, vertical = 20.dp)
-            .clickableRippleEffect { onClick() },
+            .background(color = Color(0x0DFFFFFF), shape = itemShape)
+            .clip(itemShape)
+            .clickableRippleEffect { onClick() }
+            .padding(horizontal = 14.dp, vertical = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Box(

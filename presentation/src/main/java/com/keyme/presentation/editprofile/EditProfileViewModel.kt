@@ -46,6 +46,7 @@ class EditProfileViewModel @Inject constructor(
         EditProfileUiState(
             nickname = oldMemberInfo.nickname,
             profileImageUrl = oldMemberInfo.profileImage,
+            isValidNickname = verifyNickname(oldMemberInfo.nickname),
         ),
     )
     val editProfileUiState = _editProfileUiState.asStateFlow()

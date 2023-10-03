@@ -21,6 +21,6 @@ class TutorialViewModel @Inject constructor(
         )
 
     fun setLearned(value: Boolean) {
-         tutorialRepository.setLearned(value)
+        tutorialRepository.setLearned(value)
     }
 }

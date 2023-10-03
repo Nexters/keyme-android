@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -63,9 +62,9 @@ class EditProfileViewModel @Inject constructor(
 
     private fun checkUpdateAvailable(oldValue: Member, newValue: EditProfileUiState): Boolean {
         return if (newValue.isValidNickname) {
-            oldValue.nickname != newValue.nickname
-                || oldValue.profileImage != newValue.profileImageUrl
-                || oldValue.profileThumbnail != newValue.profileThumbnailUrl
+            oldValue.nickname != newValue.nickname ||
+                oldValue.profileImage != newValue.profileImageUrl ||
+                oldValue.profileThumbnail != newValue.profileThumbnailUrl
         } else {
             false
         }

@@ -26,7 +26,6 @@ fun NavGraphBuilder.editProfileGraph(
 
 @Composable
 fun EditProfileRoute(onBackClick: () -> Unit) {
-
     KeymeBackgroundAnim()
     Box(
         modifier = Modifier

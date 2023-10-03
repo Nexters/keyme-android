@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.keyme.domain.entity.response.QuestionSolvedScore
 import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.utils.ColorUtil
 import timber.log.Timber

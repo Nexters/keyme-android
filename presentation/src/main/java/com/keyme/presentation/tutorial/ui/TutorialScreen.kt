@@ -43,7 +43,6 @@ fun TutorialScreen(
             pageCount = 1,
             state = pagerState,
         ) {
-
         }
 
         Box(
@@ -87,6 +86,5 @@ fun TutorialScreen(
 @Composable
 fun TutorialScreenPreview() {
     TutorialScreen {
-
     }
 }

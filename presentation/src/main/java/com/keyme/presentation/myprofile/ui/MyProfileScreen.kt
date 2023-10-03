@@ -134,7 +134,6 @@ private fun MyProfileTopContainer(
                 color = Color(0xFFFFFFFF),
             )
         }
-
     }
 }
 

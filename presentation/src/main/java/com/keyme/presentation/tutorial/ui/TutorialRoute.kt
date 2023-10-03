@@ -20,7 +20,6 @@ fun NavGraphBuilder.tutorialGraph(
     }
 }
 
-
 @Composable
 fun TutorialRoute(
     tutorialViewModel: TutorialViewModel = hiltViewModel(),

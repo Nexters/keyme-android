@@ -27,7 +27,6 @@ fun NavGraphBuilder.settingGraph(
         }
         nestedGraphs()
     }
-
 }
 
 @Composable
@@ -40,6 +39,6 @@ fun SettingRoute(
         onBackClick = onBackClick,
         onProfileChangeClick = navigateToEditProfile,
         onLogOutClick = settingViewModel::logOut,
-        onWithdrawClick = settingViewModel::withdraw
+        onWithdrawClick = settingViewModel::withdraw,
     )
 }

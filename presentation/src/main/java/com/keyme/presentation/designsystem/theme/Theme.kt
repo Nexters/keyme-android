@@ -43,7 +43,6 @@ fun KeymeTheme(
         }
     }
 
-
     val systemUiController = rememberSystemUiController()
     DisposableEffect(systemUiController) {
         systemUiController.setSystemBarsColor(

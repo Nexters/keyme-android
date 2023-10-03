@@ -122,7 +122,6 @@ fun OnboardingScreen(
                             },
                             confirmButtonText = "다음",
                             onEditSuccess = {
-
                             },
                         )
                     }

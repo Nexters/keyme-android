@@ -27,7 +27,7 @@ fun KeymeTextButton(
         shape = RoundedCornerShape(size = 16.dp),
         colors = ButtonDefaults.textButtonColors(
             containerColor = keyme_white,
-            disabledContainerColor = Color(0x0DFFFFFF)
+            disabledContainerColor = Color(0x0DFFFFFF),
         ),
         contentPadding = PaddingValues(),
     ) {

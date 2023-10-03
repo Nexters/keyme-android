@@ -50,7 +50,7 @@ class MyProfileViewModel @Inject constructor(
         }
     }
 
-    private var toolTipTimerJob : Job? = null
+    private var toolTipTimerJob: Job? = null
 
     fun showToolTip() {
         if (_myProfileUiState.value.showToolTip.not()) {

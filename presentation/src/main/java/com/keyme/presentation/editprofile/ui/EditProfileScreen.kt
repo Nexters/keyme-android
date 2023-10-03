@@ -234,7 +234,6 @@ private fun NicknameInputInfo(
     }
 }
 
-
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun NicknameTextField(
@@ -300,7 +299,6 @@ private fun NicknameTextField(
     }
 }
 
-
 @Composable
 private fun NicknameVerifyResult(
     uiState: EditProfileUiState,
@@ -348,4 +346,3 @@ private fun NicknameInputGuide() {
         color = keyme_white,
     )
 }
-

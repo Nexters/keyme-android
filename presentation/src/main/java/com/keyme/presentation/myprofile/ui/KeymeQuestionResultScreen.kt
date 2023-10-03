@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,7 +21,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,13 +31,11 @@ import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.Category
 import com.keyme.domain.entity.response.QuestionSolvedScore
 import com.keyme.domain.entity.response.QuestionStatistic
-import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.component.KeymeTitle
 import com.keyme.presentation.designsystem.theme.keyme_black
 import com.keyme.presentation.designsystem.theme.panchang
-import com.keyme.presentation.utils.clickableRippleEffect
 import com.keyme.presentation.utils.textDp
 import com.keyme.presentation.utils.toKeymeScore
 import kotlinx.coroutines.flow.flowOf

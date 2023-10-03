@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class TutorialRepositoryImpl @Inject constructor(
     private val tutorialDataSource: TutorialDataSource,
-): TutorialRepository {
+) : TutorialRepository {
     override fun isLearned(): Flow<Boolean> {
         return tutorialDataSource.isLearned
     }

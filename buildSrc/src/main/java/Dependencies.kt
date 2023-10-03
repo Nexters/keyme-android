@@ -76,6 +76,8 @@ object Dependencies {
     // fcm
     private val firebase_bom = "com.google.firebase:firebase-bom:32.2.2"
     private val firebase_messaging = "com.google.firebase:firebase-messaging-ktx"
+    private val firebase_crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
+    private val firebase_analytics = "com.google.firebase:firebase-analytics-ktx"
 
     // webview
     private val webView = "com.google.accompanist:accompanist-webview:${Versions.accompanist}"
@@ -165,6 +167,8 @@ object Dependencies {
     fun DependencyHandler.setFirebaseDependencies() {
         implementation(platform(firebase_bom))
         implementation(firebase_messaging)
+        implementation(firebase_crashlytics)
+        implementation(firebase_analytics)
     }
 
     fun DependencyHandler.setDatabaseDependencies() {

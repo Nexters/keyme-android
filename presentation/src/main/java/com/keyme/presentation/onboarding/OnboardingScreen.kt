@@ -35,7 +35,6 @@ import com.keyme.presentation.onboarding.guide.Guide01Screen
 import com.keyme.presentation.onboarding.guide.Guide02Screen
 import com.keyme.presentation.onboarding.guide.Guide03Screen
 import com.keyme.presentation.onboarding.guide.Guide04Screen
-import com.keyme.presentation.onboarding.nickname.NicknameScreen
 import com.keyme.presentation.onboarding.signin.SignInScreen
 
 @Composable

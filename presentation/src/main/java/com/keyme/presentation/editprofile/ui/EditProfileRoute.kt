@@ -36,6 +36,7 @@ fun EditProfileRoute(onBackClick: () -> Unit) {
         EditProfileScreen(
             onBackClick = onBackClick,
             confirmButtonText = "완료",
+            onEditSuccess = onBackClick,
         )
     }
 }

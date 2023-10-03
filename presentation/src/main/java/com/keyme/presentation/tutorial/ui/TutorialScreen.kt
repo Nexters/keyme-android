@@ -2,8 +2,6 @@ package com.keyme.presentation.tutorial.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.keyme.presentation.designsystem.component.KeymeText
@@ -44,7 +43,6 @@ fun TutorialScreen(
             pageCount = 1,
             state = pagerState,
         ) {
-
 
         }
 
@@ -82,5 +80,13 @@ fun TutorialScreen(
                 color = Color.Black,
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun TutorialScreenPreview() {
+    TutorialScreen {
+
     }
 }

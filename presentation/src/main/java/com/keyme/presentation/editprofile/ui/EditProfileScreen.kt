@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -33,9 +34,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -45,21 +48,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextButton
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.component.KeymeTitle
 import com.keyme.presentation.designsystem.theme.black_alpha_80
+import com.keyme.presentation.designsystem.theme.gray500
+import com.keyme.presentation.designsystem.theme.gray600
 import com.keyme.presentation.designsystem.theme.keyme_white
+import com.keyme.presentation.designsystem.theme.white_alpha_15
 import com.keyme.presentation.designsystem.theme.white_alpha_30
 import com.keyme.presentation.designsystem.theme.white_alpha_40
 import com.keyme.presentation.editprofile.EditProfileUiEvent
 import com.keyme.presentation.editprofile.EditProfileUiState
 import com.keyme.presentation.editprofile.EditProfileViewModel
-import com.keyme.presentation.onboarding.nickname.NicknameInputInfo
-import com.keyme.presentation.onboarding.nickname.ProfileImage
 import com.keyme.presentation.utils.ImageUploadUtil
+import com.keyme.presentation.utils.clickableRippleEffect
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -67,6 +73,7 @@ fun EditProfileScreen(
     viewModel: EditProfileViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     confirmButtonText: String,
+    onEditSuccess: () -> Unit,
 ) {
     val context = LocalContext.current
     val uiState by viewModel.editProfileUiState.collectAsStateWithLifecycle()
@@ -92,7 +99,7 @@ fun EditProfileScreen(
     LaunchedEffect(key1 = viewModel) {
         viewModel.editProfileUiEvent.collectLatest {
             when (it) {
-                is EditProfileUiEvent.UpdateMemberSuccess -> onBackClick()
+                is EditProfileUiEvent.UpdateMemberSuccess -> onEditSuccess()
             }
         }
     }
@@ -150,6 +157,83 @@ fun EditProfileScreen(
         }
     }
 }
+
+@Composable
+private fun ProfileImage(
+    selectedImage: Any?,
+    onClickImage: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .wrapContentSize()
+            .clickableRippleEffect(bounded = false) { onClickImage.invoke() },
+        contentAlignment = Alignment.BottomEnd,
+    ) {
+        AsyncImage(
+            model = selectedImage,
+            contentDescription = null,
+            modifier = Modifier
+                .size(160.dp)
+                .background(
+                    color = white_alpha_15,
+                    shape = CircleShape,
+                )
+                .border(
+                    width = 1.dp,
+                    color = white_alpha_30,
+                    shape = CircleShape,
+                )
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop,
+        )
+        Box(
+            modifier = Modifier
+                .size(50.dp)
+                .background(
+                    color = gray600,
+                    shape = CircleShape,
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.icon_gallery),
+                contentDescription = null,
+            )
+        }
+    }
+}
+
+@Composable
+private fun NicknameInputInfo(
+    nickname: String,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        KeymeText(
+            text = "닉네임",
+            keymeTextType = KeymeTextType.BODY_3_SEMIBOLD,
+            modifier = Modifier.wrapContentSize(),
+            color = keyme_white,
+        )
+        Spacer(modifier = Modifier.size(4.dp))
+        KeymeText(
+            text = "(${nickname.length}/6)",
+            keymeTextType = KeymeTextType.CAPTION_1,
+            modifier = Modifier.wrapContentSize(),
+            color = gray500,
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        KeymeText(
+            text = "2-6자리 한글, 영어, 숫자",
+            keymeTextType = KeymeTextType.CAPTION_1,
+            modifier = Modifier.wrapContentSize(),
+            color = keyme_white,
+        )
+    }
+}
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

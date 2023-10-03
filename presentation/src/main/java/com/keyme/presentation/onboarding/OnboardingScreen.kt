@@ -5,6 +5,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
@@ -14,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -28,6 +30,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.theme.black_alpha_60
 import com.keyme.presentation.designsystem.theme.keyme_black
+import com.keyme.presentation.editprofile.ui.EditProfileScreen
 import com.keyme.presentation.onboarding.guide.Guide01Screen
 import com.keyme.presentation.onboarding.guide.Guide02Screen
 import com.keyme.presentation.onboarding.guide.Guide03Screen
@@ -107,12 +110,24 @@ fun OnboardingScreen(
             when (OnboardingStepsEnum.onboardingSteps[it]) {
                 OnboardingStepsEnum.KAKAO_SIGN_IN -> SignInScreen(signInWithKeyme)
 
-                OnboardingStepsEnum.NICKNAME -> NicknameScreen(
-                    isVisible = isVisible,
-                    onBackClick = {
-                        onPageIndexChanged(pagerState.currentPage - 1)
-                    },
-                )
+                OnboardingStepsEnum.NICKNAME -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(black_alpha_60)
+                            .alpha(fadingAnimateFloatAsState(isAnimationFinished = isVisible).value),
+                    ) {
+                        EditProfileScreen(
+                            onBackClick = {
+                                onPageIndexChanged(pagerState.currentPage - 1)
+                            },
+                            confirmButtonText = "다음",
+                            onEditSuccess = {
+
+                            },
+                        )
+                    }
+                }
 
                 OnboardingStepsEnum.GUIDE_01 -> Guide01Screen(
                     isVisible = isVisible,

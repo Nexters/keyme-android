@@ -55,11 +55,19 @@ class EditProfileViewModel @Inject constructor(
 
     init {
         _editProfileUiState.onEach {
-            val changed = oldMemberInfo.nickname != it.nickname
-                || oldMemberInfo.profileImage != it.profileImageUrl
-                || oldMemberInfo.profileThumbnail != it.profileThumbnailUrl
-            _editProfileUiState.value = _editProfileUiState.value.copy(updateAvailable = changed)
+            val updateAvailable = checkUpdateAvailable(oldMemberInfo, it)
+            _editProfileUiState.value = _editProfileUiState.value.copy(updateAvailable = updateAvailable)
         }.launchIn(baseViewModelScope)
+    }
+
+    private fun checkUpdateAvailable(oldValue: Member, newValue: EditProfileUiState): Boolean {
+        return if (newValue.isValidNickname) {
+            oldValue.nickname != newValue.nickname
+                || oldValue.profileImage != newValue.profileImageUrl
+                || oldValue.profileThumbnail != newValue.profileThumbnailUrl
+        } else {
+            false
+        }
     }
 
     fun uploadProfileImage(imageString: String) {

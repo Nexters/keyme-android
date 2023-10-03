@@ -12,7 +12,7 @@ data class QuestionSolvedScoreList(
 
 data class QuestionSolvedScore(
     val id: Int,
-    val createAt: String = "",
+    val createdAt: String = "",
     val score: Int,
 ) {
     companion object {

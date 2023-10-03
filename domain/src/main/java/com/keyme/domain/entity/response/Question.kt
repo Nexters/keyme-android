@@ -22,6 +22,7 @@ data class QuestionStatistic(
     val keyword: String,
     val category: Category,
     val avgScore: Float,
+    val myScore: Int,
 ) {
     companion object {
         val EMPTY = QuestionStatistic(
@@ -30,6 +31,7 @@ data class QuestionStatistic(
             keyword = "",
             questionId = 0,
             title = "",
+            myScore = 0,
         )
     }
 }

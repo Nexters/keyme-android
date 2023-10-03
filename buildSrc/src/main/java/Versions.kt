@@ -9,6 +9,9 @@ object Versions {
     // Google-Serivces
     const val GOOGLE = "4.3.15"
 
+    // Crashlytics Gradle plugin
+    const val CRASHLYTICS = "2.9.9"
+
     // Coroutines
     const val COROUTINES = "1.3.9"
 

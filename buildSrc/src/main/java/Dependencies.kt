@@ -76,12 +76,17 @@ object Dependencies {
     // fcm
     private val firebase_bom = "com.google.firebase:firebase-bom:32.2.2"
     private val firebase_messaging = "com.google.firebase:firebase-messaging-ktx"
+    private val firebase_crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
+    private val firebase_analytics = "com.google.firebase:firebase-analytics-ktx"
 
     // webview
     private val webView = "com.google.accompanist:accompanist-webview:${Versions.accompanist}"
 
     // pager
     private const val pager_indicators = "com.google.accompanist:accompanist-pager-indicators:${Versions.accompanist}"
+
+    // system_ui_controller
+    private const val system_ui_controller = "com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}"
 
     // Test
     private val junit = "junit:junit:${Versions.JUNIT}"
@@ -123,6 +128,7 @@ object Dependencies {
         implementation(composeViewModel)
         implementation(composeNavigation)
         implementation(runtime_compose)
+        implementation(system_ui_controller)
     }
 
     fun DependencyHandler.setViewModelDependencies() {
@@ -161,6 +167,8 @@ object Dependencies {
     fun DependencyHandler.setFirebaseDependencies() {
         implementation(platform(firebase_bom))
         implementation(firebase_messaging)
+        implementation(firebase_crashlytics)
+        implementation(firebase_analytics)
     }
 
     fun DependencyHandler.setDatabaseDependencies() {

@@ -13,6 +13,7 @@ import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.domain.entity.response.Result
 import com.keyme.presentation.utils.scale
 import timber.log.Timber
+import kotlin.math.min
 
 @Composable
 fun rememberBubbleChartState(
@@ -32,7 +33,8 @@ class BubbleChartState(
     private val containerSize: Size,
     private val onBubbleClick: (BubbleItem) -> Unit,
 ) {
-    private val scale = containerSize.width.toInt()
+    // NOTE: 화면 너비 보다 사이즈가 크게 설정되는 경우 원이 찌그러지는 문제가 발생하여 임의로 scale 에 factor 설정
+    private val scale = containerSize.width * 0.8f
     val bubbleItems = results.map { it.toBubbleItem() }
 
     private fun Result.toBubbleItem(): BubbleItem {
@@ -46,7 +48,7 @@ class BubbleChartState(
 
         val offsetX = rect.topLeft.x / density
         val offsetY = rect.topLeft.y / density
-        val dpSize = (rect.size.width / density).dp
+        val dpSize = min((rect.size.width / density), containerSize.width).dp
 
         return BubbleItem(questionStatistic, Offset(offsetX, offsetY), dpSize)
     }

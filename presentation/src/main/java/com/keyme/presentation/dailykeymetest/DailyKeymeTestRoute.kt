@@ -1,17 +1,24 @@
 package com.keyme.presentation.dailykeymetest
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.AnnotatedString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.keyme.domain.entity.response.QuestionStatistic
+import com.keyme.presentation.KeymeBackgroundAnim
+import com.keyme.presentation.designsystem.theme.black_alpha_80
 import com.keyme.presentation.navigation.KeymeNavigationDestination
+import com.keyme.presentation.tutorial.TutorialViewModel
+import com.keyme.presentation.utils.KeymeLinkUtil
+import com.keyme.presentation.utils.startShareActivity
 
 object DailyKeymeTestDestination : KeymeNavigationDestination {
     override val route = "daily_keyme_test_route"
@@ -19,6 +26,7 @@ object DailyKeymeTestDestination : KeymeNavigationDestination {
 }
 
 fun NavGraphBuilder.dailyKeymeTestGraph(
+    navigateToTutorial: () -> Unit,
     navigateToTakeKeymeTest: (testId: Int) -> Unit,
     navigateToQuestionResult: (QuestionStatistic) -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit,
@@ -29,6 +37,7 @@ fun NavGraphBuilder.dailyKeymeTestGraph(
     ) {
         composable(route = DailyKeymeTestDestination.destination) {
             DailyKeymeTestRoute(
+                navigateToTutorial = navigateToTutorial,
                 navigateToTakeKeymeTest = navigateToTakeKeymeTest,
                 navigateToQuestionResult = navigateToQuestionResult,
             )
@@ -40,30 +49,36 @@ fun NavGraphBuilder.dailyKeymeTestGraph(
 @Composable
 fun DailyKeymeTestRoute(
     dailyKeymeTestViewModel: DailyKeymeTestViewModel = hiltViewModel(),
+    tutorialViewModel: TutorialViewModel = hiltViewModel(),
+    navigateToTutorial: () -> Unit,
     navigateToTakeKeymeTest: (testId: Int) -> Unit,
     navigateToQuestionResult: (QuestionStatistic) -> Unit,
 ) {
+    val showTutorial by tutorialViewModel.showTutorial.collectAsStateWithLifecycle()
+    if (showTutorial) navigateToTutorial()
+
     val myCharacter by dailyKeymeTestViewModel.myCharacterState.collectAsStateWithLifecycle()
     val dailyKeymeTest by dailyKeymeTestViewModel.dailyKeymeTestState.collectAsStateWithLifecycle()
     val dailyKeymeTestStatistic by dailyKeymeTestViewModel.dailyKeymeTestStatisticState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
-    val clipboardManager = LocalClipboardManager.current
-
-    DailyKeymeTestScreen(
-        myCharacter = myCharacter,
-        dailyKeymeTest = dailyKeymeTest,
-        dailyKeymeTestStatistic = dailyKeymeTestStatistic,
-        onDailyKeymeTestClick = {
-            navigateToTakeKeymeTest(dailyKeymeTest.testId)
-        },
-        onShareClick = {
-            // todo 코드 정리 필요
-            val testLink = "https://keyme-frontend.vercel.app/test/${dailyKeymeTest.testId}"
-            clipboardManager.setText(AnnotatedString(testLink))
-            // todo api level 분기 필요
-//            Toast.makeText(context, "링크 복사 완료", Toast.LENGTH_SHORT).show()
-        },
-        onQuestionStatisticClick = navigateToQuestionResult,
-    )
+    KeymeBackgroundAnim()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = black_alpha_80),
+    ) {
+        DailyKeymeTestScreen(
+            myCharacter = myCharacter,
+            dailyKeymeTest = dailyKeymeTest,
+            dailyKeymeTestStatistic = dailyKeymeTestStatistic,
+            onDailyKeymeTestClick = {
+                navigateToTakeKeymeTest(dailyKeymeTest.testId)
+            },
+            onShareClick = {
+                context.startShareActivity(KeymeLinkUtil.getTestLink(dailyKeymeTest.testId))
+            },
+            onQuestionStatisticClick = navigateToQuestionResult,
+        )
+    }
 }

@@ -1,6 +1,5 @@
 package com.keyme.presentation.myprofile.chart.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +21,9 @@ import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.panchang
 import com.keyme.presentation.myprofile.chart.BubbleChartState
 import com.keyme.presentation.myprofile.chart.BubbleItem
+import com.keyme.presentation.utils.clickableRippleEffect
 import com.keyme.presentation.utils.textDp
+import com.keyme.presentation.utils.toKeymeScore
 
 @Composable
 fun BubbleChartCanvas(
@@ -43,7 +44,7 @@ fun BubbleChartItem(
     Box(
         modifier = Modifier
             .bubbleChartItem(bubbleItem)
-            .clickable { onClick() },
+            .clickableRippleEffect { onClick() },
         contentAlignment = Alignment.Center,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -65,7 +66,7 @@ fun BubbleChartItem(
             )
 
             Text(
-                text = bubbleItem.statistics.avgScore.toString(),
+                text = bubbleItem.statistics.avgScore.toKeymeScore().toString(),
                 fontFamily = panchang,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 18.textDp(),

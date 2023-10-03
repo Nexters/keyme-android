@@ -16,18 +16,20 @@ import androidx.navigation.compose.rememberNavController
 import com.keyme.app.navigation.TopLevelDestination
 import com.keyme.presentation.navigation.KeymeNavigationDestination
 import com.keyme.presentation.onboarding.OnboardingDestination
-import com.keyme.presentation.onboarding.OnboardingViewModel
 import com.keyme.presentation.takekeymetest.TakeKeymeTestDestination
+import com.keyme.presentation.tutorial.ui.TutorialDestination
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun rememberKeymeAppState(
-    onboardingViewModel: OnboardingViewModel = hiltViewModel(),
+    keymeAppStateViewModel: KeymeAppStateViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
 ): KeymeAppState {
     val coroutineScope = rememberCoroutineScope()
     return remember(navController) {
-        KeymeAppState(coroutineScope, navController, onboardingViewModel)
+        KeymeAppState(coroutineScope, navController, keymeAppStateViewModel)
     }
 }
 
@@ -35,7 +37,7 @@ fun rememberKeymeAppState(
 class KeymeAppState(
     private val coroutineScope: CoroutineScope,
     val navController: NavHostController,
-    private val onboardingViewModel: OnboardingViewModel,
+    private val viewModel: KeymeAppStateViewModel,
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
@@ -44,6 +46,14 @@ class KeymeAppState(
 
     val showBottomBar: Boolean
         @Composable get() = currentDestination?.route.showBottomBar()
+
+    init {
+        coroutineScope.launch {
+            viewModel.myMemberInfoState.collectLatest {
+                if (it == null) startDestination = OnboardingDestination
+            }
+        }
+    }
 
     fun navigate(destination: KeymeNavigationDestination) {
         if (destination is TopLevelDestination) {
@@ -77,6 +87,7 @@ class KeymeAppState(
         if (this == null) return false
         if (this.contains(OnboardingDestination.destination)) return false
         if (this.contains(TakeKeymeTestDestination.route)) return false
+        if (this.contains(TutorialDestination.route)) return false
 
         return true
     }

@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.keyme.domain.entity.response.QuestionSolvedScore
 import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.utils.ColorUtil
 import timber.log.Timber
@@ -43,7 +42,6 @@ import timber.log.Timber
 @Composable
 fun ColumnScope.KeymeQuestionStatisticsCircle(
     statistics: QuestionStatistic,
-    myScore: QuestionSolvedScore?,
     onPressedUp: () -> Unit,
     onPressedDown: () -> Unit,
 ) {
@@ -54,16 +52,12 @@ fun ColumnScope.KeymeQuestionStatisticsCircle(
         height = with(density) { ((containerCircleSize.height / 5) * statistics.avgScore).toDp() },
     )
 
-    val myScoreCircleSize = if (myScore != null) {
-        DpSize(
-            width = with(density) { ((containerCircleSize.width / 5) * myScore.score).toDp() },
-            height = with(density) { ((containerCircleSize.height / 5) * myScore.score).toDp() },
-        )
-    } else {
-        DpSize.Zero
-    }
+    val myScoreCircleSize = DpSize(
+        width = with(density) { ((containerCircleSize.width / 5) * statistics.myScore).toDp() },
+        height = with(density) { ((containerCircleSize.height / 5) * statistics.myScore).toDp() },
+    )
 
-    var showMyScore by remember(myScore) { mutableStateOf(false) }
+    var showMyScore by remember { mutableStateOf(false) }
 
     Timber.d("showMyScore: $showMyScore")
 
@@ -71,7 +65,6 @@ fun ColumnScope.KeymeQuestionStatisticsCircle(
         modifier = Modifier
             .questionMatchRateCircle(
                 this,
-                myScore,
                 onPressedUp = {
                     showMyScore = true
                     onPressedUp()
@@ -126,7 +119,6 @@ fun ColumnScope.KeymeQuestionStatisticsCircle(
 @Composable
 private fun Modifier.questionMatchRateCircle(
     scope: ColumnScope,
-    myScore: QuestionSolvedScore?,
     onPressedDown: () -> Unit,
     onPressedUp: () -> Unit,
 ) = composed {
@@ -147,14 +139,12 @@ private fun Modifier.questionMatchRateCircle(
             )
             .background(color = Color(0x4DFFFFFF), shape = CircleShape)
             .clip(CircleShape)
-            .pointerInput(myScore) {
+            .pointerInput(Unit) {
                 detectTapGestures(
                     onPress = {
-                        if (myScore != null) {
-                            onPressedUp()
-                            this.awaitRelease()
-                            onPressedDown()
-                        }
+                        onPressedUp()
+                        this.awaitRelease()
+                        onPressedDown()
                     },
                 )
             }

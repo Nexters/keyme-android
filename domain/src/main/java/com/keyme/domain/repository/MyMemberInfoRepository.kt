@@ -7,5 +7,6 @@ interface MyMemberInfoRepository {
 
     fun getInfo(): Flow<Member?>
     suspend fun updateInfo(member: Member)
-    suspend fun clearInfo(member: Member)
+
+    suspend fun clearInfo()
 }

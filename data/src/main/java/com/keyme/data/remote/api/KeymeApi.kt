@@ -23,6 +23,7 @@ import com.keyme.domain.entity.response.UploadProfileImageResponse
 import com.keyme.domain.entity.response.VerifyNicknameResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
@@ -52,6 +53,9 @@ interface KeymeApi {
     suspend fun getMember(
         @Path("memberId") memberId: String,
     ): MemberResponse
+
+    @DELETE("/members")
+    suspend fun withdraw(): EmptyResponse
 
     @Multipart
     @POST("/images")

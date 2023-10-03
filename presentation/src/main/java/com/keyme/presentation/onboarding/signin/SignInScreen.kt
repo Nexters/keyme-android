@@ -31,6 +31,8 @@ import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.theme.keyme_white
 import com.keyme.presentation.designsystem.theme.white_alpha_50
+import com.keyme.presentation.utils.Consts
+import com.keyme.presentation.utils.startWebView
 
 @Composable
 fun SignInScreen(
@@ -51,8 +53,12 @@ fun SignInScreen(
             KakaoSignInButton { signInWithKakao(context, signInWithKeyme) }
             Spacer(modifier = Modifier.size(30.dp))
             SignInPoliciesText(
-                onClickServicePolicy = { /*TODO*/ },
-                onCLickPrivacyPolicy = { /*TODO*/ },
+                onClickServicePolicy = {
+                    context.startWebView(Consts.termsOfUseUrl)
+                },
+                onCLickPrivacyPolicy = {
+                    context.startWebView(Consts.policyUrl)
+                },
             )
         }
     }

@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BottomSheetHandle(modifier: Modifier) {
+fun BottomSheetHandle(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.bottomSheetHandle(),
         contentAlignment = Alignment.Center,

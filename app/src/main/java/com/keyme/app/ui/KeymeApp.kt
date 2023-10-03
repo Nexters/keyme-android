@@ -5,6 +5,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -23,12 +24,20 @@ import com.keyme.app.navigation.TopLevelDestination
 import com.keyme.app.navigation.keymeTopLevelDestinations
 import com.keyme.presentation.dailykeymetest.dailyKeymeTestGraph
 import com.keyme.presentation.designsystem.theme.KeymeTheme
+import com.keyme.presentation.designsystem.theme.keyme_bottom
+import com.keyme.presentation.designsystem.theme.keyme_white
+import com.keyme.presentation.editprofile.ui.EditProfileDestination
+import com.keyme.presentation.editprofile.ui.editProfileGraph
 import com.keyme.presentation.myprofile.ui.KeymeQuestionResultDestination
 import com.keyme.presentation.myprofile.ui.keymeQuestionResultGraph
 import com.keyme.presentation.myprofile.ui.myProfileGraph
 import com.keyme.presentation.onboarding.onboardingGraph
+import com.keyme.presentation.setting.ui.SettingDestination
+import com.keyme.presentation.setting.ui.settingGraph
 import com.keyme.presentation.takekeymetest.TakeKeymeTestDestination
 import com.keyme.presentation.takekeymetest.takeKeymeTestGraph
+import com.keyme.presentation.tutorial.ui.TutorialDestination
+import com.keyme.presentation.tutorial.ui.tutorialGraph
 import com.keyme.presentation.utils.topBorder
 
 @Composable
@@ -71,9 +80,16 @@ fun KeymeApp() {
                 )
 
                 dailyKeymeTestGraph(
+                    navigateToTutorial = { appState.navigate(TutorialDestination) },
                     navigateToTakeKeymeTest = { appState.navigate(TakeKeymeTestDestination, it) },
-                    navigateToQuestionResult = { appState.navigate(KeymeQuestionResultDestination, it.questionId) },
+                    navigateToQuestionResult = {
+                        appState.navigate(
+                            KeymeQuestionResultDestination,
+                            it.questionId,
+                        )
+                    },
                     nestedGraphs = {
+                        tutorialGraph(onBackClick = appState::onBackClick)
                         keymeQuestionResultGraph(onBackClick = appState::onBackClick)
                         takeKeymeTestGraph(
                             onBackClick = appState::onBackClick,
@@ -89,8 +105,19 @@ fun KeymeApp() {
                             question.questionId,
                         )
                     },
+                    navigateToSetting = {
+                        appState.navigate(SettingDestination)
+                    },
                     nestedGraphs = {
                         keymeQuestionResultGraph(onBackClick = appState::onBackClick)
+                        settingGraph(
+                            onBackClick = appState::onBackClick,
+                            navigateToEditProfile = {
+                                appState.navigate(EditProfileDestination)
+                            },
+                        ) {
+                            editProfileGraph(onBackClick = appState::onBackClick)
+                        }
                     },
                 )
             }
@@ -108,8 +135,10 @@ fun KeymeBottomBar(
     onNavigateToDestination: (TopLevelDestination) -> Unit,
 ) {
     NavigationBar(
-        modifier = Modifier.topBorder(width = 1.dp, color = Color(0xFF363636)),
-        containerColor = Color(0x80232323),
+        modifier = Modifier
+            .topBorder(width = 1.dp, color = Color(0xFF363636))
+            .height(65.dp),
+        containerColor = keyme_bottom,
         tonalElevation = 4.dp,
     ) {
         keymeTopLevelDestinations.forEach { destination ->
@@ -129,7 +158,11 @@ fun KeymeBottomBar(
                     ),
                 contentAlignment = Alignment.Center,
             ) {
-                Icon(painter = painterResource(id = iconResId), contentDescription = "")
+                Icon(
+                    painter = painterResource(id = iconResId),
+                    contentDescription = "",
+                    tint = keyme_white,
+                )
             }
         }
     }

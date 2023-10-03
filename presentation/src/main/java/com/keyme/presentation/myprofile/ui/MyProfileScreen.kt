@@ -3,7 +3,6 @@ package com.keyme.presentation.myprofile.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,22 +15,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.QuestionStatistic
-import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextType
+import com.keyme.presentation.designsystem.component.KeymeTitle
+import com.keyme.presentation.myprofile.MyProfileUiState
 import com.keyme.presentation.utils.clickableRippleEffect
 import kotlinx.coroutines.launch
 
@@ -44,9 +42,13 @@ private val myProfileTabs = listOf(MyProfileTab.Similar, MyProfileTab.Different)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyProfileScreen(
+    myProfileUiState: MyProfileUiState,
     myCharacter: Member,
     mySimilarStatistics: MemberStatistics,
     myDifferentStatistics: MemberStatistics,
+    onInfoClick: () -> Unit,
+    onToolTipCloseClick: () -> Unit,
+    onSettingClick: () -> Unit,
     onQuestionClick: (QuestionStatistic) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -54,9 +56,16 @@ fun MyProfileScreen(
         val coroutineScope = rememberCoroutineScope()
 
         MyProfileTopContainer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .zIndex(1f),
+            myProfileUiState,
             myCharacter,
             pagerState.currentPage,
             myProfileTabs,
+            onInfoClick = onInfoClick,
+            onSettingClick = onSettingClick,
+            onToolTipCloseClick = onToolTipCloseClick,
             onTabSelected = {
                 coroutineScope.launch {
                     pagerState.scrollToPage(it)
@@ -85,58 +94,46 @@ fun MyProfileScreen(
 }
 
 @Composable
-private fun MyProfileTitle() {
-    Row(
-        modifier = Modifier.padding(vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-    ) {
-        KeymeText(
-            text = "마이",
-            keymeTextType = KeymeTextType.BODY_3_SEMIBOLD,
-            color = Color(0xFFF8F8F8),
-        )
-        Icon(
-            painter = painterResource(id = R.drawable.info_circle),
-            contentDescription = "",
-            tint = Color.White,
-        )
-    }
-}
-
-@Composable
 private fun MyProfileTopContainer(
+    modifier: Modifier = Modifier,
+    myProfileUiState: MyProfileUiState,
     myCharacter: Member,
     selectedTabIndex: Int,
     myProfileTabs: List<MyProfileTab>,
+    onInfoClick: () -> Unit,
+    onToolTipCloseClick: () -> Unit,
+    onSettingClick: () -> Unit,
     onTabSelected: (Int) -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .zIndex(1f),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        MyProfileTitle()
+    Box(modifier) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            KeymeTitle(
+                title = "마이",
+                onSettingClick = onSettingClick,
+            )
 
-        Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-        MyProfileTabRow(
-            selectedTabIndex = selectedTabIndex,
-            tabs = myProfileTabs,
-            onTabSelected = onTabSelected,
-        )
+            MyProfileTabRow(
+                selectedTabIndex = selectedTabIndex,
+                tabs = myProfileTabs,
+                onTabSelected = onTabSelected,
+            )
 
-        Spacer(modifier = Modifier.height(18.dp))
+            Spacer(modifier = Modifier.height(18.dp))
 
-        KeymeText(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp),
-            text = "친구들이 생각하는\n${myCharacter.nickname}님의 성격은?",
-            keymeTextType = KeymeTextType.HEADING_1,
-            color = Color(0xFFFFFFFF),
-        )
+            KeymeText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp),
+                text = "친구들이 생각하는\n${myCharacter.nickname}님의 성격은?",
+                keymeTextType = KeymeTextType.HEADING_1,
+                color = Color(0xFFFFFFFF),
+            )
+        }
     }
 }
 

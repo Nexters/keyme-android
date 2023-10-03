@@ -1,5 +1,6 @@
 package com.keyme.data.remote.repositoryimpl
 
+import android.util.Base64
 import com.keyme.data.remote.datasource.SignInDataSource
 import com.keyme.domain.entity.response.SignInResponse
 import com.keyme.domain.entity.response.UpdateMemberResponse
@@ -34,8 +35,9 @@ class SignInRepositoryImpl @Inject constructor(
     override suspend fun uploadProfileImage(
         imageString: String,
     ): UploadProfileImageResponse {
-        val imageRequestBody = imageString.toRequestBody("image/*".toMediaTypeOrNull())
-        val multipartImage = MultipartBody.Part.createFormData("image", "image.jpg", imageRequestBody)
+        val image = Base64.decode(imageString, Base64.DEFAULT)
+        val imageRequestBody = image.toRequestBody("image/jpeg".toMediaTypeOrNull())
+        val multipartImage = MultipartBody.Part.createFormData("image", "image.jpeg", imageRequestBody)
 
         return signInDataSource.uploadProfileImage(
             multipartImage = multipartImage,

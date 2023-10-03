@@ -27,6 +27,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -68,6 +69,7 @@ import com.keyme.presentation.designsystem.theme.white_alpha_30
 import com.keyme.presentation.designsystem.theme.white_alpha_40
 import com.keyme.presentation.onboarding.OnboardingViewModel
 import com.keyme.presentation.onboarding.fadingAnimateFloatAsState
+import com.keyme.presentation.utils.ImageUploadUtil
 import com.keyme.presentation.utils.clickableRippleEffect
 
 @Composable
@@ -76,6 +78,7 @@ fun NicknameScreen(
     onBackClick: () -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     var nickname by remember { mutableStateOf("") }
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
 
@@ -85,6 +88,14 @@ fun NicknameScreen(
     val galleryLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent(),
     ) { uri -> uri?.let { selectedImage = uri } }
+
+    LaunchedEffect(key1 = selectedImage) {
+        selectedImage?.let {
+            ImageUploadUtil.getResizedBase64EncodedString(context, it)
+        }?.let {
+            viewModel.uploadProfileImage(it)
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -175,7 +186,7 @@ fun SignUpToolbar(
 
 @Composable
 fun ProfileImage(
-    selectedImage: Uri?,
+    selectedImage: Any?,
     onClickImage: () -> Unit,
 ) {
     Box(

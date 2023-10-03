@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -44,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.keyme.presentation.KeymeBackgroundAnim
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
 import com.keyme.presentation.designsystem.component.KeymeTextButton
@@ -59,7 +59,7 @@ import com.keyme.presentation.editprofile.EditProfileUiState
 import com.keyme.presentation.editprofile.EditProfileViewModel
 import com.keyme.presentation.onboarding.nickname.NicknameInputInfo
 import com.keyme.presentation.onboarding.nickname.ProfileImage
-import com.keyme.presentation.onboarding.nickname.SignUpToolbar
+import com.keyme.presentation.utils.ImageUploadUtil
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -68,35 +68,36 @@ fun EditProfileScreen(
     onBackClick: () -> Unit,
     confirmButtonText: String,
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.editProfileUiState.collectAsStateWithLifecycle()
 
     var nicknameValue by remember { mutableStateOf(uiState.nickname) }
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
+    val profileImage by remember(uiState.profileImageUrl, selectedImage) {
+        mutableStateOf(selectedImage ?: uiState.profileImageUrl)
+    }
+
     val galleryLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent(),
     ) { uri -> uri?.let { selectedImage = uri } }
 
     LaunchedEffect(key1 = selectedImage) {
         selectedImage?.let {
-            viewModel.uploadProfileImage(it.toString())
+            ImageUploadUtil.getResizedBase64EncodedString(context, it)
+        }?.let {
+            viewModel.uploadProfileImage(it)
         }
     }
 
     LaunchedEffect(key1 = viewModel) {
         viewModel.editProfileUiEvent.collectLatest {
-            when(it) {
+            when (it) {
                 is EditProfileUiEvent.UpdateMemberSuccess -> onBackClick()
             }
         }
     }
 
-    KeymeBackgroundAnim()
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(black_alpha_80),
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         KeymeTitle(title = "프로필 변경", onBackClick = onBackClick)
         Column(
             modifier = Modifier
@@ -108,7 +109,7 @@ fun EditProfileScreen(
         ) {
             Spacer(modifier = Modifier.size(20.dp))
             ProfileImage(
-                selectedImage = selectedImage,
+                selectedImage = profileImage,
                 onClickImage = { galleryLauncher.launch("image/*") },
             )
 
@@ -128,7 +129,6 @@ fun EditProfileScreen(
 
             NicknameVerifyResult(uiState)
 
-
             Spacer(modifier = Modifier.weight(1f))
             NicknameInputGuide()
 
@@ -143,16 +143,13 @@ fun EditProfileScreen(
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(horizontal = 16.dp),
-                enabled = uiState.isValidNickname(nicknameValue),
+                enabled = uiState.updateAvailable,
             )
 
             Spacer(modifier = Modifier.size(54.dp))
         }
     }
 }
-
-private fun EditProfileUiState.isValidNickname(nicknameValue: String) =
-    nicknameValue.length < 2 || isValidNickname
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -224,28 +221,30 @@ private fun NicknameTextField(
 private fun NicknameVerifyResult(
     uiState: EditProfileUiState,
 ) {
-    @DrawableRes val inputStatePainter = when (uiState.isValidNickname) {
-        true -> R.drawable.icon_circle_passed
-        else -> R.drawable.icon_circle_failed
-    }
+    if (uiState.verifyDescription.isNotBlank()) {
+        @DrawableRes val inputStatePainter = when (uiState.isValidNickname) {
+            true -> R.drawable.icon_circle_passed
+            else -> R.drawable.icon_circle_failed
+        }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Image(
-            painter = painterResource(id = inputStatePainter),
-            contentDescription = null,
-            modifier = Modifier.wrapContentSize(),
-        )
-        Spacer(modifier = Modifier.size(4.dp))
-        KeymeText(
-            text = uiState.verifyDescription,
-            keymeTextType = KeymeTextType.CAPTION_1,
-            color = keyme_white,
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Image(
+                painter = painterResource(id = inputStatePainter),
+                contentDescription = null,
+                modifier = Modifier.wrapContentSize(),
+            )
+            Spacer(modifier = Modifier.size(4.dp))
+            KeymeText(
+                text = uiState.verifyDescription,
+                keymeTextType = KeymeTextType.CAPTION_1,
+                color = keyme_white,
+            )
+        }
     }
 }
 

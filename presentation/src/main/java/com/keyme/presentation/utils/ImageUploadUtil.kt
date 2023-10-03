@@ -10,7 +10,7 @@ import java.io.ByteArrayOutputStream
 
 object ImageUploadUtil {
 
-    fun getProfileImageString(context: Context, uri: Uri): String? {
+    fun getResizedBase64EncodedString(context: Context, uri: Uri): String? {
         val resized = resize(context, uri, 360)
         val result = resized?.let {
             val compressed = compress(it)

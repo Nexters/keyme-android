@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -35,29 +36,37 @@ class EditProfileViewModel @Inject constructor(
     private val setMyMemberInfoUseCase: SetMyMemberInfoUseCase,
 ) : BaseViewModel() {
 
-    private val _editProfileUiState = MutableStateFlow(EditProfileUiState())
+    private val myMemberInfo: StateFlow<Member> = getMyUserInfoUseCase()
+        .filterNotNull()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, Member.EMPTY)
+
+    private val oldMemberInfo = myMemberInfo.value
+
+    private val _editProfileUiState = MutableStateFlow(
+        EditProfileUiState(
+            nickname = oldMemberInfo.nickname,
+            profileImageUrl = oldMemberInfo.profileImage,
+        ),
+    )
     val editProfileUiState = _editProfileUiState.asStateFlow()
 
     private val _editProfileUiEvent = MutableSharedFlow<EditProfileUiEvent>()
     val editProfileUiEvent = _editProfileUiEvent.asSharedFlow()
 
-    private val myMemberInfo: StateFlow<Member> = getMyUserInfoUseCase()
-        .filterNotNull()
-        .stateIn(viewModelScope, SharingStarted.Eagerly, Member.EMPTY)
-
     init {
-        myMemberInfo.onEach {
-            _editProfileUiState.value = _editProfileUiState.value.copy(nickname = it.nickname)
+        _editProfileUiState.onEach {
+            val changed = oldMemberInfo.nickname != it.nickname
+                || oldMemberInfo.profileImage != it.profileImageUrl
+                || oldMemberInfo.profileThumbnail != it.profileThumbnailUrl
+            _editProfileUiState.value = _editProfileUiState.value.copy(updateAvailable = changed)
         }.launchIn(baseViewModelScope)
     }
 
     fun uploadProfileImage(imageString: String) {
         apiCall(apiRequest = { uploadProfileImageUseCase.invoke(imageString = imageString) }) {
-            setMyMemberInfoUseCase(
-                myMemberInfo.value.copy(
-                    profileImage = it.originalUrl,
-                    profileThumbnail = it.thumbnailUrl,
-                ),
+            _editProfileUiState.value = _editProfileUiState.value.copy(
+                profileImageUrl = it.originalUrl,
+                profileThumbnailUrl = it.thumbnailUrl,
             )
         }
     }
@@ -68,7 +77,7 @@ class EditProfileViewModel @Inject constructor(
                 .onSuccess {
                     _editProfileUiState.value = _editProfileUiState.value.copy(
                         nickname = nickname,
-                        isValidNickname = it.valid,
+                        isValidNickname = it.valid && verifyNickname(nickname),
                         verifyDescription = it.description,
                     )
                 }.onApiError { code, message ->
@@ -87,15 +96,18 @@ class EditProfileViewModel @Inject constructor(
         }
     }
 
+    private fun verifyNickname(nickname: String): Boolean {
+        return nickname.length in 2..6
+    }
+
     fun updateMember() {
-        // todo 프로필 사진 선택
-//        if (uploadProfileImageState.value == null) return
         apiCall(
             apiRequest = {
+                val updateMemberInfo = _editProfileUiState.value
                 updateMemberUseCase.invoke(
-                    nickname = _editProfileUiState.value.nickname,
-                    profileImage = myMemberInfo.value.profileImage,
-                    profileThumbnail = myMemberInfo.value.profileThumbnail,
+                    nickname = updateMemberInfo.nickname,
+                    profileImage = updateMemberInfo.profileImageUrl,
+                    profileThumbnail = updateMemberInfo.profileThumbnailUrl,
                 )
             },
         ) {
@@ -108,7 +120,7 @@ class EditProfileViewModel @Inject constructor(
                     friendCode = it.friendCode ?: "",
                     isOnboardingClear = myMemberInfo.value.isOnboardingClear,
                     accessToken = myMemberInfo.value.accessToken,
-                )
+                ),
             )
             _editProfileUiEvent.emit(EditProfileUiEvent.UpdateMemberSuccess)
         }
@@ -117,10 +129,13 @@ class EditProfileViewModel @Inject constructor(
 
 data class EditProfileUiState(
     val nickname: String = "",
+    val profileImageUrl: String = "",
+    val profileThumbnailUrl: String = "",
     val isValidNickname: Boolean = false,
     val verifyDescription: String = "",
+    val updateAvailable: Boolean = false,
 )
 
 sealed interface EditProfileUiEvent {
-    object UpdateMemberSuccess: EditProfileUiEvent
+    object UpdateMemberSuccess : EditProfileUiEvent
 }

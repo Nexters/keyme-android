@@ -137,7 +137,7 @@ fun KeymeTestResultItem(
                 .padding(top = 33.dp, start = 32.dp, end = 32.dp),
         ) {
             KeymeText(
-                text = item.category.name,
+                text = item.keyword,
                 keymeTextType = KeymeTextType.BODY_4,
                 color = Color.White,
             )
@@ -145,7 +145,7 @@ fun KeymeTestResultItem(
             Spacer(modifier = Modifier.height(8.dp))
 
             KeymeText(
-                text = "${myCharacter.nickname}님의 ${item.keyword} 정도는?",
+                text = myCharacter.nickname + item.title,
                 keymeTextType = KeymeTextType.HEADING_1,
                 color = Color.White,
             )

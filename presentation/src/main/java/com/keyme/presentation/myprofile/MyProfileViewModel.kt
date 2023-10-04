@@ -1,10 +1,14 @@
 package com.keyme.presentation.myprofile
 
 import com.keyme.domain.entity.member.Member
+import com.keyme.domain.entity.onApiError
+import com.keyme.domain.entity.onFailure
+import com.keyme.domain.entity.onSuccess
 import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.usecase.GetMyCharacterUseCase
 import com.keyme.domain.usecase.GetMyStatisticsUseCase
 import com.keyme.presentation.BaseViewModel
+import com.keyme.presentation.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
@@ -42,11 +46,30 @@ class MyProfileViewModel @Inject constructor(
     }
 
     private fun loadMyStatistics() {
-        apiCall(apiRequest = { getMyStatisticsUseCase.invoke(type = MemberStatistics.StatisticsType.SIMILAR) }) {
-            _mySimilarStatisticsState.value = it
+        baseViewModelScope.launch {
+            getMyStatisticsUseCase(type = MemberStatistics.StatisticsType.SIMILAR)
+                .onSuccess {
+                    _mySimilarStatisticsState.value = it
+                }.onApiError { code, message ->
+                    _mySimilarStatisticsState.value = MemberStatistics()
+                }.onFailure {
+                    baseViewModelScope.launch {
+                        uiEventManager.onEvent(UiEvent.Toast(it.message ?: ""))
+                    }
+                }
         }
-        apiCall(apiRequest = { getMyStatisticsUseCase.invoke(type = MemberStatistics.StatisticsType.DIFFERENT) }) {
-            _myDifferentStatisticsState.value = it
+
+        baseViewModelScope.launch {
+            getMyStatisticsUseCase(type = MemberStatistics.StatisticsType.DIFFERENT)
+                .onSuccess {
+                    _myDifferentStatisticsState.value = it
+                }.onApiError { code, message ->
+                    _myDifferentStatisticsState.value = MemberStatistics()
+                }.onFailure {
+                    baseViewModelScope.launch {
+                        uiEventManager.onEvent(UiEvent.Toast(it.message ?: ""))
+                    }
+                }
         }
     }
 

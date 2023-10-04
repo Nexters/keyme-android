@@ -24,6 +24,7 @@ import timber.log.Timber
 @Composable
 fun TakeKeymeTestScreen(
     loadTestUrl: String,
+    accessToken: String,
     onTestSolved: (TestRegisterResponse) -> Unit,
     onBackClick: () -> Unit,
     onCloseClick: () -> Unit,
@@ -31,6 +32,7 @@ fun TakeKeymeTestScreen(
     Timber.d("loadTestUrl: $loadTestUrl")
 
     val state = rememberWebViewState(url = loadTestUrl)
+//    val state = rememberWebViewState(url = "file:///android_asset/sample.html")
     val navigator = rememberWebViewNavigator()
 
     BackHandler {
@@ -38,41 +40,42 @@ fun TakeKeymeTestScreen(
     }
 
     val coroutineScope = rememberCoroutineScope()
-
-    WebView(
-        modifier = Modifier.fillMaxSize(),
-        state = state,
-        captureBackPresses = true,
-        client = MyWebViewerClient(),
-        navigator = navigator,
-        onCreated = {
-            it.apply {
-                setBackgroundColor(keyme_black.toArgb())
-                setNetworkAvailable(true)
-                settings.loadWithOverviewMode = true
-                settings.useWideViewPort = true
-                settings.javaScriptEnabled = true
-                settings.userAgentString = "keyme"
-                it.addJavascriptInterface(
-                    TakeKeymeTestInterface(
-                        onSolved = {
-                            coroutineScope.launch {
-                                onTestSolved(it)
-                            }
-                        },
-                        onClose = {
-                            coroutineScope.launch {
-                                onCloseClick()
-                            }
-                        },
-                    ),
-                    "keymeAndroid",
-                )
-                settings.domStorageEnabled = true
-                settings.setSupportZoom(false)
-            }
-        },
-    )
+    if (accessToken.isNotBlank()) {
+        WebView(
+            modifier = Modifier.fillMaxSize(),
+            state = state,
+            captureBackPresses = true,
+            client = MyWebViewerClient(),
+            navigator = navigator,
+            onCreated = {
+                it.apply {
+                    setBackgroundColor(keyme_black.toArgb())
+                    setNetworkAvailable(true)
+                    settings.loadWithOverviewMode = true
+                    settings.useWideViewPort = true
+                    settings.javaScriptEnabled = true
+                    settings.userAgentString = "KEYME_$accessToken"
+                    it.addJavascriptInterface(
+                        TakeKeymeTestInterface(
+                            onSolved = {
+                                coroutineScope.launch {
+                                    onTestSolved(it)
+                                }
+                            },
+                            onClose = {
+                                coroutineScope.launch {
+                                    onCloseClick()
+                                }
+                            },
+                        ),
+                        "keymeAndroid",
+                    )
+                    settings.domStorageEnabled = true
+                    settings.setSupportZoom(false)
+                }
+            },
+        )
+    }
 }
 
 private class TakeKeymeTestInterface(

@@ -52,6 +52,7 @@ fun TakeKeymeTestRoute(
         if (keymeTestResult == null) {
             TakeKeymeTestScreen(
                 loadTestUrl = loadTestUrl,
+                accessToken = myCharacter.accessToken,
                 onTestSolved = {
                     takeKeymeTestViewModel.updateTestResult(it)
                 },

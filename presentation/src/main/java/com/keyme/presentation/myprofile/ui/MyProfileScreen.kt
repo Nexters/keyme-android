@@ -224,8 +224,7 @@ private fun MyProfileTabItem(
                     Modifier
                 },
             )
-            .clipToBounds()
-            .clickableRippleEffect(bounded = false) { onClick() },
+            .clickableRippleEffect { onClick() },
         contentAlignment = Alignment.Center,
     ) {
         KeymeText(

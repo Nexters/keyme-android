@@ -8,6 +8,7 @@ import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.usecase.GetDailyKeymeTestUseCase
 import com.keyme.domain.usecase.GetMyCharacterUseCase
 import com.keyme.domain.usecase.GetMyStatisticsUseCase
+import com.keyme.domain.usecase.GetOnboardingKeymeTestUseCase
 import com.keyme.presentation.BaseViewModel
 import com.keyme.presentation.UiEvent
 import com.keyme.presentation.utils.KeymeLinkUtil
@@ -25,7 +26,7 @@ import kotlin.coroutines.resume
 class MyProfileViewModel @Inject constructor(
     private val getMyCharacterUseCase: GetMyCharacterUseCase,
     private val getMyStatisticsUseCase: GetMyStatisticsUseCase,
-    private val getDailyKeymeTestUseCase: GetDailyKeymeTestUseCase,
+    private val getOnboardingKeymeTestUseCase: GetOnboardingKeymeTestUseCase,
 ) : BaseViewModel() {
 
     private val _mySimilarStatisticsState = MutableStateFlow(MemberStatistics())
@@ -60,7 +61,7 @@ class MyProfileViewModel @Inject constructor(
     }
 
     private suspend fun getTestForShare() = suspendCancellableCoroutine { continuation ->
-        apiCall(apiRequest = { getDailyKeymeTestUseCase() }) {
+        apiCall(apiRequest = { getOnboardingKeymeTestUseCase() }) {
             continuation.resume(it)
         }
     }

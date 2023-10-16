@@ -1,7 +1,9 @@
 package com.keyme.presentation.tutorial.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.keyme.presentation.navigation.KeymeNavigationDestination
@@ -25,10 +27,12 @@ fun TutorialRoute(
     tutorialViewModel: TutorialViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
 ) {
+    val showTutorial by tutorialViewModel.showTutorial.collectAsStateWithLifecycle()
+    if (!showTutorial) onBackClick()
+
     TutorialScreen(
-        onFinish = {
+        onStartClick = {
             tutorialViewModel.setLearned(true)
-            onBackClick()
         },
     )
 }

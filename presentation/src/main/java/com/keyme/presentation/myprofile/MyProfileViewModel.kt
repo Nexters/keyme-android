@@ -1,12 +1,10 @@
 package com.keyme.presentation.myprofile
 
-import com.keyme.domain.entity.apiResult
 import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.onApiError
 import com.keyme.domain.entity.onFailure
 import com.keyme.domain.entity.onSuccess
 import com.keyme.domain.entity.response.MemberStatistics
-import com.keyme.domain.entity.response.Test
 import com.keyme.domain.usecase.GetDailyKeymeTestUseCase
 import com.keyme.domain.usecase.GetMyCharacterUseCase
 import com.keyme.domain.usecase.GetMyStatisticsUseCase
@@ -16,10 +14,7 @@ import com.keyme.presentation.utils.KeymeLinkUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine

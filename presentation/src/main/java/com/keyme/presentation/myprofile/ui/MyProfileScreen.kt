@@ -21,13 +21,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText

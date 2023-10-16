@@ -1,16 +1,12 @@
 package com.keyme.app
 
-import android.animation.ObjectAnimator
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.animation.AnticipateInterpolator
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope

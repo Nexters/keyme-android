@@ -5,7 +5,6 @@ import com.keyme.domain.entity.onApiError
 import com.keyme.domain.entity.onFailure
 import com.keyme.domain.entity.onSuccess
 import com.keyme.domain.entity.response.MemberStatistics
-import com.keyme.domain.usecase.GetDailyKeymeTestUseCase
 import com.keyme.domain.usecase.GetMyCharacterUseCase
 import com.keyme.domain.usecase.GetMyStatisticsUseCase
 import com.keyme.domain.usecase.GetOnboardingKeymeTestUseCase
@@ -54,7 +53,6 @@ class MyProfileViewModel @Inject constructor(
         initialValue = MyProfileUiState.EmptyStatistics(),
         scope = baseViewModelScope,
     )
-
 
     init {
         loadMyStatistics()

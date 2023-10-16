@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import coil.size.Precision
 import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.domain.entity.response.TestStatistic
@@ -128,7 +129,10 @@ private fun LazyListScope.statisticList(
     dailyKeymeTestStatistic: TestStatistic,
     onClickItem: (QuestionStatistic) -> Unit,
 ) {
-    items(dailyKeymeTestStatistic.questionsStatistics) {
+    items(
+        items = dailyKeymeTestStatistic.questionsStatistics,
+        key = { it.questionId },
+    ) {
         QuestionStatisticItem(
             myCharacter = myCharacter,
             statistic = it,
@@ -165,7 +169,11 @@ private fun QuestionStatisticItem(
         ) {
             AsyncImage(
                 modifier = Modifier.size(20.dp),
-                model = ImageRequest.Builder(LocalContext.current).data(statistic.category.iconUrl).build(),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(statistic.category.iconUrl)
+                    .memoryCacheKey(statistic.category.iconUrl)
+                    .precision(Precision.EXACT)
+                    .build(),
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
             )

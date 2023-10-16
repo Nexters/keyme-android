@@ -62,6 +62,7 @@ fun DailyKeymeTestRoute(
     val dailyKeymeTestStatistic by dailyKeymeTestViewModel.dailyKeymeTestStatisticState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
+
     KeymeBackgroundAnim()
     Box(
         modifier = Modifier

@@ -28,7 +28,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.keyme.domain.entity.member.Member
-import com.keyme.domain.entity.response.MemberStatistics
 import com.keyme.domain.entity.response.QuestionStatistic
 import com.keyme.presentation.R
 import com.keyme.presentation.designsystem.component.KeymeText
@@ -37,7 +36,6 @@ import com.keyme.presentation.designsystem.component.KeymeTextType
 import com.keyme.presentation.designsystem.component.KeymeTitle
 import com.keyme.presentation.designsystem.theme.keyme_white
 import com.keyme.presentation.myprofile.MyProfileUiState
-import com.keyme.presentation.utils.KeymeLinkUtil
 import com.keyme.presentation.utils.clickableRippleEffect
 import com.keyme.presentation.utils.startShareActivity
 import kotlinx.coroutines.launch
@@ -52,11 +50,6 @@ private val myProfileTabs = listOf(MyProfileTab.Similar, MyProfileTab.Different)
 @Composable
 fun MyProfileScreen(
     myProfileUiState: MyProfileUiState,
-    myCharacter: Member,
-    mySimilarStatistics: MemberStatistics,
-    myDifferentStatistics: MemberStatistics,
-    onInfoClick: () -> Unit,
-    onToolTipCloseClick: () -> Unit,
     onSettingClick: () -> Unit,
     onQuestionClick: (QuestionStatistic) -> Unit,
 ) {
@@ -74,7 +67,7 @@ fun MyProfileScreen(
                 onSettingClick = onSettingClick,
             )
 
-            if (statisticsEmpty(mySimilarStatistics, myDifferentStatistics).not()) {
+            if (myProfileUiState is MyProfileUiState.Statistics) {
                 Spacer(modifier = Modifier.height(10.dp))
 
                 MyProfileTabRow(
@@ -93,47 +86,45 @@ fun MyProfileScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 18.dp),
-                    text = "친구들이 생각하는\n${myCharacter.nickname}님의 성격은?",
+                    text = "친구들이 생각하는\n${myProfileUiState.myCharacter.nickname}님의 성격은?",
                     keymeTextType = KeymeTextType.HEADING_1,
                     color = Color(0xFFFFFFFF),
                 )
             }
         }
 
-        if (statisticsEmpty(mySimilarStatistics, myDifferentStatistics)) {
-            val context = LocalContext.current
-            EmptyStatistics(onShareClick = {
-                //
-            })
-        } else {
-            HorizontalPager(
-                pageCount = myProfileTabs.size,
-                state = pagerState,
-                userScrollEnabled = false,
-            ) {
-                when (myProfileTabs[it]) {
-                    MyProfileTab.Similar -> KeymeMemberStatisticsScreen(
-                        memberStatistics = mySimilarStatistics,
-                        onQuestionClick = { question -> onQuestionClick(question) },
-                    )
+        when (myProfileUiState) {
+            is MyProfileUiState.EmptyStatistics -> {
+                val context = LocalContext.current
+                EmptyStatistics(
+                    onShareClick = {
+                        context.startShareActivity(myProfileUiState.testLink)
+                    },
+                )
+            }
 
-                    MyProfileTab.Different -> KeymeMemberStatisticsScreen(
-                        memberStatistics = myDifferentStatistics,
-                        onQuestionClick = { question -> onQuestionClick(question) },
-                    )
+            is MyProfileUiState.Statistics -> {
+                HorizontalPager(
+                    pageCount = myProfileTabs.size,
+                    state = pagerState,
+                    userScrollEnabled = false,
+                ) {
+                    when (myProfileTabs[it]) {
+                        MyProfileTab.Similar -> KeymeMemberStatisticsScreen(
+                            memberStatistics = myProfileUiState.similar,
+                            onQuestionClick = { question -> onQuestionClick(question) },
+                        )
+
+                        MyProfileTab.Different -> KeymeMemberStatisticsScreen(
+                            memberStatistics = myProfileUiState.different,
+                            onQuestionClick = { question -> onQuestionClick(question) },
+                        )
+                    }
                 }
             }
         }
     }
 }
-
-private fun statisticsEmpty(
-    similarStatistics: MemberStatistics,
-    differentStatistics: MemberStatistics,
-): Boolean {
-    return similarStatistics.results.isEmpty() || differentStatistics.results.isEmpty()
-}
-
 
 @Composable
 private fun MyProfileTopContainer(

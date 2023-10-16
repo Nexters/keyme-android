@@ -1,48 +1,80 @@
 package com.keyme.presentation.myprofile
 
+import com.keyme.domain.entity.apiResult
 import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.onApiError
 import com.keyme.domain.entity.onFailure
 import com.keyme.domain.entity.onSuccess
 import com.keyme.domain.entity.response.MemberStatistics
+import com.keyme.domain.entity.response.Test
+import com.keyme.domain.usecase.GetDailyKeymeTestUseCase
 import com.keyme.domain.usecase.GetMyCharacterUseCase
 import com.keyme.domain.usecase.GetMyStatisticsUseCase
 import com.keyme.presentation.BaseViewModel
 import com.keyme.presentation.UiEvent
+import com.keyme.presentation.utils.KeymeLinkUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
+import kotlin.coroutines.resume
 
 @HiltViewModel
 class MyProfileViewModel @Inject constructor(
     private val getMyCharacterUseCase: GetMyCharacterUseCase,
     private val getMyStatisticsUseCase: GetMyStatisticsUseCase,
+    private val getDailyKeymeTestUseCase: GetDailyKeymeTestUseCase,
 ) : BaseViewModel() {
+
     private val _mySimilarStatisticsState = MutableStateFlow(MemberStatistics())
-    val mySimilarStatisticsState = _mySimilarStatisticsState.asStateFlow()
-
     private val _myDifferentStatisticsState = MutableStateFlow(MemberStatistics())
-    val myDifferentStatisticsState = _myDifferentStatisticsState.asStateFlow()
 
-    private val _myProfileUiState = MutableStateFlow(MyProfileUiState())
-    val myProfileUiState = _myProfileUiState.asStateFlow()
-
-    val myCharacterState = getMyCharacterUseCase().stateIn(
-        started = SharingStarted.WhileSubscribed(5000L),
-        initialValue = Member.EMPTY,
+    val myProfileUiState = combine(
+        getMyCharacterUseCase(),
+        _mySimilarStatisticsState,
+        _myDifferentStatisticsState,
+    ) { myCharacter, similarStatistics, differentStatistics ->
+        if (statisticsEmpty(similarStatistics, differentStatistics)) {
+            MyProfileUiState.EmptyStatistics(
+                myCharacter = myCharacter,
+                testLink = KeymeLinkUtil.getTestLink(getTestForShare().testId),
+            )
+        } else {
+            MyProfileUiState.Statistics(
+                myCharacter = myCharacter,
+                similar = _mySimilarStatisticsState.value,
+                different = _myDifferentStatisticsState.value,
+            )
+        }
+    }.stateIn(
+        started = SharingStarted.Eagerly,
+        initialValue = MyProfileUiState.EmptyStatistics(),
         scope = baseViewModelScope,
     )
 
+
     init {
-        showToolTip()
         loadMyStatistics()
+    }
+
+    private suspend fun getTestForShare() = suspendCancellableCoroutine { continuation ->
+        apiCall(apiRequest = { getDailyKeymeTestUseCase() }) {
+            continuation.resume(it)
+        }
+    }
+
+    private fun statisticsEmpty(
+        similarStatistics: MemberStatistics,
+        differentStatistics: MemberStatistics,
+    ): Boolean {
+        return similarStatistics.results.isEmpty() || differentStatistics.results.isEmpty()
     }
 
     private fun loadMyStatistics() {
@@ -57,9 +89,7 @@ class MyProfileViewModel @Inject constructor(
                         uiEventManager.onEvent(UiEvent.Toast(it.message ?: ""))
                     }
                 }
-        }
 
-        baseViewModelScope.launch {
             getMyStatisticsUseCase(type = MemberStatistics.StatisticsType.DIFFERENT)
                 .onSuccess {
                     _myDifferentStatisticsState.value = it
@@ -72,28 +102,17 @@ class MyProfileViewModel @Inject constructor(
                 }
         }
     }
-
-    private var toolTipTimerJob: Job? = null
-
-    fun showToolTip() {
-        if (_myProfileUiState.value.showToolTip.not()) {
-            _myProfileUiState.value = _myProfileUiState.value.copy(showToolTip = true)
-
-            toolTipTimerJob = baseViewModelScope.launch {
-                delay(3000L)
-                dismissToolTip()
-            }
-        }
-    }
-
-    fun dismissToolTip() {
-        _myProfileUiState.value = _myProfileUiState.value.copy(showToolTip = false)
-
-        baseViewModelScope.launch {
-            toolTipTimerJob?.cancelAndJoin()
-            toolTipTimerJob = null
-        }
-    }
 }
 
-data class MyProfileUiState(val showToolTip: Boolean = false)
+sealed class MyProfileUiState(open val myCharacter: Member) {
+    data class EmptyStatistics(
+        override val myCharacter: Member = Member.EMPTY,
+        val testLink: String = "",
+    ) : MyProfileUiState(myCharacter)
+
+    data class Statistics(
+        override val myCharacter: Member = Member.EMPTY,
+        val similar: MemberStatistics,
+        val different: MemberStatistics,
+    ) : MyProfileUiState(myCharacter)
+}

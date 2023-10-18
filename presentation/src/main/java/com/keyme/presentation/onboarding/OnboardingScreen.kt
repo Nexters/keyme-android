@@ -76,7 +76,7 @@ fun OnboardingScreen(
     }
 
     when (pagerState.currentPage) {
-        0 -> BackHandler(enabled = true) { /*TODO*/ }
+        OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal -> BackHandler(enabled = true) { /*TODO*/ }
         else -> BackHandler(enabled = true) {
             onPageIndexChanged(pagerState.currentPage - 1)
         }

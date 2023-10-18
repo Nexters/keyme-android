@@ -3,7 +3,7 @@ object AppConfig {
     const val targetSdkVersion = 33
     const val compileSdkVersion = 33
 
-    const val versionCode = 1
+    const val versionCode = 3
     const val versionName = "1.0.0"
 
     const val androidTestInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

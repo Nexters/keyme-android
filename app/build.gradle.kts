@@ -31,6 +31,7 @@ android {
     defaultConfig {
         applicationId = "com.keyme.app"
         minSdk = AppConfig.minSdkVersion
+        targetSdk = AppConfig.targetSdkVersion
         versionCode = AppConfig.versionCode
         versionName = AppConfig.versionName
 
@@ -52,6 +53,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            isShrinkResources = false
+        }
     }
 }
 

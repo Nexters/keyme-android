@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import com.keyme.domain.entity.member.Member
 import com.keyme.domain.entity.response.TestRegisterResponse
 import com.keyme.domain.entity.response.TestResult
-import com.keyme.domain.entity.response.isRegister
 import com.keyme.domain.usecase.GetKeymeTestResultUseCase
 import com.keyme.domain.usecase.GetMyCharacterUseCase
 import com.keyme.domain.usecase.RegistrationResultCodeUseCase
@@ -14,12 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,23 +35,8 @@ class TakeKeymeTestViewModel @Inject constructor(
     private val _keymeTestResultState = MutableStateFlow<TestResult?>(null)
     val keymeTestResultState = _keymeTestResultState.asStateFlow()
 
-    private val _testRegisterResponseState = MutableStateFlow(TestRegisterResponse.EMPTY)
-
-    init {
-        _testRegisterResponseState
-            .filter { it.isRegister() }
-            .distinctUntilChanged()
-            .onEach {
-                if (registrationResultCodeUseCase(it.resultCode)) {
-                    getTestResult(it.testResultId)
-                }
-            }.launchIn(baseViewModelScope)
-    }
-
     fun updateTestResult(result: TestRegisterResponse) {
-        baseViewModelScope.launch {
-            _testRegisterResponseState.value = result
-        }
+        getTestResult(result.testResultId)
     }
 
     private fun getTestResult(testResultId: Int) {

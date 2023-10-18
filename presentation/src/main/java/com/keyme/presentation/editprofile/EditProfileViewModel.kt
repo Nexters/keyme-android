@@ -80,27 +80,28 @@ class EditProfileViewModel @Inject constructor(
     }
 
     fun onNicknameChange(nickname: String) {
-        baseViewModelScope.launch {
-            verifyNicknameUseCase(nickname)
-                .onSuccess {
-                    _editProfileUiState.value = _editProfileUiState.value.copy(
-                        nickname = nickname,
-                        isValidNickname = it.valid && verifyNickname(nickname),
-                        verifyDescription = it.description,
-                    )
-                }.onApiError { code, message ->
-                    _editProfileUiState.value = _editProfileUiState.value.copy(isValidNickname = false)
+        if (verifyNickname(nickname)) {
+            baseViewModelScope.launch {
+                verifyNicknameUseCase(nickname)
+                    .onSuccess {
+                        _editProfileUiState.value = _editProfileUiState.value.copy(
+                            nickname = nickname,
+                            isValidNickname = it.valid && verifyNickname(nickname),
+                            verifyDescription = "사용 가능합니다",
+                        )
+                    }.onApiError { code, _ ->
+                        val description = if (code == "201") "이미 사용 중인 닉네임입니다" else ""
+                        _editProfileUiState.value = _editProfileUiState.value.copy(isValidNickname = false, verifyDescription = description)
+                    }.onFailure {
+                        _editProfileUiState.value = _editProfileUiState.value.copy(isValidNickname = false)
 
-                    baseViewModelScope.launch {
-                        uiEventManager.onEvent(UiEvent.Toast(message))
+                        baseViewModelScope.launch {
+                            uiEventManager.onEvent(UiEvent.Toast(it.message ?: ""))
+                        }
                     }
-                }.onFailure {
-                    _editProfileUiState.value = _editProfileUiState.value.copy(isValidNickname = false)
-
-                    baseViewModelScope.launch {
-                        uiEventManager.onEvent(UiEvent.Toast(it.message ?: ""))
-                    }
-                }
+            }
+        } else {
+            _editProfileUiState.value = _editProfileUiState.value.copy(isValidNickname = false, verifyDescription = "")
         }
     }
 

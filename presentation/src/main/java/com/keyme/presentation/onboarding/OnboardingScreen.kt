@@ -106,7 +106,7 @@ fun OnboardingScreen(
         ) {
             val isVisible = it == pagerState.currentPage
 
-            when (OnboardingStepsEnum.onboardingSteps[it]) {
+            when (OnboardingStepsEnum.values()[it]) {
                 OnboardingStepsEnum.KAKAO_SIGN_IN -> SignInScreen(signInWithKeyme)
 
                 OnboardingStepsEnum.NICKNAME -> {

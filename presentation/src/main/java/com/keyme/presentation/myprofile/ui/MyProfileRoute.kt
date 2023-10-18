@@ -47,10 +47,7 @@ fun MyProfileRoute(
     navigateToQuestionResult: (QuestionStatistic) -> Unit,
     navigateToSetting: () -> Unit,
 ) {
-    val myCharacter by myProfileViewModel.myCharacterState.collectAsStateWithLifecycle()
     val myProfileUiState by myProfileViewModel.myProfileUiState.collectAsStateWithLifecycle()
-    val mySimilarStatistics by myProfileViewModel.mySimilarStatisticsState.collectAsStateWithLifecycle()
-    val myDifferentStatistics by myProfileViewModel.myDifferentStatisticsState.collectAsStateWithLifecycle()
 
     KeymeBackgroundAnim()
     Box(
@@ -60,12 +57,7 @@ fun MyProfileRoute(
     ) {
         MyProfileScreen(
             myProfileUiState = myProfileUiState,
-            myCharacter = myCharacter,
-            mySimilarStatistics = mySimilarStatistics,
-            myDifferentStatistics = myDifferentStatistics,
-            onInfoClick = myProfileViewModel::showToolTip,
             onSettingClick = navigateToSetting,
-            onToolTipCloseClick = myProfileViewModel::dismissToolTip,
             onQuestionClick = navigateToQuestionResult,
         )
     }

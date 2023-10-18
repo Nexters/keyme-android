@@ -12,10 +12,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -47,16 +43,9 @@ class DailyKeymeTestViewModel @Inject constructor(
 //        apiCall(apiRequest = { getDailyKeymeTestUseCase() }) {
         // NOTE: 데일리 문제를 제공하는 대신 온보딩 문제를 계속 공유할 수 있게 하는 플로우로 수정 방향 생각중
         apiCall(apiRequest = { getOnboardingKeymeTestUseCase() }) {
-            _dailyKeymeTestState.value = it
+            apiCall(apiRequest = { getKeymeTestStatisticUseCase(it.testId) }) { statistic ->
+                _dailyKeymeTestStatisticState.value = statistic
+            }
         }
-
-        dailyKeymeTestState
-            .filter { it.testResultId != 0 }
-            .distinctUntilChanged()
-            .onEach {
-                apiCall(apiRequest = { getKeymeTestStatisticUseCase(it.testId) }) { statistic ->
-                    _dailyKeymeTestStatisticState.value = statistic
-                }
-            }.launchIn(baseViewModelScope)
     }
 }

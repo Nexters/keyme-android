@@ -52,7 +52,7 @@ class OnboardingViewModel @Inject constructor(
         getMyUserInfoUseCase().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private val _onBoardingPageUiState =
-        MutableStateFlow(OnBoardingPageUiState(OnboardingStepsEnum.KAKAO_SIGN_IN))
+        MutableStateFlow(OnBoardingPageUiState(OnboardingStepsEnum.SPLASH))
     val onBoardingPageUiState = _onBoardingPageUiState.asStateFlow()
 
     private val _remoteOnboardingState = MutableStateFlow(OnboardingStepsEnum.KAKAO_SIGN_IN.ordinal)

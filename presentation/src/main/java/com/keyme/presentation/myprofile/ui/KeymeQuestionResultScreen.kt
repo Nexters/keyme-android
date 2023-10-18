@@ -93,7 +93,7 @@ private fun KeymeQuestionStatisticsInfo(
             text = if (showMyScore) {
                 "나의 점수"
             } else {
-                questionStatistic.category.name
+                questionStatistic.keyword
             },
             keymeTextType = KeymeTextType.BODY_3_REGULAR,
             color = Color.White,

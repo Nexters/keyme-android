@@ -1,5 +1,6 @@
 package com.keyme.presentation.dailykeymetest
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -58,8 +59,8 @@ fun DailyKeymeTestRoute(
     if (showTutorial) navigateToTutorial()
 
     val myCharacter by dailyKeymeTestViewModel.myCharacterState.collectAsStateWithLifecycle()
-    val dailyKeymeTest by dailyKeymeTestViewModel.dailyKeymeTestState.collectAsStateWithLifecycle()
-    val dailyKeymeTestStatistic by dailyKeymeTestViewModel.dailyKeymeTestStatisticState.collectAsStateWithLifecycle()
+    val dailyKeymeTest by dailyKeymeTestViewModel.keymeTestState.collectAsStateWithLifecycle()
+    val dailyKeymeTestStatistic by dailyKeymeTestViewModel.keymeTestStatisticState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
 
@@ -77,7 +78,12 @@ fun DailyKeymeTestRoute(
                 navigateToTakeKeymeTest(dailyKeymeTest.testId)
             },
             onShareClick = {
-                context.startShareActivity(KeymeLinkUtil.getTestLink(dailyKeymeTest.testId))
+                val shareTestLink = KeymeLinkUtil.getTestLink(dailyKeymeTest.testId)
+                if (shareTestLink.isNotEmpty()) {
+                    context.startShareActivity(KeymeLinkUtil.getTestLink(dailyKeymeTest.testId))
+                } else {
+                    Toast.makeText(context, "테스트 정보를 가져오는데 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
             },
             onQuestionStatisticClick = navigateToQuestionResult,
         )

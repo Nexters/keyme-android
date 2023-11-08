@@ -1,5 +1,6 @@
 package com.keyme.presentation.myprofile.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -96,7 +97,11 @@ fun MyProfileScreen(
                 val context = LocalContext.current
                 EmptyStatistics(
                     onShareClick = {
-                        context.startShareActivity(myProfileUiState.testLink)
+                        if (myProfileUiState.testLink.isNotEmpty()) {
+                            context.startShareActivity(myProfileUiState.testLink)
+                        } else {
+                            Toast.makeText(context, "테스트 정보를 가져오는데 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        }
                     },
                 )
             }
